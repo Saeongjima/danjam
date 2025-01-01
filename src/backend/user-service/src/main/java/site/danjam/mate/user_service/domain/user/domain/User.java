@@ -35,9 +35,8 @@ public class User extends BaseTimeEntity {
     private LocalDateTime deletedAt;
 
     @Builder
-    public User(Long id, String username, Integer gender, String password,
+    public User(String username, Integer gender, String password,
                 String nickname, String email, String authImgUrl, LocalDateTime deletedAt) {
-        this.id = id;
         this.username = username;
         this.gender = gender;
         this.password = password;

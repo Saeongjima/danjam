@@ -29,8 +29,7 @@ public class MyProfile extends BaseTimeEntity {
     String greeting;
 
     @Builder
-    public MyProfile(Long id, String birth, Integer entryYear, String major, String profileImgUrl) {
-        this.id = id;
+    public MyProfile(String birth, Integer entryYear, String major, String profileImgUrl) {
         this.birth = birth;
         this.entryYear = entryYear;
         this.major = major;

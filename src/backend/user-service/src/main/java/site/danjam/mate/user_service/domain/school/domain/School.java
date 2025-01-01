@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
@@ -20,4 +21,10 @@ public class School extends BaseTimeEntity {
     private String name;
     @Column(nullable = false)
     private String korName;
+
+    @Builder
+    public School(String name, String korName) {
+        this.name = name;
+        this.korName = korName;
+    }
 }
