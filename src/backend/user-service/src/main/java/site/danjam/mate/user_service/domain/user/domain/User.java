@@ -25,8 +25,6 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer gender;
     @Column(nullable = false)
-    private String birth;
-    @Column(nullable = false)
     private String password;
     @Column(nullable = false, unique = true)
     private String nickname;
@@ -37,12 +35,11 @@ public class User extends BaseTimeEntity {
     private LocalDateTime deletedAt;
 
     @Builder
-    public User(Long id, String username, Integer gender, String birth, String password, String nickname, String email,
-                String authImgUrl, LocalDateTime deletedAt) {
+    public User(Long id, String username, Integer gender, String password,
+                String nickname, String email, String authImgUrl, LocalDateTime deletedAt) {
         this.id = id;
         this.username = username;
         this.gender = gender;
-        this.birth = birth;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
