@@ -25,8 +25,8 @@ public class MyProfile extends BaseTimeEntity {
     private String major;
     @Column(columnDefinition = "TEXT")
     private String profileImgUrl;
-    private String mbti;
-    private String greeting;
+    String mbti;
+    String greeting;
 
     @Builder
     public MyProfile(Long id, String birth, Integer entryYear, String major, String profileImgUrl) {
