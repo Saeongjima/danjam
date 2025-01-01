@@ -34,7 +34,6 @@ public class User extends BaseTimeEntity {
     private String email;
     @Column(columnDefinition = "TEXT")
     private String authImgUrl;
-    @Column
     private LocalDateTime deletedAt;
 
     @Builder
