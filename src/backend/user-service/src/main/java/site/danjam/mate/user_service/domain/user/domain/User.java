@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +15,6 @@ import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Entity
 public class User extends BaseTimeEntity {
     @Id
@@ -39,4 +36,18 @@ public class User extends BaseTimeEntity {
     private String authImgUrl;
     @Column
     private LocalDateTime deletedAt;
+
+    @Builder
+    public User(Long id, String username, Integer gender, String birth, String password, String nickname, String email,
+                String authImgUrl, LocalDateTime deletedAt) {
+        this.id = id;
+        this.username = username;
+        this.gender = gender;
+        this.birth = birth;
+        this.password = password;
+        this.nickname = nickname;
+        this.email = email;
+        this.authImgUrl = authImgUrl;
+        this.deletedAt = deletedAt;
+    }
 }
