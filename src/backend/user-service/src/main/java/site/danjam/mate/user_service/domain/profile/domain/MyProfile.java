@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.domain.user.domain;
+package site.danjam.mate.user_service.domain.profile.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
