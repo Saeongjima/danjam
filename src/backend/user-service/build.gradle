@@ -13,8 +13,19 @@ java {
 	}
 }
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 repositories {
 	mavenCentral()
+}
+
+// Spring Cloud Version
+ext {
+	set('springCloudVersion', "2024.0.0")
 }
 
 dependencies {
@@ -39,7 +50,19 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Spring Cloud
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
 }
+
+// Spring Cloud Dependency Management
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
