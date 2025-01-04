@@ -16,7 +16,7 @@ public class MultipartUtil {
 
 
     @MethodDescription(description = "파일 확장자 추출")
-    public static String getFileExtension(MultipartFile file) {
+    public String getFileExtension(MultipartFile file) {
         String originalFileName = file.getOriginalFilename();
         if (StringUtils.hasText(originalFileName)) {
             return originalFileName.substring(originalFileName.lastIndexOf('/') + 1);
