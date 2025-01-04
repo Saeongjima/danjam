@@ -5,17 +5,9 @@ import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
-import io.minio.errors.ErrorResponseException;
-import io.minio.errors.InsufficientDataException;
-import io.minio.errors.InternalException;
-import io.minio.errors.InvalidResponseException;
-import io.minio.errors.ServerException;
-import io.minio.errors.XmlParserException;
 import io.minio.http.Method;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +30,7 @@ public class MinioService {
     private final MultipartUtil multipartUtil;
 
     @MethodDescription(description = "minio 서버에 파일 업로드")
-    public String uploadFileMinio(String bucketName, String fileName, MultipartFile file)
-            throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public String uploadFileMinio(String bucketName, String fileName, MultipartFile file) throws Exception {
         // 업로드 진행 전 파일 확장자 확인
         uploadFileCheck(file);
 
@@ -66,8 +57,7 @@ public class MinioService {
     }
 
     @MethodDescription(description = "파일 이름과 버킷 이름을 통해 파일을 다운로드 받습니다.")
-    public ResponseEntity<byte[]> downloadFile(String fileName, String bucketName)
-            throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public ResponseEntity<byte[]> downloadFile(String fileName, String bucketName) throws Exception {
         InputStream fileData = minioClient.getObject(
                 GetObjectArgs.builder()
                         .bucket(bucketName)
@@ -85,8 +75,7 @@ public class MinioService {
     }
 
     @MethodDescription(description = "파일 이름과 버킷 이름을 통해 파일을 삭제합나디.")
-    public String deleteFile(String bucketName, String fileName)
-            throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public String deleteFile(String bucketName, String fileName) throws Exception {
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
