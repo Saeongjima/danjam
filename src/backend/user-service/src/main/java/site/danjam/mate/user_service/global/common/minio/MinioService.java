@@ -84,6 +84,7 @@ public class MinioService {
         return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
 
+    @MethodDescription(description = "파일 이름과 버킷 이름을 통해 파일을 삭제합나디.")
     public String deleteFile(String bucketName, String fileName)
             throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         try {
