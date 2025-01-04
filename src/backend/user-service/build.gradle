@@ -34,6 +34,9 @@ dependencies {
 
     // Rabbitmq
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    
+    // minio
+    implementation("io.minio:minio:8.5.10")
 
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

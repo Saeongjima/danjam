@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,12 +15,12 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 
-
+@Entity
 @Getter
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
 @Where(clause = "deletedAt is null")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@Table(name = "user")
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
