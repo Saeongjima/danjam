@@ -1,10 +1,15 @@
 package site.danjam.mate.user_service.domain.user.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -13,6 +18,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
+import site.danjam.mate.user_service.domain.school.domain.School;
 import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 
 @Entity
@@ -39,15 +46,34 @@ public class User extends BaseTimeEntity {
     private String authImgUrl;
     private LocalDateTime deletedAt;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "my_profile_id")
+    private MyProfile myProfile;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "school_id")
+    private School school;
+
     @Builder
     public User(String username, Integer gender, String password,
-                String nickname, String email, String authImgUrl, LocalDateTime deletedAt) {
+                String nickname, String email, String authImgUrl) {
         this.username = username;
         this.gender = gender;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
         this.authImgUrl = authImgUrl;
-        this.deletedAt = deletedAt;
+    }
+
+    public void createDefaultMyProfile(MyProfile myProfile) {
+        this.myProfile = myProfile;
+    }
+
+    public void createDefaultSchool(School school) {
+        this.school = school;
+    }
+
+    public void deleteUser() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

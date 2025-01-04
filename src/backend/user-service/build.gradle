@@ -25,6 +25,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
 
+    //Spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // Database
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -34,7 +37,7 @@ dependencies {
 
     // Rabbitmq
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    
+
     // minio
     implementation("io.minio:minio:8.5.10")
 

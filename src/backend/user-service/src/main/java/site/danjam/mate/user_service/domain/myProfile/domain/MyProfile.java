@@ -1,15 +1,18 @@
-package site.danjam.mate.user_service.domain.profile.domain;
+package site.danjam.mate.user_service.domain.myProfile.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 
 @Entity
@@ -27,16 +30,19 @@ public class MyProfile extends BaseTimeEntity {
     @Column(nullable = false)
     private String major;
     @Column(columnDefinition = "TEXT")
-    private String profileImgUrl;
+    String profileImgUrl;
     String mbti;
     String greeting;
 
+    @OneToOne(mappedBy = "myProfile", fetch = FetchType.LAZY)
+    private User user;
+
     @Builder
-    public MyProfile(String birth, Integer entryYear, String major, String profileImgUrl) {
+    public MyProfile(String birth, Integer entryYear, String major, User user) {
         this.birth = birth;
         this.entryYear = entryYear;
         this.major = major;
-        this.profileImgUrl = profileImgUrl;
+        this.user = user;
     }
 
     public void updateMbti(String mbti) {
@@ -45,6 +51,10 @@ public class MyProfile extends BaseTimeEntity {
 
     public void updateGreeting(String greeting) {
         this.greeting = greeting;
+    }
+
+    public void updateProfileImg(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
     }
 }
 
