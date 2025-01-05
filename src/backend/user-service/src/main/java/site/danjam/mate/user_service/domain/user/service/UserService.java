@@ -24,16 +24,15 @@ public class UserService {
     private final MyProfileRepository myProfileRepository;
     private final SchoolRepository schoolRepository;
 
-    private final MultipartUtil multipartUtil;
     private final MinioService minioService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @MethodDescription(description = "유저를 생성합니다.")
     @Transactional
-    public String registerUser(JoinDto joinDto) throws Exception {
+    public String signup(JoinDto joinDto, MultipartFile authImgFile) throws Exception {
         School school = schoolRepository.findById(joinDto.getSchoolId()).orElseThrow(NotFoundSchoolException::new);
 
-        String fileName = uploadFile(joinDto.getAuthImgUrl(), joinDto.getUsername());
+        String fileName = uploadFile(authImgFile, joinDto.getUsername());
         User user = createBuildUser(joinDto, fileName);
         user.createDefaultSchool(school);
         MyProfile myProfile = createBuildMyProfile(joinDto, user);
@@ -47,9 +46,11 @@ public class UserService {
 
     @MethodDescription(description = "파일을 업로드 하고, 파일 이름을 반환받습니다.")
     private String uploadFile(MultipartFile file, String userName) throws Exception {
+        MultipartUtil multipartUtil = new MultipartUtil();
         String extension = multipartUtil.getFileExtension(file);
+        System.out.println("extension = " + extension + ", userName = " + userName);
         String fileName = multipartUtil.generateFileName(userName, "auth", extension);
-        minioService.uploadFileMinio("auth", fileName, file);
+//        minioService.uploadFileMinio("auth", fileName, file);
 
         return fileName;
     }

@@ -18,7 +18,7 @@ import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "myProfile")
+@Table
 public class MyProfile extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

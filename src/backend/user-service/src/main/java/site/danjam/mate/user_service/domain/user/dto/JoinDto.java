@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class JoinDto {
@@ -33,5 +32,4 @@ public class JoinDto {
     @NotBlank(message = "비밀번호를 입혁해주세요.")
     @Size(min = 8, max = 32, message = "비밀번호는 8자 이상, 32자 이내여야 합니다.")
     private String password;
-    private MultipartFile authImgUrl; //학교 인증 사진
 }
