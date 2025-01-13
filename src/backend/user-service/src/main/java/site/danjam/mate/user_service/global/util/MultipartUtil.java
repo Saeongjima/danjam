@@ -14,7 +14,7 @@ import site.danjam.mate.user_service.global.exception.MultipartException;
 
 @Component
 public class MultipartUtil {
-    String[] extensions = {"png", "jpeg", "jpg", "bmp"};
+    private String[] extensions = {"png", "jpeg", "jpg", "bmp"};
     private List<String> allowedFileExtensions = new ArrayList<>(Arrays.asList(extensions));
 
 
