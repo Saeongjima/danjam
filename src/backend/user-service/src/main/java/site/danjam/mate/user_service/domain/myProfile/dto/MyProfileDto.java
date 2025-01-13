@@ -1,14 +1,17 @@
 package site.danjam.mate.user_service.domain.myProfile.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
+import site.danjam.mate.user_service.domain.user.domain.User;
 
 @Getter
-@Setter
-@RequiredArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class MyProfileDto {
     private String profileImgUrl; //이미지
     private String nickname; //닉네임
@@ -19,4 +22,16 @@ public class MyProfileDto {
     //태그 정보
     private String mbti; // mbti
     private Integer gender; //성별
+
+    public static MyProfileDto from(MyProfile myProfile, User user) {
+        return MyProfileDto.builder()
+                .profileImgUrl(myProfile.getProfileImgUrl())
+                .nickname(user.getNickname())
+                .birth(myProfile.getBirth())
+                .major(myProfile.getMajor())
+                .greeting(myProfile.getGreeting())
+                .mbti(myProfile.getMbti())
+                .gender(user.getGender())
+                .build();
+    }
 }

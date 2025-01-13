@@ -25,7 +25,7 @@ import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 @Entity
 @Getter
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-@Where(clause = "deletedAt is null")
+@Where(clause = "deleted_at is null")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
@@ -44,6 +44,7 @@ public class User extends BaseTimeEntity {
     private String email;
     @Column(columnDefinition = "TEXT")
     private String authImgUrl;
+    
     private LocalDateTime deletedAt;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
