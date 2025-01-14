@@ -14,7 +14,7 @@ import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class JoinController {
     private final JoinService joinService;
 
     @PostMapping(value = "signup", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
