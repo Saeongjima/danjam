@@ -9,6 +9,9 @@ import lombok.Getter;
 
 @Getter
 public class JoinDto {
+
+    @NotBlank(message = "이름을 입력해주세요.")
+    private String name;
     @NotBlank(message = "유저명을 입력해주세요.")
     @Size(min = 2, max = 32, message = "유저명은 2자 이상, 32자 이내여야 합니다.")
     private String username;

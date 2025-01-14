@@ -33,6 +33,8 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true)
+    private String name;
+    @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
     private Integer gender;
@@ -44,7 +46,7 @@ public class User extends BaseTimeEntity {
     private String email;
     @Column(columnDefinition = "TEXT")
     private String authImgUrl;
-    
+
     private LocalDateTime deletedAt;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -56,8 +58,9 @@ public class User extends BaseTimeEntity {
     private School school;
 
     @Builder
-    public User(String username, Integer gender, String password,
+    public User(String name, String username, Integer gender, String password,
                 String nickname, String email, String authImgUrl) {
+        this.name = name;
         this.username = username;
         this.gender = gender;
         this.password = password;
