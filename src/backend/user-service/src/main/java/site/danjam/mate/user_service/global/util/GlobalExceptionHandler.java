@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import site.danjam.mate.user_service.domain.myProfile.exception.NotFoundMyProfileException;
+import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.global.common.dto.ApiResponseError;
 import site.danjam.mate.user_service.global.exception.Code;
@@ -33,9 +35,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(VALIDATION_ERROR.getStatus()).body(response);
     }
 
-    @MethodDescription(description = "공통 예외 처리 메서드")
+    @ExceptionHandler(NotFoundUserException.class)
+    public ResponseEntity<ApiResponseError> handlerNotFoundUserException(NotFoundUserException e) {
+        return processCustomErrorResponse(e.getErrorCode());
+    }
+
+    @ExceptionHandler(NotFoundMyProfileException.class)
+    public ResponseEntity<ApiResponseError> handlerNotFoundUserException(NotFoundMyProfileException e) {
+        return processCustomErrorResponse(e.getErrorCode());
+    }
+
+    @MethodDescription(description = "공통 예외 처리 메서드(코드)")
     private ResponseEntity<ApiResponseError> processCustomErrorResponse(Code code) {
         ApiResponseError response = ApiResponseError.of(code);
+        return ResponseEntity.status(code.getStatus()).body(response);
+    }
+
+    @MethodDescription(description = "공통 예외 처리 메서드(코드, 메시지)")
+    private ResponseEntity<ApiResponseError> processCustomErrorResponse(Code code, String message) {
+        ApiResponseError response = ApiResponseError.of(code, message);
         return ResponseEntity.status(code.getStatus()).body(response);
     }
 }
