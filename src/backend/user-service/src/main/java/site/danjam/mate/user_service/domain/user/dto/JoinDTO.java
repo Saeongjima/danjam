@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JoinDto {
+public class JoinDTO {
 
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;

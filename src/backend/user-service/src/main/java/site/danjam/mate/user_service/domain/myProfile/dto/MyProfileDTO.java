@@ -12,7 +12,7 @@ import site.danjam.mate.user_service.domain.user.domain.User;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class MyProfileDto {
+public class MyProfileDTO {
     private String profileImgUrl; //이미지
     private String nickname; //닉네임
     private String birth; //생년월일
@@ -23,8 +23,8 @@ public class MyProfileDto {
     private String mbti; // mbti
     private Integer gender; //성별
 
-    public static MyProfileDto from(MyProfile myProfile, User user) {
-        return MyProfileDto.builder()
+    public static MyProfileDTO from(MyProfile myProfile, User user) {
+        return MyProfileDTO.builder()
                 .profileImgUrl(myProfile.getProfileImgUrl())
                 .nickname(user.getNickname())
                 .birth(myProfile.getBirth())
