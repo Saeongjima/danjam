@@ -11,7 +11,7 @@ import site.danjam.mate.user_service.domain.school.domain.School;
 import site.danjam.mate.user_service.domain.school.exception.NotFoundSchoolException;
 import site.danjam.mate.user_service.domain.school.repository.SchoolRepository;
 import site.danjam.mate.user_service.domain.user.domain.User;
-import site.danjam.mate.user_service.domain.user.dto.JoinDto;
+import site.danjam.mate.user_service.domain.user.dto.JoinDTO;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.global.common.minio.MinioService;
@@ -19,7 +19,7 @@ import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class JoinService {
     private final UserRepository userRepository;
     private final MyProfileRepository myProfileRepository;
     private final SchoolRepository schoolRepository;
@@ -29,10 +29,10 @@ public class UserService {
 
     @MethodDescription(description = "유저를 생성합니다.")
     @Transactional
-    public String signup(JoinDto joinDto, MultipartFile authImgFile) throws Exception {
+    public String signup(JoinDTO joinDto, MultipartFile authImgFile) throws Exception {
         School school = schoolRepository.findById(joinDto.getSchoolId()).orElseThrow(NotFoundSchoolException::new);
 
-        String fileName = uploadFile(authImgFile, joinDto.getUsername());
+        String fileName = determineFileName(authImgFile, joinDto.getUsername());
         User user = createBuildUser(joinDto, fileName);
         user.createDefaultSchool(school);
         MyProfile myProfile = createBuildMyProfile(joinDto, user);
@@ -44,8 +44,16 @@ public class UserService {
         return fileName;
     }
 
+    @MethodDescription(description = "파일 이름을 결정합니다.")
+    private String determineFileName(MultipartFile file, String userName) {
+        if (file == null || file.isEmpty()) {
+            return "default.png";
+        }
+        return uploadFile(file, userName);
+    }
+
     @MethodDescription(description = "파일을 업로드 하고, 파일 이름을 반환받습니다.")
-    private String uploadFile(MultipartFile file, String userName) throws Exception {
+    private String uploadFile(MultipartFile file, String userName) {
         MultipartUtil multipartUtil = new MultipartUtil();
         String extension = multipartUtil.getFileExtension(file);
         System.out.println("extension = " + extension + ", userName = " + userName);
@@ -56,8 +64,9 @@ public class UserService {
     }
 
     @MethodDescription(description = "빌더 패턴을 통해 User 를 반환받습니다.")
-    private User createBuildUser(JoinDto dto, String authImgUrl) {
+    private User createBuildUser(JoinDTO dto, String authImgUrl) {
         return User.builder()
+                .name(dto.getName())
                 .username(dto.getUsername())
                 .gender(dto.getGender())
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
@@ -68,7 +77,7 @@ public class UserService {
     }
 
     @MethodDescription(description = "빌더 패턴을 통해 MyProfile 를 반환받습니다.")
-    private MyProfile createBuildMyProfile(JoinDto dto, User user) {
+    private MyProfile createBuildMyProfile(JoinDTO dto, User user) {
         return MyProfile.builder()
                 .birth(dto.getBirth())
                 .entryYear(dto.getEntryYear())

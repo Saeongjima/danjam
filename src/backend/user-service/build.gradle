@@ -41,6 +41,9 @@ dependencies {
     // minio
     implementation("io.minio:minio:8.5.10")
 
+    //openfeign
+    
+
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
