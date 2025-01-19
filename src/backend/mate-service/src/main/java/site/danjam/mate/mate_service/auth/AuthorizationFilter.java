@@ -24,7 +24,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         String auth = request.getHeader("Auth");
 
         if(!"true".equals(auth)){
-            throw new BaseException(Code.ACCESS_DENIED, Code.ACCESS_DENIED.getMessage());
+            throw new BaseException(Code.ACCESS_DENIED);
         }
 
         // 헤더에서 userId와 Role 추출
@@ -33,12 +33,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         // 헤더가 없는 경우 예외 발생
         if (userId == null || role == null) {
-            throw new BaseException(Code.REQUIRED_LOGIN, Code.REQUIRED_LOGIN.getMessage());
+            throw new BaseException(Code.REQUIRED_LOGIN);
         }
 
         // Role 검증
         if (!"AuthUser".equals(role)) {
-            throw new BaseException(Code.ACCESS_DENIED, Code.ACCESS_DENIED.getMessage());
+            throw new BaseException(Code.ACCESS_DENIED);
         }
 
         // 로그 기록

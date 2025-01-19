@@ -16,6 +16,7 @@ import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
 @Getter @Setter
 public class RoomMateProfileInputDTO {
+
     @NotEmpty(message = "기숙사 옵션을 선택해주세요.")
     @Size(min = 1, max = 20, message = "기숙사 옵션은 1개 이상 20개 이하로 선택해주세요.")
     private Set<String> hopeDormitories; // 희망 기숙사
@@ -30,15 +31,16 @@ public class RoomMateProfileInputDTO {
     private Set<SleepHabit> sleepHabits; // 수면 습관
 
     @NotNull(message = "흡연 여부를 선택해주세요.")
+    @Size(min=1, max=1, message = "흡연여부는 Y 또는 N입니다.")
     private Character isSmoking; // Y: 흡연, N: 비흡연
 
     @NotNull(message = "더위 정도를 선택해주세요.")
     @Enumerated(EnumType.STRING)
-    private Level hotLevel; //
+    private Level hotLevel;
 
     @NotNull(message = "추위 정도를 선택해주세요.")
     @Enumerated(EnumType.STRING)
-    private Level coldLevel; //
+    private Level coldLevel;
 
     @NotNull(message = "활동 시간대를 선택해주세요.")
     @Enumerated(EnumType.STRING)

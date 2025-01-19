@@ -4,9 +4,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import site.danjam.mate.mate_service.domain.MateProfile;
+import site.danjam.mate.mate_service.enums.MateType;
+import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileInputDTO;
 import site.danjam.mate.mate_service.romm_mate.enums.ActivityTime;
 import site.danjam.mate.mate_service.romm_mate.enums.CleanPeriod;
 import site.danjam.mate.mate_service.romm_mate.enums.Level;
@@ -14,7 +21,9 @@ import site.danjam.mate.mate_service.romm_mate.enums.ShowerTime;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public class RoomMateProfile extends MateProfile {
 
     @Column(nullable = false)
@@ -39,5 +48,14 @@ public class RoomMateProfile extends MateProfile {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     ShowerTime showerTime; // 10-20분, 20-30분, 30-40분, 40분이상
+
+    @Column(nullable = false, length = 20)
+    String hopeRoomPersons; // ex) "[2,3,4]", "[1,2]"
+
+    @Column(nullable = false, length = 100)
+    String hopeDormitories; // ex) "[정의관,자유관]"
+
+    @Column(nullable = false)
+    String ownSleepHbits; // ex) "[SENSITIVE_TO_SOUND,SNORE]"
 
 }
