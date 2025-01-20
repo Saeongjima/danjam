@@ -27,6 +27,23 @@ public class MultipartUtil {
         return "";
     }
 
+    @MethodDescription(description = "파일 확장자를 확인합니다.")
+    public void uploadFileExtensionCheck(String extension) {
+        if (!allowedFileExtensions.contains(extension)) {
+            throw new MultipartException();
+        }
+    }
+
+    @MethodDescription(description = "파일을 업로드 하고, 파일 이름을 반환받습니다.")
+    private String uploadFile(MultipartFile file, String userName) {
+        String extension = getFileExtension(file);
+        System.out.println("extension = " + extension + ", userName = " + userName);
+        String fileName = generateFileName(userName, "auth", extension);
+//        minioService.uploadFileMinio("auth", fileName, file);
+
+        return fileName;
+    }
+
     @MethodDescription(description = "지정된 형식으로 파일명 생성")
     public String generateFileName(String username, String suffix, String extension) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -34,10 +51,11 @@ public class MultipartUtil {
         return username + "_" + now.format(formatter) + "_" + suffix + "." + extension;
     }
 
-    @MethodDescription(description = "파일 확장자를 확인합니다.")
-    public void uploadFileExtensionCheck(String extension) {
-        if (!allowedFileExtensions.contains(extension)) {
-            throw new MultipartException();
+    @MethodDescription(description = "파일 이름을 결정합니다.")
+    public String determineFileName(MultipartFile file, String userName) {
+        if (file == null || file.isEmpty()) {
+            return "default.png";
         }
+        return uploadFile(file, userName);
     }
 }

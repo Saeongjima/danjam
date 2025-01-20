@@ -14,7 +14,6 @@ import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.JoinDTO;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.common.minio.MinioService;
 import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service
@@ -24,15 +23,15 @@ public class JoinService {
     private final MyProfileRepository myProfileRepository;
     private final SchoolRepository schoolRepository;
 
-    private final MinioService minioService;
+    private final MultipartUtil multipartUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @MethodDescription(description = "유저를 생성합니다.")
     @Transactional
-    public String signup(JoinDTO joinDto, MultipartFile authImgFile) throws Exception {
+    public String signup(JoinDTO joinDto, MultipartFile authImgFile) {
         School school = schoolRepository.findById(joinDto.getSchoolId()).orElseThrow(NotFoundSchoolException::new);
 
-        String fileName = determineFileName(authImgFile, joinDto.getUsername());
+        String fileName = multipartUtil.determineFileName(authImgFile, joinDto.getUsername());
         User user = createBuildUser(joinDto, fileName);
         user.createDefaultSchool(school);
         MyProfile myProfile = createBuildMyProfile(joinDto, user);
@@ -44,24 +43,6 @@ public class JoinService {
         return fileName;
     }
 
-    @MethodDescription(description = "파일 이름을 결정합니다.")
-    private String determineFileName(MultipartFile file, String userName) {
-        if (file == null || file.isEmpty()) {
-            return "default.png";
-        }
-        return uploadFile(file, userName);
-    }
-
-    @MethodDescription(description = "파일을 업로드 하고, 파일 이름을 반환받습니다.")
-    private String uploadFile(MultipartFile file, String userName) {
-        MultipartUtil multipartUtil = new MultipartUtil();
-        String extension = multipartUtil.getFileExtension(file);
-        System.out.println("extension = " + extension + ", userName = " + userName);
-        String fileName = multipartUtil.generateFileName(userName, "auth", extension);
-//        minioService.uploadFileMinio("auth", fileName, file);
-
-        return fileName;
-    }
 
     @MethodDescription(description = "빌더 패턴을 통해 User 를 반환받습니다.")
     private User createBuildUser(JoinDTO dto, String authImgUrl) {
