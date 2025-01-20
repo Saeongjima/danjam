@@ -31,7 +31,7 @@ public class JoinService {
     public String signup(JoinDTO joinDto, MultipartFile authImgFile) {
         School school = schoolRepository.findById(joinDto.getSchoolId()).orElseThrow(NotFoundSchoolException::new);
 
-        String fileName = multipartUtil.determineFileName(authImgFile, joinDto.getUsername());
+        String fileName = multipartUtil.determineFileName(authImgFile, joinDto.getUsername(), "auth");
         User user = createBuildUser(joinDto, fileName);
         user.createDefaultSchool(school);
         MyProfile myProfile = createBuildMyProfile(joinDto, user);
