@@ -11,10 +11,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.danjam.mate.user_service.domain.myProfile.exception.NotFoundMyProfileException;
+import site.danjam.mate.user_service.domain.school.exception.NotFoundSchoolException;
+import site.danjam.mate.user_service.domain.user.exception.DuplicateUsernameException;
 import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.global.common.dto.ApiResponseError;
 import site.danjam.mate.user_service.global.exception.Code;
+import site.danjam.mate.user_service.global.exception.InvalidInputException;
 
 @Slf4j
 @RestControllerAdvice
@@ -44,6 +47,27 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseError> handlerNotFoundUserException(NotFoundMyProfileException e) {
         return processCustomErrorResponse(e.getErrorCode());
     }
+
+    @ExceptionHandler(NotFoundSchoolException.class)
+    public ResponseEntity<ApiResponseError> handlerNotFoundSchoolException(NotFoundSchoolException e) {
+        return processCustomErrorResponse(e.getErrorCode());
+    }
+
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<ApiResponseError> handlerDuplicateUsernameException(DuplicateUsernameException e) {
+        return processCustomErrorResponse(e.getErrorCode());
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ApiResponseError> handlerInvalidInputException(InvalidInputException e) {
+        return processCustomErrorResponse(e.getErrorCode());
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ApiResponseError> handlerInvalidInputException(InvalidInputException e, String message) {
+        return processCustomErrorResponse(e.getErrorCode(), message);
+    }
+
 
     @MethodDescription(description = "공통 예외 처리 메서드(코드)")
     private ResponseEntity<ApiResponseError> processCustomErrorResponse(Code code) {

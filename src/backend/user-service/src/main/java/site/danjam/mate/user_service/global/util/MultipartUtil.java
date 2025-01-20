@@ -35,11 +35,11 @@ public class MultipartUtil {
     }
 
     @MethodDescription(description = "파일을 업로드 하고, 파일 이름을 반환받습니다.")
-    private String uploadFile(MultipartFile file, String userName, String bucketName) {
+    private String uploadFile(MultipartFile file, String userName, String suffix, String bucketName) {
         String extension = getFileExtension(file);
         System.out.println("extension = " + extension + ", userName = " + userName);
-        String fileName = generateFileName(userName, bucketName, extension);
-//        minioService.uploadFileMinio("auth", fileName, file);
+        String fileName = generateFileName(userName, suffix, extension);
+//        minioService.uploadFileMinio(bucketName, fileName, file);
 
         return fileName;
     }
@@ -52,10 +52,10 @@ public class MultipartUtil {
     }
 
     @MethodDescription(description = "파일 이름을 결정합니다.")
-    public String determineFileName(MultipartFile file, String userName, String bucketName) {
+    public String determineFileName(MultipartFile file, String userName, String suffix, String bucketName) {
         if (file == null || file.isEmpty()) {
             return "default.png";
         }
-        return uploadFile(file, userName, bucketName);
+        return uploadFile(file, userName, suffix, bucketName);
     }
 }

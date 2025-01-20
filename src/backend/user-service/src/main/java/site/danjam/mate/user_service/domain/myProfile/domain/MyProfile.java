@@ -56,5 +56,10 @@ public class MyProfile extends BaseTimeEntity {
     public void updateProfileImg(String profileImgUrl) {
         this.profileImgUrl = profileImgUrl;
     }
+
+    public void updateSchoolInfo(Integer entryYear, String major) {
+        this.entryYear = entryYear;
+        this.major = major;
+    }
 }
 

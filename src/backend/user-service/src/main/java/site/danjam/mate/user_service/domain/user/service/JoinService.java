@@ -19,23 +19,24 @@ import site.danjam.mate.user_service.global.util.MultipartUtil;
 @Service
 @RequiredArgsConstructor
 public class JoinService {
+    private final String SUFFIX = "auth";
+    private final String BUCKET_NAME = "user-auth-img";
     private final UserRepository userRepository;
     private final MyProfileRepository myProfileRepository;
     private final SchoolRepository schoolRepository;
-
     private final MultipartUtil multipartUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @MethodDescription(description = "유저를 생성합니다.")
     @Transactional
     public String signup(JoinDTO joinDto, MultipartFile authImgFile) {
-        School school = schoolRepository.findById(joinDto.getSchoolId()).orElseThrow(NotFoundSchoolException::new);
+        School school = findBySchool(joinDto.getSchoolId());
 
-        String fileName = multipartUtil.determineFileName(authImgFile, joinDto.getUsername(), "auth");
+        String fileName = multipartUtil.determineFileName(authImgFile, joinDto.getUsername(), SUFFIX, BUCKET_NAME);
         User user = createBuildUser(joinDto, fileName);
-        user.createDefaultSchool(school);
+        user.updateSchool(school);
         MyProfile myProfile = createBuildMyProfile(joinDto, user);
-        user.createDefaultMyProfile(myProfile);
+        user.updateMyProfile(myProfile);
 
         userRepository.save(user);
         myProfileRepository.save(myProfile);
@@ -65,5 +66,10 @@ public class JoinService {
                 .major(dto.getMajor())
                 .user(user)
                 .build();
+    }
+
+    @MethodDescription(description = "학교 정보를 찾습니다.")
+    private School findBySchool(Long id) {
+        return schoolRepository.findById(id).orElseThrow(NotFoundSchoolException::new);
     }
 }

@@ -69,11 +69,11 @@ public class User extends BaseTimeEntity {
         this.authImgUrl = authImgUrl;
     }
 
-    public void createDefaultMyProfile(MyProfile myProfile) {
+    public void updateMyProfile(MyProfile myProfile) {
         this.myProfile = myProfile;
     }
 
-    public void createDefaultSchool(School school) {
+    public void updateSchool(School school) {
         this.school = school;
     }
 
@@ -83,6 +83,10 @@ public class User extends BaseTimeEntity {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateAuthImgUrl(String authImgUrl) {
+        this.authImgUrl = authImgUrl;
     }
 
     public void deleteUser() {
