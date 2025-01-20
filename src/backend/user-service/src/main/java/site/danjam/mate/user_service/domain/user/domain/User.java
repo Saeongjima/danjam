@@ -77,6 +77,14 @@ public class User extends BaseTimeEntity {
         this.school = school;
     }
 
+    public void updateUsername(String username) {
+        this.username = username;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
     public void deleteUser() {
         this.deletedAt = LocalDateTime.now();
     }

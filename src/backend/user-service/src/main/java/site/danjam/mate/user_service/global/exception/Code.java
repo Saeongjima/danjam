@@ -34,6 +34,7 @@ public enum Code {
     NO_MATCHING_SCHOOL_FOUND(HttpStatus.NOT_FOUND, 40200, "일치하는 학교를 찾을 수 없습니다."),
     CAN_NOT_FIND_USER(HttpStatus.BAD_REQUEST, 40300, "유저를 찾을 수 없습니다."),
     CAN_NOT_FIND_MYPROFILE(HttpStatus.BAD_REQUEST, 40400, "프로필을 찾을 수 없습니다."),
+    DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, 40500, "이미 사용중인 유저 이름입니다."),
 
     //보안 관련(40200 ~ 40299번대)
     REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40200, "로그인이 필요합니다."),
