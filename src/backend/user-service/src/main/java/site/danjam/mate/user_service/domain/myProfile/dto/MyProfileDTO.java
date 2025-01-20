@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
 import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
 import site.danjam.mate.user_service.domain.user.domain.User;
 
@@ -22,8 +23,9 @@ public class MyProfileDTO {
     //태그 정보
     private String mbti; // mbti
     private Integer gender; //성별
+    private MateProfileDTO mateProfileDTO;
 
-    public static MyProfileDTO from(MyProfile myProfile, User user) {
+    public static MyProfileDTO from(MyProfile myProfile, User user, MateProfileDTO mateProfileDTO) {
         return MyProfileDTO.builder()
                 .profileImgUrl(myProfile.getProfileImgUrl())
                 .nickname(user.getNickname())
@@ -32,6 +34,7 @@ public class MyProfileDTO {
                 .greeting(myProfile.getGreeting())
                 .mbti(myProfile.getMbti())
                 .gender(user.getGender())
+                .mateProfileDTO(mateProfileDTO)
                 .build();
     }
 }
