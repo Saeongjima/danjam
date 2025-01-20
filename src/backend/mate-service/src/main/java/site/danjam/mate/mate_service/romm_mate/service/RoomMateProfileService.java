@@ -1,6 +1,7 @@
 package site.danjam.mate.mate_service.romm_mate.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,8 +55,21 @@ public class RoomMateProfileService implements MateProfileService {
         roomMateProfileRepository.save(roomMateProfile);
     }
 
+    @Override
+    public RoomMateProfileDTO getMateProfile(String username, String role) {
+        // 요청 권한을 확인
+        if(!checkAuthority(role)){
+            throw new BaseException(Code.ACCESS_DENIED);
+        }
 
-    @MethodDescription(description = "빌더 패턴을 통해 RoomMateProfile을 반환받습니다.")
+        // 유저의 메이트 프로필이 있는지 확인
+        RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUserId(username)
+                .orElseThrow(() -> new BaseException(Code.CAN_NOT_FIND_RESOURCE, Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
+
+        return createBuildRoomMateProfileDTO(roomMateProfile);
+    }
+
+    @MethodDescription(description = "메이트 프로필 생성할 때 사용합니다. 빌더 패턴을 통해 RoomMateProfile을 반환 합니다.")
     private RoomMateProfile createBuildRoomMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO, String userId) {
         return RoomMateProfile.builder()
                 .userId(userId)
@@ -72,12 +86,26 @@ public class RoomMateProfileService implements MateProfileService {
                 .build();
     }
 
+    @MethodDescription(description = "메이트 프로플일 조회할 때 사용합니다. 빌더 패턴을 통해 RoomMateProfile를 인자로 받아 RoomMateProfileDTO를 반환합니다.")
+    private RoomMateProfileDTO createBuildRoomMateProfileDTO(RoomMateProfile roomMateProfile){
+        return RoomMateProfileDTO.builder()
+                .profileId(roomMateProfile.getId())
+                .isSmoking(roomMateProfile.getIsSmoking())
+                .hotLevel(roomMateProfile.getHotLevel().toString())
+                .coldLevel(roomMateProfile.getColdLevel().toString())
+                .activityTime(roomMateProfile.getActivityTime().toString())
+                .cleanPeriod(roomMateProfile.getCleanPeriod().toString())
+                .showerTime(roomMateProfile.getShowerTime().toString())
+                .hopeRoomPersons(DataConvert.stringToSet(roomMateProfile.getHopeRoomPersons()))
+                .hopeDormitories(DataConvert.stringToSet(roomMateProfile.getHopeDormitories()))
+                .ownSleepHabits(DataConvert.stringToSet(roomMateProfile.getOwnSleepHbits()))
+                .build();
+    }
+
     @Override
     public MateType getMateType(){
         return MateType.ROOMMATE;
     }
-
-
 
     @Override
     public boolean checkAuthority(String role){
