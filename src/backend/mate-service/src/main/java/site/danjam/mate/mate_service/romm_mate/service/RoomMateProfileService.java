@@ -1,14 +1,11 @@
 package site.danjam.mate.mate_service.romm_mate.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.mate_service.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.mate_service.global.common.dto.ApiResponseMessage;
 import site.danjam.mate.mate_service.global.exception.BaseException;
 import site.danjam.mate.mate_service.global.exception.Code;
 import site.danjam.mate.mate_service.romm_mate.domain.RoomMateProfile;
@@ -16,6 +13,7 @@ import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileDTO;
 import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileInputDTO;
 import site.danjam.mate.mate_service.romm_mate.repository.RoomMateProfileRepository;
 import site.danjam.mate.mate_service.service.MateProfileService;
+import site.danjam.mate.mate_service.global.utils.AuthUtil;
 import site.danjam.mate.mate_service.utils.DataConvert;
 import site.danjam.mate.mate_service.utils.ValidationUtil;
 
@@ -31,12 +29,12 @@ public class RoomMateProfileService implements MateProfileService {
     public void createMateProfile(Object inputDTO, String username, String role){
 
         // 요청 권한을 확인
-        if(!checkAuthority(role)){
+        if(!AuthUtil.checkAuthUser(role)){
             throw new BaseException(Code.ACCESS_DENIED);
         }
 
         // 이미 해당 프로필이 있는지 확인
-        if(roomMateProfileRepository.findByUserId(username).isPresent()){
+        if(roomMateProfileRepository.findByUsername(username).isPresent()){
             throw new BaseException(Code.ALREADY_PROFILE_EXIST);
         }
 
@@ -58,21 +56,21 @@ public class RoomMateProfileService implements MateProfileService {
     @Override
     public RoomMateProfileDTO getMateProfile(String username, String role) {
         // 요청 권한을 확인
-        if(!checkAuthority(role)){
+        if(!AuthUtil.checkAuthUser(role)){
             throw new BaseException(Code.ACCESS_DENIED);
         }
 
         // 유저의 메이트 프로필이 있는지 확인
-        RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUserId(username)
+        RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUsername(username)
                 .orElseThrow(() -> new BaseException(Code.CAN_NOT_FIND_RESOURCE, Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
         return createBuildRoomMateProfileDTO(roomMateProfile);
     }
 
     @MethodDescription(description = "메이트 프로필 생성할 때 사용합니다. 빌더 패턴을 통해 RoomMateProfile을 반환 합니다.")
-    private RoomMateProfile createBuildRoomMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO, String userId) {
+    private RoomMateProfile createBuildRoomMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO, String username) {
         return RoomMateProfile.builder()
-                .userId(userId)
+                .username(username)
                 .mateType(MateType.ROOMMATE)
                 .isSmoking(roomMateProfileInputDTO.getIsSmoking())
                 .hotLevel(roomMateProfileInputDTO.getHotLevel())
@@ -107,8 +105,4 @@ public class RoomMateProfileService implements MateProfileService {
         return MateType.ROOMMATE;
     }
 
-    @Override
-    public boolean checkAuthority(String role){
-        return role.equals("ROLE_AUTH_USER");
-    }
 }

@@ -1,27 +1,36 @@
-//package site.danjam.mate.mate_service.study_mate.domain;
-//
-//import jakarta.persistence.Column;
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Table;
-//import java.util.Set;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.experimental.SuperBuilder;
-//import site.danjam.mate.mate_service.domain.MateProfile;
-//
-//@Entity
-//@Getter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@SuperBuilder
-//@Table(name = "study_mate_profile")
-//public class StudyMateProfile extends MateProfile {
-//
-//    @Column(nullable = false)
-//    private
-//    private Set<String> preferredStudyTypes; //선호하는 스터디 종류
-//    private String preferredStudyTime; //원하는 스터디 시간
-//    private Set<String> userSubjects; //수강중인 과목
-//    private String averageGrade; //평균 학점
-//}
+package site.danjam.mate.mate_service.study_mate.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import site.danjam.mate.mate_service.domain.MateProfile;
+import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
+import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
+
+@Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class StudyMateProfile extends MateProfile {
+
+    @Column(nullable = false)
+    private String preferredStudyTypes; //ex) "[CERTIFICATION,LANGUAGE]"
+
+    @Column(nullable = false)
+    private String userSubjects; //ex) "[데이터베이스,자율주행]"
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StudyTime preferredStudyTime;
+
+    @Column(nullable = false)
+    @Enumerated
+    private AverageGrade averageGrade;
+
+}

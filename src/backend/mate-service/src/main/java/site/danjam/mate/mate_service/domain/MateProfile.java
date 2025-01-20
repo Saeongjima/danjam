@@ -33,8 +33,8 @@ public abstract class MateProfile extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(name = "user_id")
-    protected String userId;
+    @Column(name = "username")
+    protected String username;
 
     @Enumerated
     protected MateType mateType;

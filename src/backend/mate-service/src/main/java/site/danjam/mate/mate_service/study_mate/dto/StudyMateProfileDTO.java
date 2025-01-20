@@ -1,7 +1,11 @@
 package site.danjam.mate.mate_service.study_mate.dto;
 
 import java.util.Set;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@Builder
 public class StudyMateProfileDTO {
 
     private Long id; //roomMateProfile의 id

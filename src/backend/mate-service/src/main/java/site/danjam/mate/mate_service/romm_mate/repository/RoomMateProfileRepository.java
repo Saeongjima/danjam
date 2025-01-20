@@ -7,6 +7,6 @@ import site.danjam.mate.mate_service.romm_mate.domain.RoomMateProfile;
 
 public interface RoomMateProfileRepository extends JpaRepository<RoomMateProfile, Long> {
 
-    @MethodDescription(description = "userId로 룸메이트 프로필 조회 메서드")
-    Optional<RoomMateProfile> findByUserId(String userId);
+    @MethodDescription(description = "username으로 룸메이트 프로필 조회 메서드")
+    Optional<RoomMateProfile> findByUsername(String userId);
 }
