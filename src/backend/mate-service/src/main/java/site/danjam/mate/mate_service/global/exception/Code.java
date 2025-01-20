@@ -19,7 +19,7 @@ public enum Code {
      * VALIDATION 관련 100번대
      */
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, 100, "잘못된 입력값이 존재합니다."),
-
+    MISSING_HEADER(HttpStatus.BAD_REQUEST, 101, "Header에 값이 존재하지 않습니다."),
     /**
      * 400번대
      */
@@ -28,6 +28,8 @@ public enum Code {
     INVALID_QUERY_PARAM(HttpStatus.BAD_REQUEST, 40001, "쿼리 파라미터 타입이 일치하지 않습니다."),
     NULL_INPUT_VALUE(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
     ALREADY_PROFILE_EXIST(HttpStatus.BAD_REQUEST, 40003, "프로필이 이미 존재합니다."),
+    INVALID_MATE_TYPE(HttpStatus.BAD_REQUEST, 40004, "존재하지 않는 메이트 타입입니다."),
+
     //유효하지 않은 리소스(40100 ~ 40199번대
     CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 40100, "해당 리소스를 찾을 수 없습니다."),
 

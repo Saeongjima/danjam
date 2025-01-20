@@ -27,35 +27,35 @@ import site.danjam.mate.mate_service.romm_mate.enums.ShowerTime;
 public class RoomMateProfile extends MateProfile {
 
     @Column(nullable = false)
-    private Character isSmoking; // Y: 흡연, N: 비흡연
+    private String isSmoking; // Y: 흡연, N: 비흡연
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    Level hotLevel; // 많이타요, 적게타요, 상관없어요
+    private Level hotLevel; // 많이타요, 적게타요, 상관없어요
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    Level coldLevel; // 많이타요, 적게타요, 상관없어요
+    private Level coldLevel; // 많이타요, 적게타요, 상관없어요
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    ActivityTime activityTime; // 아침형, 새벽형, 상관없어요
+    private ActivityTime activityTime; // 아침형, 새벽형, 상관없어요
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    CleanPeriod cleanPeriod; // 매일해요, 주마다해요, 달마다해요, 상관없어요
+    private CleanPeriod cleanPeriod; // 매일해요, 주마다해요, 달마다해요, 상관없어요
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    ShowerTime showerTime; // 10-20분, 20-30분, 30-40분, 40분이상
+    private ShowerTime showerTime; // 10-20분, 20-30분, 30-40분, 40분이상
 
     @Column(nullable = false, length = 20)
-    String hopeRoomPersons; // ex) "[2,3,4]", "[1,2]"
+    private String hopeRoomPersons; // ex) "[2,3,4]", "[1,2]"
 
     @Column(nullable = false, length = 100)
-    String hopeDormitories; // ex) "[정의관,자유관]"
+    private String hopeDormitories; // ex) "[정의관,자유관]"
 
     @Column(nullable = false)
-    String ownSleepHbits; // ex) "[SENSITIVE_TO_SOUND,SNORE]"
+    private String ownSleepHbits; // ex) "[SENSITIVE_TO_SOUND,SNORE]"
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Set;
 import lombok.Getter;
@@ -31,8 +32,8 @@ public class RoomMateProfileInputDTO {
     private Set<SleepHabit> sleepHabits; // 수면 습관
 
     @NotNull(message = "흡연 여부를 선택해주세요.")
-    @Size(min=1, max=1, message = "흡연여부는 Y 또는 N입니다.")
-    private Character isSmoking; // Y: 흡연, N: 비흡연
+    @Pattern(regexp = "Y|N", message = "흡연 여부는 Y 또는 N만 가능합니다.")
+    private String isSmoking; // Y: 흡연, N: 비흡연
 
     @NotNull(message = "더위 정도를 선택해주세요.")
     @Enumerated(EnumType.STRING)

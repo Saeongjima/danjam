@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
@@ -32,4 +33,14 @@ public class GlobalExceptionHandler {
         ApiResponseError response = ApiResponseError.of(code, e.getMessage());
         return ResponseEntity.status(code.getStatus()).body(response);
     }
+
+    @MethodDescription(description = "Header 누락시 예외처리")
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ApiResponseError> handleMissingRequestHeaderException(MissingRequestHeaderException e){
+        Code code = Code.MISSING_HEADER;
+        String missingHeaderName = e.getHeaderName();
+        ApiResponseError response = ApiResponseError.of(code, e.getMessage()+":"+missingHeaderName);
+        return ResponseEntity.status(code.getStatus()).body(response);
+    }
+
 }

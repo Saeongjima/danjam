@@ -1,5 +1,6 @@
 package site.danjam.mate.mate_service.romm_mate.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,31 +11,43 @@ import site.danjam.mate.mate_service.global.common.dto.ApiResponseMessage;
 import site.danjam.mate.mate_service.global.exception.BaseException;
 import site.danjam.mate.mate_service.global.exception.Code;
 import site.danjam.mate.mate_service.romm_mate.domain.RoomMateProfile;
+import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileDTO;
 import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileInputDTO;
 import site.danjam.mate.mate_service.romm_mate.repository.RoomMateProfileRepository;
 import site.danjam.mate.mate_service.service.MateProfileService;
 import site.danjam.mate.mate_service.utils.DataConvert;
+import site.danjam.mate.mate_service.utils.ValidationUtil;
 
 @Service
 @RequiredArgsConstructor
 public class RoomMateProfileService implements MateProfileService {
 
     private final RoomMateProfileRepository roomMateProfileRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     @Transactional
-    public void createMateProfile(Object inputDTO, String username){
-        // inputDTO의 타입 확인 및 변환
-        if(!isValidInputDTO(inputDTO)){
-            throw new IllegalArgumentException("Invalid DTO type for ROOMMATE");
+    public void createMateProfile(Object inputDTO, String username, String role){
+
+        // 요청 권한을 확인
+        if(!checkAuthority(role)){
+            throw new BaseException(Code.ACCESS_DENIED);
         }
-        RoomMateProfileInputDTO roomMateProfileInputDTO = (RoomMateProfileInputDTO)inputDTO;
 
-
-        // 이미 프로필이 있는지 확인
+        // 이미 해당 프로필이 있는지 확인
         if(roomMateProfileRepository.findByUserId(username).isPresent()){
             throw new BaseException(Code.ALREADY_PROFILE_EXIST);
         }
+
+        // inputDTO의 타입 확인 및 Validation 체크
+        String validationMessage = ValidationUtil.validateInput(inputDTO, RoomMateProfileInputDTO.class);
+        if(validationMessage!=null){
+            throw new BaseException(Code.VALIDATION_ERROR, Code.VALIDATION_ERROR.getMessage()+" : "+validationMessage);
+        }
+
+        // ObjectMapper를 사용해 타입 변환
+        RoomMateProfileInputDTO roomMateProfileInputDTO = objectMapper.convertValue(inputDTO, RoomMateProfileInputDTO.class);
+
 
         // RoomMAteProfileInputDTO를 RoomMateProfile로 변환하여 저장
         RoomMateProfile roomMateProfile = createBuildRoomMateProfile(roomMateProfileInputDTO, username);
@@ -64,12 +77,10 @@ public class RoomMateProfileService implements MateProfileService {
         return MateType.ROOMMATE;
     }
 
-    @Override
-    public boolean isValidInputDTO(Object inputDTO){
-        if (!(inputDTO instanceof RoomMateProfileInputDTO)) {
-            return false;
-        }
-        return true;
-    }
 
+
+    @Override
+    public boolean checkAuthority(String role){
+        return role.equals("ROLE_AUTH_USER");
+    }
 }
