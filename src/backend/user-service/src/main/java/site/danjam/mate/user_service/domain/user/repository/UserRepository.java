@@ -1,15 +1,33 @@
 package site.danjam.mate.user_service.domain.user.repository;
 
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import site.danjam.mate.user_service.domain.user.domain.User;
+import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    boolean existsByUsername(String username);
+@Repository
+@RequiredArgsConstructor
+public class UserRepository {
 
-    boolean existsByEmail(String email);
+    private final UserJpaRepository userJpaRepository;
 
-    boolean existsByNickname(String nickname);
+    public User save(User user) {
+        return userJpaRepository.save(user);
+    }
 
-    Optional<User> findByUsername(String username);
+    public boolean existsByUsername(String username) {
+        return userJpaRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
+    }
+
+    public boolean existsByNickname(String nickname) {
+        return userJpaRepository.existsByNickname(nickname);
+    }
+
+    public User findByUsername(String username) {
+        return userJpaRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
+    }
 }

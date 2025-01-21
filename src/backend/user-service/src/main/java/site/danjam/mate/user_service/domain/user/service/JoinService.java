@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
 import site.danjam.mate.user_service.domain.myProfile.repository.MyProfileRepository;
 import site.danjam.mate.user_service.domain.school.domain.School;
-import site.danjam.mate.user_service.domain.school.exception.NotFoundSchoolException;
 import site.danjam.mate.user_service.domain.school.repository.SchoolRepository;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.JoinDTO;
@@ -30,7 +29,7 @@ public class JoinService {
     @MethodDescription(description = "유저를 생성합니다.")
     @Transactional
     public String signup(JoinDTO joinDto, MultipartFile authImgFile) {
-        School school = findBySchool(joinDto.getSchoolId());
+        School school = schoolRepository.findBySchool(joinDto.getSchoolId());
 
         String fileName = multipartUtil.determineFileName(authImgFile, joinDto.getUsername(), SUFFIX, BUCKET_NAME);
         User user = createBuildUser(joinDto, fileName);
@@ -66,10 +65,5 @@ public class JoinService {
                 .major(dto.getMajor())
                 .user(user)
                 .build();
-    }
-
-    @MethodDescription(description = "학교 정보를 찾습니다.")
-    private School findBySchool(Long id) {
-        return schoolRepository.findById(id).orElseThrow(NotFoundSchoolException::new);
     }
 }

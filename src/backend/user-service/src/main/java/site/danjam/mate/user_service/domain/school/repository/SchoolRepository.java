@@ -1,9 +1,16 @@
 package site.danjam.mate.user_service.domain.school.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.danjam.mate.user_service.domain.school.domain.School;
+import site.danjam.mate.user_service.domain.school.exception.NotFoundSchoolException;
 
 @Repository
-public interface SchoolRepository extends JpaRepository<School, Long> {
+@RequiredArgsConstructor
+public class SchoolRepository {
+    private final SchoolJpaRepository schoolJpaRepository;
+
+    public School findBySchool(Long id) {
+        return schoolJpaRepository.findById(id).orElseThrow(NotFoundSchoolException::new);
+    }
 }

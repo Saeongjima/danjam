@@ -1,6 +1,5 @@
 package site.danjam.mate.user_service.domain.myProfile.service;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,23 +7,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
 import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
+import site.danjam.mate.user_service.domain.myProfile.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.myProfile.dto.MyProfileDTO;
 import site.danjam.mate.user_service.domain.myProfile.dto.UpdateLoginDTO;
 import site.danjam.mate.user_service.domain.myProfile.dto.UpdateSchoolDTO;
-import site.danjam.mate.user_service.domain.myProfile.exception.NotFoundMyProfileException;
 import site.danjam.mate.user_service.domain.myProfile.repository.MyProfileRepository;
 import site.danjam.mate.user_service.domain.school.domain.School;
-import site.danjam.mate.user_service.domain.school.exception.NotFoundSchoolException;
 import site.danjam.mate.user_service.domain.school.repository.SchoolRepository;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.exception.DuplicateUsernameException;
-import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.global.exception.InvalidInputException;
 import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MyProfileInfoService {
 
@@ -39,20 +37,19 @@ public class MyProfileInfoService {
     private final SchoolRepository schoolRepository;
 
     @MethodDescription(description = "유저 마이 프로필 정보를 조회합니다.")
+    @Transactional(readOnly = true)
     public MyProfileDTO readMyProfileInfo(String username) {
-        User user = findByUser(username);
-        MyProfile myProfile = findByMyProfile(user);
+        User user = userRepository.findByUsername(username);
+        MyProfile myProfile = myProfileRepository.findByMyProfile(user);
         MateProfileDTO mate = mateStatusClient.getMateProfile(username);
 
-        MyProfileDTO response = MyProfileDTO.from(myProfile, user, mate);
-        return response;
+        return MyProfileDTO.from(myProfile, user, mate);
     }
 
     @MethodDescription(description = "마이프로필 로그인정보(username, password, profileImg) 를 수정합니다.")
-    @Transactional
     public void updateLoginInfo(String username, UpdateLoginDTO dto, MultipartFile file) {
-        User user = findByUser(username);
-        MyProfile myProfile = findByMyProfile(user);
+        User user = userRepository.findByUsername(username);
+        MyProfile myProfile = myProfileRepository.findByMyProfile(user);
 
         if (file != null && file.isEmpty()) {
             myProfile.updateProfileImg(multipartUtil.determineFileName(file, username, SUFFIX, PROFILE_BUCKET_NAME));
@@ -75,9 +72,9 @@ public class MyProfileInfoService {
 
     @MethodDescription(description = "사용자의 학교 정보를 수정합니다.")
     public void updateSchoolInfo(String username, UpdateSchoolDTO dto, MultipartFile file) {
-        User user = findByUser(username);
-        MyProfile myProfile = findByMyProfile(user);
-        School school = findBySchool(dto.getSchoolId());
+        User user = userRepository.findByUsername(username);
+        MyProfile myProfile = myProfileRepository.findByMyProfile(user);
+        School school = schoolRepository.findBySchool(dto.getSchoolId());
 
         if (file != null && file.isEmpty()) {
             throw new InvalidInputException("학교 인증 사진이 존재하지 않습니다.");
@@ -91,18 +88,14 @@ public class MyProfileInfoService {
         myProfileRepository.save(myProfile);
     }
 
-    @MethodDescription(description = "유저 정보를 찾습니다.")
-    private User findByUser(String username) {
-        return userRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
-    }
+    @MethodDescription(description = "사용자의 mbti와 소개글을 수정합니다.")
+    public void updateGreeting(String username, GreetingDTO dto) {
+        User user = userRepository.findByUsername(username);
+        MyProfile myProfile = myProfileRepository.findByMyProfile(user);
 
-    @MethodDescription(description = "마이프로필 정보를 찾습니다.")
-    private MyProfile findByMyProfile(User user) {
-        return Optional.ofNullable(user.getMyProfile()).orElseThrow(NotFoundMyProfileException::new);
-    }
+        myProfile.updateGreeting(dto.getGreeting());
+        myProfile.updateMbti(dto.getMbti());
 
-    @MethodDescription(description = "학교 정보를 찾습니다.")
-    private School findBySchool(Long id) {
-        return schoolRepository.findById(id).orElseThrow(NotFoundSchoolException::new);
+        myProfileRepository.save(myProfile);
     }
 }
