@@ -98,4 +98,14 @@ public class MyProfileInfoService {
 
         myProfileRepository.save(myProfile);
     }
+
+    @MethodDescription(description = "회원을 탈퇴합니다.")
+    public void deleteUser(String username, UpdateLoginDTO dto) {
+        User user = userRepository.findByUsername(username);
+        if (!bCryptPasswordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new InvalidInputException("비밀번호가 일치하지 않습니다.");
+        }
+        user.deleteUser();
+        userRepository.save(user);
+    }
 }

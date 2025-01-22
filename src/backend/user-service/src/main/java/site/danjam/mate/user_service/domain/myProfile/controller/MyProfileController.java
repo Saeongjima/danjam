@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,5 +57,12 @@ public class MyProfileController {
                                                                  @RequestBody @Valid GreetingDTO dto) {
         myProfileInfoService.updateGreeting(username, dto);
         return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponseMessage> deleteUser(@RequestHeader("username") String username,
+                                                         @RequestBody UpdateLoginDTO dto) {
+        myProfileInfoService.deleteUser(username, dto);
+        return ResponseEntity.ok(ApiResponseMessage.of("정상적으로 탈퇴 되었습니다."));
     }
 }
