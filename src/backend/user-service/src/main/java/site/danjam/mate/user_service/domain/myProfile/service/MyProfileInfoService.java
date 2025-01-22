@@ -51,19 +51,19 @@ public class MyProfileInfoService {
         User user = userRepository.findByUsername(username);
         MyProfile myProfile = myProfileRepository.findByMyProfile(user);
 
-        if (file != null && file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             myProfile.updateProfileImg(multipartUtil.determineFileName(file, username, SUFFIX, PROFILE_BUCKET_NAME));
             myProfileRepository.save(myProfile);
         }
 
-        if (!dto.getUsername().isBlank()) {
-            if (userRepository.existsByUsername(username)) {
+        if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
+            if (userRepository.existsByUsername(dto.getUsername())) {
                 throw new DuplicateUsernameException();
             }
             user.updateUsername(username);
         }
 
-        if (!dto.getPassword().isBlank()) {
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             user.updatePassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         }
 
@@ -76,7 +76,7 @@ public class MyProfileInfoService {
         MyProfile myProfile = myProfileRepository.findByMyProfile(user);
         School school = schoolRepository.findBySchool(dto.getSchoolId());
 
-        if (file != null && file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             throw new InvalidInputException("학교 인증 사진이 존재하지 않습니다.");
         }
 

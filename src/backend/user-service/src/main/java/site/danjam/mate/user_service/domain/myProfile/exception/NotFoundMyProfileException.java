@@ -8,8 +8,4 @@ public class NotFoundMyProfileException extends BaseException {
     public NotFoundMyProfileException() {
         super(CAN_NOT_FIND_MYPROFILE);
     }
-
-    public NotFoundMyProfileException(String message) {
-        super(CAN_NOT_FIND_MYPROFILE, message);
-    }
 }

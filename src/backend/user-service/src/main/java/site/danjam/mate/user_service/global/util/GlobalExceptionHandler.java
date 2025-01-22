@@ -59,8 +59,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<ApiResponseError> handlerInvalidInputException(InvalidInputException e, String message) {
-        return processCustomErrorResponse(e.getErrorCode(), message);
+    public ResponseEntity<ApiResponseError> handlerInvalidInputException(InvalidInputException e) {
+        return processCustomErrorResponse(e.getErrorCode(), e.getMessage());
     }
 
 
