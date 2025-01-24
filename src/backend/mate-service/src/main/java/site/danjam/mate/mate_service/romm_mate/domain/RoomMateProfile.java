@@ -1,18 +1,27 @@
 package site.danjam.mate.mate_service.romm_mate.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.mate.domain.MateProfile;
 import site.danjam.mate.mate_service.romm_mate.enums.ActivityTime;
 import site.danjam.mate.mate_service.romm_mate.enums.CleanPeriod;
 import site.danjam.mate.mate_service.romm_mate.enums.Level;
 import site.danjam.mate.mate_service.romm_mate.enums.ShowerTime;
+import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
 @Entity
 @Getter
@@ -42,15 +51,47 @@ public class RoomMateProfile extends MateProfile {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ShowerTime showerTime; // 10-20분, 20-30분, 30-40분, 40분이상
+    ShowerTime showerTime; // _10_20분, _20_30분, _30_40분, _40분이상
 
-    @Column(nullable = false, length = 20)
-    private String hopeRoomPersons; // ex) "[2,3,4]", "[1,2]"
+    @OneToMany(mappedBy = "roomMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HopeDormitory> hopeDormitories;
 
-    @Column(nullable = false, length = 100)
-    private String hopeDormitories; // ex) "[정의관,자유관]"
+    @OneToMany(mappedBy = "roomMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HopeRoomPerson> hopeRoomPersons;
 
-    @Column(nullable = false)
-    private String ownSleepHbits; // ex) "[SENSITIVE_TO_SOUND,SNORE]"
+    @OneToMany(mappedBy = "roomMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OwnSleepHabit> ownSleepHabits;
 
+    @MethodDescription(description = "희망 기숙사 이름만 추출하는 메서드. 프로필을 조회할 때 사용합니다.")
+    public Set<String> getHopeDormitoryNames() {
+        if (hopeDormitories == null) {
+            return Set.of(); // null인 경우 빈 Set 반환
+        }
+
+        return hopeDormitories.stream()
+                .map(HopeDormitory::getHopeDormitory) // 각 HopeDormitory의 hopeDormitory 값을 추출
+                .collect(Collectors.toSet()); // 중복 제거 후 Set으로 변환
+    }
+
+    @MethodDescription(description = "희망 인원 값만 추출하는 메서드. 프로필을 조회할 때 사용합니다.")
+    public Set<String> getHopeRoomPersonValues() {
+        if (hopeRoomPersons == null) {
+            return Set.of(); // null인 경우 빈 Set 반환
+        }
+
+        return hopeRoomPersons.stream()
+                .map(hopeRoomPerson -> String.valueOf(hopeRoomPerson.getHopeRoomPerson())) // Integer를 String으로 변환
+                .collect(Collectors.toSet()); // 중복 제거 후 Set으로 변환
+    }
+
+    @MethodDescription(description = "가지고 있는 습관 값만 추출하는 메서드. 프로필을 조회할 때 사용합니다.")
+    public Set<String> getOwnSleepHabitValues() {
+        if (ownSleepHabits == null) {
+            return Set.of(); // null인 경우 빈 Set 반환
+        }
+
+        return ownSleepHabits.stream()
+                .map(ownSleepHabit -> ownSleepHabit.getSleepHabit().toString()) // SleepHabit을 String으로 변환
+                .collect(Collectors.toSet()); // 중복 제거 후 Set으로 변환
+    }
 }

@@ -1,38 +1,40 @@
-package site.danjam.mate.mate_service.mate.domain;
+package site.danjam.mate.mate_service.romm_mate.domain;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
+import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
-@Getter
+@Entity
+@Getter @Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-@EntityListeners(AuditingEntityListener.class)
-@MappedSuperclass
-public abstract class MateProfile extends BaseTimeEntity {
+public class OwnSleepHabit extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    private Long id;
 
-    @Column(nullable = false)
-    protected String username;
+    @ManyToOne
+    @JoinColumn(name = "roomMateProfileDetailId", nullable = false)
+    private RoomMateProfile roomMateProfile;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    protected MateType mateType;
-
+    private SleepHabit sleepHabit;
 }
