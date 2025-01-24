@@ -29,16 +29,14 @@ public enum Code {
     NULL_INPUT_VALUE(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
     ALREADY_PROFILE_EXIST(HttpStatus.BAD_REQUEST, 40003, "프로필이 이미 존재합니다."),
     INVALID_MATE_TYPE(HttpStatus.BAD_REQUEST, 40004, "존재하지 않는 메이트 타입입니다."),
+    CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 4005, "해당 리소스를 찾을 수 없습니다."),
 
-    //유효하지 않은 리소스(40100 ~ 40199번대
-    CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 40100, "해당 리소스를 찾을 수 없습니다."),
-
-    //보안 관련(40200 ~ 40299번대)
-    REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40200, "로그인이 필요합니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 40201, "유효하지 않은 토큰입니다."),
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 40202, "토큰이 만료되었습니다."),
-    CAN_NOT_ACCESS_RESOURCE(HttpStatus.FORBIDDEN, 40203, "해당 리소스에 대한 접근 권한이 없습니다."),
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
+    //보안 관련(40300 ~ 40399)
+    REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40300, "로그인이 필요합니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 40301, "유효하지 않은 토큰입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 40302, "토큰이 만료되었습니다."),
+    CAN_NOT_ACCESS_RESOURCE(HttpStatus.FORBIDDEN, 40303, "해당 리소스에 대한 접근 권한이 없습니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, 40304, "접근 권한이 없습니다."),
 
     /**
      * 500번대

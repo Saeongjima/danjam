@@ -20,7 +20,7 @@ public class StudyMateProfileInputDTO {
     private StudyTime preferredStudyTime;
 
     @Size(min = 1, max = 100, message = "수강중인 과목은 1개이상 100개 이하로 선택해주세요.")
-    private Set<String> subjects;
+    private Set<String> userSubjects;
 
     @NotNull(message = "평균 학점을 선택해주세요.")
     private AverageGrade averageGrade;

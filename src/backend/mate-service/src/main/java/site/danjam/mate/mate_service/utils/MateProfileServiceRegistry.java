@@ -5,9 +5,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
-import site.danjam.mate.mate_service.domain.MateProfile;
-import site.danjam.mate.mate_service.enums.MateType;
-import site.danjam.mate.mate_service.service.MateProfileService;
+import site.danjam.mate.mate_service.mate.enums.MateType;
+import site.danjam.mate.mate_service.mate.service.MateProfileService;
 
 @Component
 public class MateProfileServiceRegistry {

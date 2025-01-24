@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import site.danjam.mate.mate_service.domain.MateProfile;
+import site.danjam.mate.mate_service.mate.domain.MateProfile;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
 
