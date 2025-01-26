@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.dto;
+package site.danjam.mate.user_service.auth.dto;
 
 import java.util.Collection;
 import java.util.Collections;

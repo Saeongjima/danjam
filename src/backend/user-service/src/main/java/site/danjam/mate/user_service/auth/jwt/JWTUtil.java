@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.jwt;
+package site.danjam.mate.user_service.auth.jwt;
 
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;

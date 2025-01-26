@@ -9,6 +9,7 @@ import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
 import site.danjam.mate.user_service.domain.myProfile.repository.MyProfileRepository;
 import site.danjam.mate.user_service.domain.school.domain.School;
 import site.danjam.mate.user_service.domain.school.repository.SchoolRepository;
+import site.danjam.mate.user_service.domain.user.domain.Role;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.JoinDTO;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
@@ -54,6 +55,7 @@ public class JoinService {
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
                 .authImgUrl(authImgUrl)
+                .role(Role.STRANGER)
                 .build();
     }
 

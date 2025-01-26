@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.jwt;
+package site.danjam.mate.user_service.auth.jwt;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,23 +21,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
-import site.danjam.mate.user_service.domain.RefreshToken;
-import site.danjam.mate.user_service.repository.RefreshTokenRepository;
-import site.danjam.mate.user_service.dto.LoginInputDTO;
+import site.danjam.mate.user_service.auth.domain.RefreshToken;
+import site.danjam.mate.user_service.auth.repository.RefreshTokenJpaRepository;
+import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenJpaRepository refreshTokenJpaRepository;
 
     // 생성자에서 경로 설정
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenRepository refreshTokenRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenJpaRepository refreshTokenJpaRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.setFilterProcessesUrl("/user-service/api/users/login"); // 경로 설정
+        this.refreshTokenJpaRepository = refreshTokenJpaRepository;
+        this.setFilterProcessesUrl("/user-service/api/login"); // 경로 설정
     }
 
     @MethodDescription(description = "로그인 시도를 받아서 AuthenticationManager에게 전달한다.")
@@ -90,7 +89,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refreshToken = jwtUtil.createJwt("refresh", username, role, 86400000L*30L);    // 30일 : 2592000000L
 
         //Refresh 토큰 저장
-        addRefreshToken(username, refreshToken, 1800000L); // 30분
+        addRefreshToken(username, refreshToken, 86400000L*30L); // 30일
 
         //응답 설정
         response.setHeader("access", accessToken);
@@ -110,7 +109,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
 //        cookie.setMaxAge(24*60*60); // 24시간
-        cookie.setMaxAge(1800); // 30분
+        cookie.setMaxAge((int)(86400000L*30L)); // 30일
         //cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -128,6 +127,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshToken.setRefresh(refresh);
         refreshToken.setExpiration(date.toString());
 
-        refreshTokenRepository.save(refreshToken);
+        refreshTokenJpaRepository.save(refreshToken);
     }
 }

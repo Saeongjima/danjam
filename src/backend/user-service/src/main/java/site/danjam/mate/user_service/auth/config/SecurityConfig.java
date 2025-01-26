@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.config;
+package site.danjam.mate.user_service.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,12 +10,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.jwt.JWTUtil;
-import site.danjam.mate.user_service.jwt.LoginFilter;
-import site.danjam.mate.user_service.repository.RefreshTokenRepository;
-import site.danjam.mate.user_service.service.CustomUserDetailsService;
+import site.danjam.mate.user_service.auth.jwt.JWTUtil;
+import site.danjam.mate.user_service.auth.jwt.LoginFilter;
+import site.danjam.mate.user_service.auth.repository.RefreshTokenJpaRepository;
+import site.danjam.mate.user_service.auth.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -23,15 +22,15 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenJpaRepository refreshTokenJpaRepository;
     private final CustomUserDetailsService customUserDetailsService;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
-                          RefreshTokenRepository refreshTokenRepository,
+                          RefreshTokenJpaRepository refreshTokenJpaRepository,
                           CustomUserDetailsService customUserDetailsService) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
-        this.refreshTokenRepository = refreshTokenRepository;
+        this.refreshTokenJpaRepository = refreshTokenJpaRepository;
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -39,12 +38,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @MethodDescription(description = "비밀번호 암호화 메소드. 해당 메서드가 반환하는 객체가 빈으로 등록된다.")
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -67,7 +60,8 @@ public class SecurityConfig {
 
         //로그인 필터 추가
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
+                        refreshTokenJpaRepository), UsernamePasswordAuthenticationFilter.class);
 
 //        //로그아웃 필터 추가
 //        http

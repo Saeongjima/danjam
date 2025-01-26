@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.dto;
+package site.danjam.mate.user_service.auth.dto;
 
 import lombok.Getter;
 import lombok.Setter;

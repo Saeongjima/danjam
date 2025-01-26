@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.domain;
+package site.danjam.mate.user_service.auth.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
