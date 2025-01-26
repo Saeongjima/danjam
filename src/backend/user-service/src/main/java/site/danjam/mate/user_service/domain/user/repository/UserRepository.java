@@ -31,8 +31,4 @@ public class UserRepository {
     public User findByUsername(String username) {
         return userJpaRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
     }
-
-    public Long findIdByUsername(String username){
-        return userJpaRepository.findIdByUsername(username).orElseThrow(NotFoundUserException::new);
-    }
 }

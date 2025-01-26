@@ -12,6 +12,6 @@ public class UserInquiryService {
 
     @MethodDescription(description = "username을 바탕으로 userId를 조회합니다.")
     public Long getUserId(String username){
-        return userRepository.findIdByUsername(username);
+        return userRepository.findByUsername(username).getId();
     }
 }
