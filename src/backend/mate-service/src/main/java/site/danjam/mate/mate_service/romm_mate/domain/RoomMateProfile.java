@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.mate.domain.MateProfile;
+import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileInputDTO;
 import site.danjam.mate.mate_service.romm_mate.enums.ActivityTime;
 import site.danjam.mate.mate_service.romm_mate.enums.CleanPeriod;
 import site.danjam.mate.mate_service.romm_mate.enums.Level;
@@ -61,6 +62,17 @@ public class RoomMateProfile extends MateProfile {
 
     @OneToMany(mappedBy = "roomMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OwnSleepHabit> ownSleepHabits;
+
+    @MethodDescription(description = "필드들을 업데이트할 때 사용합니다.")
+    public void updateMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO){
+        this.isSmoking= roomMateProfileInputDTO.getIsSmoking();
+        this.hotLevel = roomMateProfileInputDTO.getHotLevel();
+        this.coldLevel = roomMateProfileInputDTO.getColdLevel();
+        this.activityTime = roomMateProfileInputDTO.getActivityTime();
+        this.cleanPeriod = roomMateProfileInputDTO.getCleanPeriod();
+        this.showerTime = roomMateProfileInputDTO.getShowerTime();
+    }
+
 
     @MethodDescription(description = "희망 기숙사 이름만 추출하는 메서드. 프로필을 조회할 때 사용합니다.")
     public Set<String> getHopeDormitoryNames() {

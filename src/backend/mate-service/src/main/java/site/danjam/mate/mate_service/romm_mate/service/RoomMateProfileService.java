@@ -1,11 +1,14 @@
 package site.danjam.mate.mate_service.romm_mate.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.danjam.mate.mate_service.global.exception.AccessDeniedException;
 import site.danjam.mate.mate_service.global.exception.AlreadyProfileExistException;
+import site.danjam.mate.mate_service.global.exception.CanNotFindResourceException;
 import site.danjam.mate.mate_service.global.exception.ValidationExcepiton;
 import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
@@ -43,7 +46,7 @@ public class RoomMateProfileService implements MateProfileService {
 
         // 요청 권한을 확인
         if(!AuthUtil.checkAuthUser(role)){
-            throw new BaseException(Code.ACCESS_DENIED);
+            throw new AccessDeniedException();
         }
 
         // 이미 해당 프로필이 있는지 확인
@@ -78,14 +81,60 @@ public class RoomMateProfileService implements MateProfileService {
     public RoomMateProfileDTO getMateProfile(String username, String role) {
         // 요청 권한을 확인
         if(!AuthUtil.checkAuthUser(role)){
-            throw new BaseException(Code.ACCESS_DENIED);
+            throw new AccessDeniedException();
         }
 
         // 유저의 메이트 프로필이 있는지 확인
         RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUsername(username)
-                .orElseThrow(() -> new BaseException(Code.CAN_NOT_FIND_RESOURCE, Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
         return createBuildRoomMateProfileDTO(roomMateProfile);
+    }
+
+    @Override
+    @Transactional
+    public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId){
+        /**
+         * 1. 사전작업 : 권한/유효성 검증, 타입 변환
+         */
+        // 요청 권한을 확인
+        if(!AuthUtil.checkAuthUser(role)){
+            throw new AccessDeniedException();
+        }
+
+        RoomMateProfile roomMateProfile = roomMateProfileRepository.findById(mateProfileId)
+                .orElseThrow(()-> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
+
+        // TODO - username에서 userId 검증으로 변경 필요함
+        // 본인 프로필이 맞는지 검증
+        if(!roomMateProfile.getUsername().equals(username)){
+            throw new AccessDeniedException();
+        }
+
+        // inputDTO의 타입 확인 및 Validation 체크
+        String validationMessage = ValidationUtil.validateInput(inputDTO, RoomMateProfileInputDTO.class);
+        if(validationMessage!=null){
+            throw new ValidationExcepiton(Code.VALIDATION_ERROR.getMessage()+" : "+validationMessage) ;
+        }
+
+        // ObjectMapper를 사용해 타입 변환
+        RoomMateProfileInputDTO roomMateProfileInputDTO = objectMapper.convertValue(inputDTO, RoomMateProfileInputDTO.class);
+
+        /**
+         * 2. 룸메이트 프로필 수정
+         */
+        roomMateProfile.updateMateProfile(roomMateProfileInputDTO);
+
+        /**
+         * 3. 기존 데이터 삭제 후 저장
+         */
+        hopeRoomPersonRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
+        hopeDormitoryRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
+        ownSleepHabitRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
+        saveHopeDormitories(roomMateProfileInputDTO.getHopeDormitories(),roomMateProfile);
+        saveHopeRoomPersons(roomMateProfileInputDTO.getHopeRoomPersons(),roomMateProfile);
+        saveOwnSleepHabits(roomMateProfileInputDTO.getSleepHabits(),roomMateProfile);
+
     }
 
     @MethodDescription(description = "빌더 패턴을 통해 RoomMateProfile을 반환 합니다. 메이트 프로필 생성할 때 사용합니다. ")

@@ -68,6 +68,11 @@ public class StudyMateProfileService implements MateProfileService {
     }
 
     @Override
+    public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId) {
+        
+    }
+
+    @Override
     public MateType getMateType() {
         return MateType.STUDYMATE;
     }

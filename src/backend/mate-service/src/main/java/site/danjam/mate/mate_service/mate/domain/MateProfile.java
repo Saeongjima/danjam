@@ -29,7 +29,7 @@ public abstract class MateProfile extends BaseTimeEntity {
     protected Long id;
 
     @Column(nullable = false)
-    protected String username;
+    protected String username; //todo - userId로 변경 필요함.
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
