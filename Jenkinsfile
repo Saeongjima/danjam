@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-arm64'
+        JAVA_HOME = '/opt/java/openjdk'
         GRADLE_OPTS = '-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
