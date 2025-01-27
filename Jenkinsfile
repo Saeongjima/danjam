@@ -21,7 +21,10 @@ pipeline {
                 dir('src/backend/user-service') { // backend/user-service 디렉토리로 이동
                     script {
                         echo "Building Backend..."
-                        sh './gradlew clean build --parallel' // Gradle 빌드
+                        sh '''
+                        chmod +x ./gradlew
+                        ./gradlew clean build --parallel
+                        '''
                     }
                 }
             }
