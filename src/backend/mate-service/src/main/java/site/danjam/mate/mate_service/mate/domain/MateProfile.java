@@ -28,8 +28,8 @@ public abstract class MateProfile extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(nullable = false)
-    protected String username; //todo - userId로 변경 필요함.
+    @Column(nullable = false, unique = true)
+    protected Long userId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

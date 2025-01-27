@@ -49,8 +49,9 @@ public class RoomMateProfileService implements MateProfileService {
             throw new AccessDeniedException();
         }
 
+        Long userId=1L;//todo - openfeign을 이용해서 suerId조회해야함.
         // 이미 해당 프로필이 있는지 확인
-        if(roomMateProfileRepository.findByUsername(username).isPresent()){
+        if(roomMateProfileRepository.findByUserId(userId).isPresent()){
             throw new AlreadyProfileExistException();
         }
 
@@ -64,7 +65,7 @@ public class RoomMateProfileService implements MateProfileService {
         RoomMateProfileInputDTO roomMateProfileInputDTO = objectMapper.convertValue(inputDTO, RoomMateProfileInputDTO.class);
 
         // RoomMAteProfileInputDTO를 RoomMateProfile로 변환하여 저장
-        RoomMateProfile roomMateProfile = createBuildRoomMateProfile(roomMateProfileInputDTO, username);
+        RoomMateProfile roomMateProfile = createBuildRoomMateProfile(roomMateProfileInputDTO, userId);
         roomMateProfileRepository.save(roomMateProfile);
 
         // HopeDormitories 저장
@@ -83,9 +84,9 @@ public class RoomMateProfileService implements MateProfileService {
         if(!AuthUtil.checkAuthUser(role)){
             throw new AccessDeniedException();
         }
-
+        Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         // 유저의 메이트 프로필이 있는지 확인
-        RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUsername(username)
+        RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
         return createBuildRoomMateProfileDTO(roomMateProfile);
@@ -105,9 +106,9 @@ public class RoomMateProfileService implements MateProfileService {
         RoomMateProfile roomMateProfile = roomMateProfileRepository.findById(mateProfileId)
                 .orElseThrow(()-> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
-        // TODO - username에서 userId 검증으로 변경 필요함
+        Long userId = 1L;//todo - openfeign을 이용해서 suerId조회해야함.
         // 본인 프로필이 맞는지 검증
-        if(!roomMateProfile.getUsername().equals(username)){
+        if(!roomMateProfile.getUserId().equals(userId)){
             throw new AccessDeniedException();
         }
 
@@ -138,9 +139,9 @@ public class RoomMateProfileService implements MateProfileService {
     }
 
     @MethodDescription(description = "빌더 패턴을 통해 RoomMateProfile을 반환 합니다. 메이트 프로필 생성할 때 사용합니다. ")
-    private RoomMateProfile createBuildRoomMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO, String username) {
+    private RoomMateProfile createBuildRoomMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO, Long userId) {
         return RoomMateProfile.builder()
-                .username(username)
+                .userId(userId)
                 .mateType(MateType.ROOMMATE)
                 .isSmoking(roomMateProfileInputDTO.getIsSmoking())
                 .hotLevel(roomMateProfileInputDTO.getHotLevel())
