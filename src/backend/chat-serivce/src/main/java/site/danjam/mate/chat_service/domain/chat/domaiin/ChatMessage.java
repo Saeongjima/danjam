@@ -2,6 +2,8 @@ package site.danjam.mate.chat_service.domain.chat.domaiin;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.danjam.mate.chat_service.domain.chat.enums.ChatType;
 import site.danjam.mate.chat_service.global.common.entity.BaseTimeEntity;
 
 @Entity
@@ -24,24 +27,23 @@ public class ChatMessage extends BaseTimeEntity {
     @Column(nullable = false)
     private Long chatRoomId;
 
-    @Column
+    @Column(nullable = false)
     private String sender;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String message;
-
-    @Column
-    private String files;
 
     @Column(columnDefinition = "TEXT")
     private String unreadUsers;
 
+    @Enumerated(EnumType.STRING)
+    private ChatType chatType;
+
     @Builder
-    public ChatMessage(Long chatRoomId, String sender, String message, String files, String unreadUsers) {
+    public ChatMessage(Long chatRoomId, String sender, String message, String unreadUsers) {
         this.chatRoomId = chatRoomId;
         this.sender = sender;
         this.message = message;
-        this.files = files;
         this.unreadUsers = unreadUsers;
     }
 }
