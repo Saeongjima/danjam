@@ -10,12 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import site.danjam.mate.user_service.domain.myProfile.exception.NotFoundMyProfileException;
-import site.danjam.mate.user_service.domain.school.exception.NotFoundSchoolException;
-import site.danjam.mate.user_service.domain.user.exception.DuplicateUsernameException;
-import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.global.common.dto.ApiResponseError;
+import site.danjam.mate.user_service.global.exception.BaseException;
 import site.danjam.mate.user_service.global.exception.Code;
 import site.danjam.mate.user_service.global.exception.InvalidInputException;
 
@@ -38,23 +35,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(VALIDATION_ERROR.getStatus()).body(response);
     }
 
-    @ExceptionHandler(NotFoundUserException.class)
-    public ResponseEntity<ApiResponseError> handlerNotFoundUserException(NotFoundUserException e) {
-        return processCustomErrorResponse(e.getErrorCode());
-    }
-
-    @ExceptionHandler(NotFoundMyProfileException.class)
-    public ResponseEntity<ApiResponseError> handlerNotFoundUserException(NotFoundMyProfileException e) {
-        return processCustomErrorResponse(e.getErrorCode());
-    }
-
-    @ExceptionHandler(NotFoundSchoolException.class)
-    public ResponseEntity<ApiResponseError> handlerNotFoundSchoolException(NotFoundSchoolException e) {
-        return processCustomErrorResponse(e.getErrorCode());
-    }
-
-    @ExceptionHandler(DuplicateUsernameException.class)
-    public ResponseEntity<ApiResponseError> handlerDuplicateUsernameException(DuplicateUsernameException e) {
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ApiResponseError> handlerBaseExceptionException(BaseException e) {
         return processCustomErrorResponse(e.getErrorCode());
     }
 
