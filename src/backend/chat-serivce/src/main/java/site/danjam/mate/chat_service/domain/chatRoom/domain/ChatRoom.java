@@ -37,12 +37,16 @@ public class ChatRoom extends BaseTimeEntity {
     @Column(nullable = true)
     private String title;
 
+    @Column(nullable = true)
+    private Integer userCount;
+
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
 
     @Builder
-    public ChatRoom(MateType mateType, String title) {
+    public ChatRoom(MateType mateType, String title, Integer userCount) {
         this.mateType = mateType;
         this.title = title;
+        this.userCount = userCount;
     }
 }
