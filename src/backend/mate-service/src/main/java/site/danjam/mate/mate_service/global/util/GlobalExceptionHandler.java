@@ -1,4 +1,6 @@
-package site.danjam.mate.mate_service.global.exception;
+package site.danjam.mate.mate_service.global.util;
+
+import static site.danjam.mate.mate_service.global.exception.Code.*;
 
 import java.util.List;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.global.common.dto.ApiResponseError;
+import site.danjam.mate.mate_service.global.exception.BaseException;
+import site.danjam.mate.mate_service.global.exception.Code;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,7 +24,7 @@ public class GlobalExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
-        Code code = Code.VALIDATION_ERROR;
+        Code code = VALIDATION_ERROR;
         String detailedMessage = code.getDetailMessage(String.join(", ", errorMessages));
         ApiResponseError response = ApiResponseError.of(code, detailedMessage);
         return ResponseEntity.status(code.getStatus()).body(response);
@@ -37,7 +41,7 @@ public class GlobalExceptionHandler {
     @MethodDescription(description = "Header 누락시 예외처리")
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ApiResponseError> handleMissingRequestHeaderException(MissingRequestHeaderException e){
-        Code code = Code.MISSING_HEADER;
+        Code code = MISSING_HEADER;
         String missingHeaderName = e.getHeaderName();
         ApiResponseError response = ApiResponseError.of(code, e.getMessage()+":"+missingHeaderName);
         return ResponseEntity.status(code.getStatus()).body(response);

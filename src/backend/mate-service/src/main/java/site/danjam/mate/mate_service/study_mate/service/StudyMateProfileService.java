@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.mate_service.global.exception.AccessDeniedException;
 import site.danjam.mate.mate_service.global.exception.AlreadyProfileExistException;
 import site.danjam.mate.mate_service.global.exception.ValidationExcepiton;
+import site.danjam.mate.mate_service.global.util.RequiredAuthUser;
 import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.global.exception.Code;
-import site.danjam.mate.mate_service.global.utils.AuthUtil;
 import site.danjam.mate.mate_service.mate.service.MateProfileService;
 import site.danjam.mate.mate_service.study_mate.domain.PreferredStudyType;
 import site.danjam.mate.mate_service.study_mate.domain.StudyMateProfile;
@@ -31,12 +32,9 @@ public class StudyMateProfileService implements MateProfileService {
     private final ObjectMapper objectMapper;
 
     @Override
+    @Transactional
+    @RequiredAuthUser
     public void createMateProfile(Object inputDTO, String username, String role) {
-
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
 
         Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
 
@@ -60,11 +58,9 @@ public class StudyMateProfileService implements MateProfileService {
 
 
     @Override
+    @RequiredAuthUser
+    @Transactional(readOnly = true)
     public StudyMateProfileDTO getMateProfile(String username, String role) {
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
 
         Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         // 유저의 메이트 프로필이 있는지 확인
@@ -74,14 +70,11 @@ public class StudyMateProfileService implements MateProfileService {
     }
 
     @Override
+    @RequiredAuthUser
     public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId) {
         /**
          * 1. 사전작업 : 권한/유효성 검증, 타입 변환
          */
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
 
         Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         StudyMateProfile studyMateProfile = studyMateProfileRepository.findById(mateProfileId);

@@ -1,7 +1,6 @@
 package site.danjam.mate.mate_service.romm_mate.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,9 +9,9 @@ import site.danjam.mate.mate_service.global.exception.AccessDeniedException;
 import site.danjam.mate.mate_service.global.exception.AlreadyProfileExistException;
 import site.danjam.mate.mate_service.global.exception.CanNotFindResourceException;
 import site.danjam.mate.mate_service.global.exception.ValidationExcepiton;
+import site.danjam.mate.mate_service.global.util.RequiredAuthUser;
 import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.mate_service.global.exception.BaseException;
 import site.danjam.mate.mate_service.global.exception.Code;
 import site.danjam.mate.mate_service.romm_mate.domain.HopeDormitory;
 import site.danjam.mate.mate_service.romm_mate.domain.HopeRoomPerson;
@@ -26,8 +25,6 @@ import site.danjam.mate.mate_service.romm_mate.repository.HopeRoomPersonReposito
 import site.danjam.mate.mate_service.romm_mate.repository.OwnSleepHabitRepository;
 import site.danjam.mate.mate_service.romm_mate.repository.RoomMateProfileRepository;
 import site.danjam.mate.mate_service.mate.service.MateProfileService;
-import site.danjam.mate.mate_service.global.utils.AuthUtil;
-import site.danjam.mate.mate_service.utils.DataConvert;
 import site.danjam.mate.mate_service.utils.ValidationUtil;
 
 @Service
@@ -41,13 +38,9 @@ public class RoomMateProfileService implements MateProfileService {
     private final ObjectMapper objectMapper;
 
     @Override
+    @RequiredAuthUser
     @Transactional
     public void createMateProfile(Object inputDTO, String username, String role){
-
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
 
         Long userId=1L;//todo - openfeign을 이용해서 suerId조회해야함.
         // 이미 해당 프로필이 있는지 확인
@@ -79,11 +72,9 @@ public class RoomMateProfileService implements MateProfileService {
     }
 
     @Override
+    @RequiredAuthUser
     public RoomMateProfileDTO getMateProfile(String username, String role) {
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
+
         Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         // 유저의 메이트 프로필이 있는지 확인
         RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUserId(userId)
@@ -93,15 +84,12 @@ public class RoomMateProfileService implements MateProfileService {
     }
 
     @Override
+    @RequiredAuthUser
     @Transactional
     public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId){
         /**
          * 1. 사전작업 : 권한/유효성 검증, 타입 변환
          */
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
 
         RoomMateProfile roomMateProfile = roomMateProfileRepository.findById(mateProfileId)
                 .orElseThrow(()-> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
