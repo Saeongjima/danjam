@@ -3,9 +3,8 @@ package site.danjam.mate.chat_service.domain.chatRoom.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -20,12 +19,9 @@ import site.danjam.mate.chat_service.global.common.entity.BaseTimeEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@IdClass(ChatRoomUserPK.class)
 @Table(name = "chat_room_user")
 public class ChatRoomUser extends BaseTimeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +29,7 @@ public class ChatRoomUser extends BaseTimeEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ChatRoom chatRoom;
 
+    @Id
     @Column(nullable = false)
     private Long userId;
 
