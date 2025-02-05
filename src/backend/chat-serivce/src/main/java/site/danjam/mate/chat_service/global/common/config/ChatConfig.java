@@ -22,7 +22,7 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 메시지를 구독(수신)하는 요청 엔드포인트
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "/queue");
         // 메시지를 발행(송신)하는 엔드포인트
         config.setApplicationDestinationPrefixes("/ws/chat");
     }
