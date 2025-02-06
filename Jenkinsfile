@@ -22,7 +22,7 @@ pipeline {
                 script {
                     // 동적으로 env.properties 생성
                     def envContent = "SERVER_PORT=8761"
-                    def propertiesPath = 'src/backend/discovery_service/src/main/java/resources/properties/env.properties'
+                    def propertiesPath = 'src/backend/discovery_service/src/main/resources/properties/env.properties'
                     writeFile file: propertiesPath, text: envContent
                     echo "env.properties generated with SERVER_PORT=8761 at ${propertiesPath}"
                 }
