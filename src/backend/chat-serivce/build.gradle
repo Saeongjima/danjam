@@ -50,6 +50,13 @@ dependencies {
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	//kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	//eureka client
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
