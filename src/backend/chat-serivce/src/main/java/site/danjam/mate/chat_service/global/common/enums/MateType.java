@@ -1,4 +1,4 @@
-package site.danjam.mate.chat_service.domain.mate.enums;
+package site.danjam.mate.chat_service.global.common.enums;
 
 
 import lombok.Getter;
