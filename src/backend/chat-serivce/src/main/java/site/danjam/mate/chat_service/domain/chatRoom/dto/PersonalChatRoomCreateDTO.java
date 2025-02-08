@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.danjam.mate.chat_service.domain.mate.enums.MateType;
+import site.danjam.mate.chat_service.global.common.enums.MateType;
 
 @Getter
 @Builder
@@ -13,13 +13,13 @@ import site.danjam.mate.chat_service.domain.mate.enums.MateType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PersonalChatRoomCreateDTO {
     private String title;
-    private Long chatRoomId;
+    private String friendUsername;
     private MateType mateType;
 
-    public static PersonalChatRoomCreateDTO of(String title, Long chatRoomId, MateType mateType) {
+    public static PersonalChatRoomCreateDTO of(String title, String friendUsername, MateType mateType) {
         return PersonalChatRoomCreateDTO.builder()
                 .title(title)
-                .chatRoomId(chatRoomId)
+                .friendUsername(friendUsername)
                 .mateType(mateType)
                 .build();
     }
