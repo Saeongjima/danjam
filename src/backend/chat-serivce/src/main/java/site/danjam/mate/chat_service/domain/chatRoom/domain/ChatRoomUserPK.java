@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class ChatRoomUserPK implements Serializable {
-    private Long user;
+    private Long userId;
     private Long chatRoom;
 }

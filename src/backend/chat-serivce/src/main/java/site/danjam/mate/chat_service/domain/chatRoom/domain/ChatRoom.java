@@ -17,8 +17,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.danjam.mate.chat_service.domain.mate.enums.MateType;
 import site.danjam.mate.chat_service.global.common.entity.BaseTimeEntity;
+import site.danjam.mate.chat_service.global.common.enums.MateType;
 
 @Entity
 @Getter
