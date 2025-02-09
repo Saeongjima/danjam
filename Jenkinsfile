@@ -55,24 +55,24 @@ pipeline {
             }
         }
 
-        // Docker 이미지 생성 및 배포 단계
-        stage('Deploy Backend') {
-            steps {
-                script {
-                    sh 'echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin' // Docker 레지스트리에 로그인
-                }
-                dir('src/backend/discovery_service') {
-                    script {
-                        echo "Deploying Backend..."
-                        sh '''
-                        docker build -t my-backend:latest .
-                        docker tag my-backend:latest my-docker-registry/my-backend:latest
-                        docker push my-docker-registry/my-backend:latest
-                        '''
-                    }
-                }
-            }
-        }
+        // // Docker 이미지 생성 및 배포 단계
+        // stage('Deploy Backend') {
+        //     steps {
+        //         script {
+        //             sh 'echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin' // Docker 레지스트리에 로그인
+        //         }
+        //         dir('src/backend/discovery_service') {
+        //             script {
+        //                 echo "Deploying Backend..."
+        //                 sh '''
+        //                 docker build -t my-backend:latest .
+        //                 docker tag my-backend:latest my-docker-registry/my-backend:latest
+        //                 docker push my-docker-registry/my-backend:latest
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
     }
     post {
         success {
