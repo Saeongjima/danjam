@@ -7,14 +7,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.auth.jwt.JWTUtil;
 import site.danjam.mate.user_service.auth.jwt.LoginFilter;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenJpaRepository;
-import site.danjam.mate.user_service.auth.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -23,15 +22,15 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserRepository userRepository;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
                           RefreshTokenJpaRepository refreshTokenJpaRepository,
-                          CustomUserDetailsService customUserDetailsService) {
+                          UserRepository userRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshTokenJpaRepository = refreshTokenJpaRepository;
-        this.customUserDetailsService = customUserDetailsService;
+        this.userRepository = userRepository;
     }
 
     @MethodDescription(description = "AuthenticationManager를 빈으로 등록한다.")
@@ -61,7 +60,7 @@ public class SecurityConfig {
         //로그인 필터 추가
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
-                        refreshTokenJpaRepository), UsernamePasswordAuthenticationFilter.class);
+                        refreshTokenJpaRepository, this.userRepository), UsernamePasswordAuthenticationFilter.class);
 
 //        //로그아웃 필터 추가
 //        http

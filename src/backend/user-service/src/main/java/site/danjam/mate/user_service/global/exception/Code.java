@@ -28,6 +28,7 @@ public enum Code {
     INVALID_QUERY_PARAM(HttpStatus.BAD_REQUEST, 40001, "쿼리 파라미터 타입이 일치하지 않습니다."),
     NULL_INPUT_VALUE(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, 40003, "지원되지 않는 파일 확장자 입니다."),
+    BAD_REQUEST_EXCEPTION(HttpStatus.BAD_REQUEST, 40004, "잘못된 요청입니다."),
 
     //유효하지 않은 리소스(40100 ~ 40199번대
     CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 40100, "해당 리소스를 찾을 수 없습니다."),
