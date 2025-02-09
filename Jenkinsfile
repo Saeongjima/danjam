@@ -57,7 +57,7 @@ pipeline {
             }
         }
 
-        // Docker 이미지 생성 및 배포 단계
+        // 서버에 jar파일 복사 및 배포 단계
         stage('Deploy Backend') {
             steps {
                 sshPublisher(
@@ -66,16 +66,20 @@ pipeline {
                             configName: 'kangmin-oracle-orm',
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: 'src/backend/discovery_service/build/libs/*.jar',
+                                    sourceFiles: 'src/backend/discovery_service/build/libs/*-SNAPSHOT.jar',
+                                    excludes: '*-plain.jar',
                                     remoteDirectory: '/discovery-service',
                                     removePrefix: 'src/backend/discovery_service/build/libs'
                                 )
                             ],
                             execCommand: '''
-                                echo "Starting discovery-service..."
-                                cd /danjam/discovery-service
-                                pkill -f 'discovery-service' || true
-                                nohup java -jar discovery-service-*.jar > app.log 2>&1 &
+                                echo "Stopping any running instance of discovery-service..."
+                                pkill -f 'discovery-service' || echo "No running service found."
+
+                                echo "Finding the latest JAR file..."
+                                latest_jar=$(ls -t /discovery-service/discovery-service-*.jar | head -n 1)
+                                echo "Starting $latest_jar"
+                                nohup java -jar $latest_jar > app.log 2>&1 &
                             '''
                         )
                     ]
