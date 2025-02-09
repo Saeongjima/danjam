@@ -1,4 +1,3 @@
-```
 pipeline {
     agent any
     environment {
@@ -92,4 +91,3 @@ pipeline {
         }
     }
 }
-```
