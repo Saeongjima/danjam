@@ -24,9 +24,11 @@ pipeline {
                         echo "Copying env.properties from Secret file"
 
                         // env.properties를 빌드 시 필요한 위치로 복사
-                        sh """
-                        cp ${ENV_PROPERTIES_FILE} src/backend/discovery_service/src/main/resources/properties/env.properties
-                        """
+                       withEnv(["SECRET_FILE=${ENV_PROPERTIES_FILE}"]) {
+                           sh '''
+                           cp $SECRET_FILE src/backend/discovery_service/src/main/resources/properties/env.properties
+                           '''
+                       }
                     }
                 }
             }
@@ -77,7 +79,7 @@ pipeline {
                                 pkill -f 'discovery-service' || echo "No running service found."
 
                                 echo "Finding the latest JAR file..."
-                                latest_jar=$(ls -t /discovery-service/discovery-service-*.jar | head -n 1)
+                                latest_jar=$(ls -t /discovery-service/discovery_service-*.jar | head -n 1)
                                 echo "Starting $latest_jar"
                                 nohup java -jar $latest_jar > app.log 2>&1 &
                             '''
