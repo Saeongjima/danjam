@@ -4,6 +4,7 @@ pipeline {
         JAVA_HOME = '/opt/java/openjdk'
         GRADLE_OPTS = '-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        DOCKER_CREDENTIALS = credentials('docker-credentials')
     }
     options {
         skipStagesAfterUnstable() // 실패한 단계 이후 실행 중지
@@ -53,9 +54,13 @@ pipeline {
                 }
             }
         }
+
         // Docker 이미지 생성 및 배포 단계
         stage('Deploy Backend') {
             steps {
+                script {
+                    sh 'echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin' // Docker 레지스트리에 로그인
+                }
                 dir('src/backend/discovery_service') {
                     script {
                         echo "Deploying Backend..."
