@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'danjam-discovery-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
-                        echo "Copying env.properties from Secret file: ${ENV_PROPERTIES_FILE}"
+                        echo "Copying env.properties from Secret file"
 
                         // env.properties를 빌드 시 필요한 위치로 복사
                         sh """
@@ -67,12 +67,13 @@ pipeline {
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'src/backend/discovery_service/build/libs/*.jar',
-                                    remoteDirectory: '/home/ubuntu/danjam/discovery-service',
+                                    remoteDirectory: '/discovery-service',
                                     removePrefix: 'src/backend/discovery_service/build/libs'
                                 )
                             ],
                             execCommand: '''
-                                cd /home/ubuntu/danjam/discovery-service
+                                echo "Starting discovery-service..."
+                                cd /danjam/discovery-service
                                 pkill -f 'discovery-service' || true
                                 nohup java -jar discovery-service-*.jar > app.log 2>&1 &
                             '''
