@@ -1,0 +1,40 @@
+server:
+  port: ${SERVER_PORT}
+
+eureka:
+  client:
+    register-with-eureka: ${EUREKA_REGISTER_WITH_EUREKA}
+    fetch-registry: ${EUREKA_FETCH_REGISTRY}
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+
+spring:
+  application:
+    name: api-gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: user-service-signup
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/api/signup
+            - Method=POST
+        - id: user-service-login
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/api/login
+            - Method=POST
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - name: AuthPermissionFilter
+        - id: mate-service
+          uri: lb://mate-service
+          predicates:
+            - Path=/mate-service/**
+          filters:
+            - name: AuthPermissionFilter
+  jwt:
+    secret: ${SPRING_JWT_SECRET}

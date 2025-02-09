@@ -7,8 +7,8 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
-import site.danjam.mate.api_gateway_service.MethodDescription;
 import site.danjam.mate.api_gateway_service.auth.AuthPermissionFilter.Config;
+import site.danjam.mate.api_gateway_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.api_gateway_service.global.exception.BaseException;
 import site.danjam.mate.api_gateway_service.global.exception.Code;
 
@@ -52,13 +52,13 @@ public class AuthPermissionFilter extends AbstractGatewayFilterFactory<Config> {
             }
 
             // 사용자 정보를 헤더에 추가
-            String username = jwtUtil.getUsername(accessToken.get(0));
+            String userId = jwtUtil.getUserId(accessToken.get(0));
             String role = jwtUtil.getRole(accessToken.get(0));
 
             // 사용자 정보를 헤더에 추가
             ServerHttpRequest authRequest = request.mutate()
                     .header("Auth", "true")
-                    .header("username", username)
+                    .header("userId", userId)
                     .header("role", role)
                     .build();
 
