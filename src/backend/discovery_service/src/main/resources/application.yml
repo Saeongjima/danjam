@@ -9,3 +9,10 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.boot: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
