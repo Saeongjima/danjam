@@ -75,6 +75,9 @@ pipeline {
                                 )
                             ],
                             execCommand: '''
+                                echo "Adding execution permissions to JAR files..."
+                                chmod +x /discovery-service/discovery_service-*.jar
+
                                 echo "Stopping any running instance of discovery-service..."
                                 pkill -f 'discovery-service' || echo "No running service found."
 
