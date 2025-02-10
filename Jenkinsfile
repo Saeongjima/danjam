@@ -73,22 +73,29 @@ pipeline {
                                     remoteDirectory: '/discovery-service',
                                     removePrefix: 'src/backend/discovery_service/build/libs'
                                 )
-                            ],
-                            execCommand: '''
-                                echo "Adding execution permissions to JAR files..."
-                                chmod +x /discovery-service/discovery_service-*.jar
-
-                                echo "Stopping any running instance of discovery-service..."
-                                pkill -f 'discovery-service' || echo "No running service found."
-
-                                echo "Finding the latest JAR file..."
-                                latest_jar=$(ls -t /discovery-service/discovery_service-*.jar | head -n 1)
-                                echo "Starting $latest_jar"
-                                nohup java -jar $latest_jar > app.log 2>&1 &
-                            '''
+                            ]
                         )
                     ]
                 )
+            }
+        }
+        // jar파일 실행
+        stage('Execute Remote Commands') {
+            steps {
+                sshagent(['kangmin-oracle-orm']) {
+                    sh '''
+                    echo "Adding execution permissions to JAR files..."
+                    chmod +x /discovery-service/discovery_service-*.jar
+
+                    echo "Stopping any running instance of discovery-service..."
+                    pkill -f 'discovery-service' || echo 'No running service found.'
+
+                    echo "Finding the latest JAR file..."
+                    latest_jar=$(ls -t /discovery-service/discovery_service-*.jar | head -n 1)
+                    echo "Starting $latest_jar"
+                    nohup java -jar $latest_jar > /discovery-service/app.log 2>&1 &
+                    '''
+                }
             }
         }
     }
