@@ -20,7 +20,7 @@ public class JWTUtil {
     public String createJwt(String category, Long userId, String role, Long expiredMs){
         return Jwts.builder()
                 .claim("category",category)
-                .claim("userId",userId)
+                .claim("userId",userId.toString())
                 .claim("role",role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))

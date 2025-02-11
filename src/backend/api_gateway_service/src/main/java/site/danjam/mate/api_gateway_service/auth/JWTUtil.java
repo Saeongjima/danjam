@@ -63,7 +63,7 @@ public class JWTUtil {
 
     @MethodDescription(description = "토큰에서 userId를 추출한다.")
     public String getUserId(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId",Long.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId",String.class);
     }
 
     @MethodDescription(description = "토큰에서 role을 추출한다.")
