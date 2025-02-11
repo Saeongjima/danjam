@@ -41,7 +41,7 @@ public class PersonalChatConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ChatMessageDTO> directChatListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, ChatMessageDTO> personalChatListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ChatMessageDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(personalChatConsumerFactory());
         return factory;
