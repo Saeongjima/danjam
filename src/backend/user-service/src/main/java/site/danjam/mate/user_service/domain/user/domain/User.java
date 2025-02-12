@@ -3,6 +3,8 @@ package site.danjam.mate.user_service.domain.user.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +37,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @Column(nullable = false)
     private Integer gender;
     @Column(nullable = false)
     private String password;
@@ -57,7 +62,7 @@ public class User extends BaseTimeEntity {
 
     @Builder
     public User(String name, String username, Integer gender, String password,
-                String nickname, String email, String authImgUrl) {
+                String nickname, String email, String authImgUrl, Role role) {
         this.name = name;
         this.username = username;
         this.gender = gender;
@@ -65,6 +70,7 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
         this.email = email;
         this.authImgUrl = authImgUrl;
+        this.role = role;
     }
 
     public void updateMyProfile(MyProfile myProfile) {

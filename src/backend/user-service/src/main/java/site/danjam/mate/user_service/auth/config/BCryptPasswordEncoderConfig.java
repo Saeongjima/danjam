@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.global.security.config;
+package site.danjam.mate.user_service.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
