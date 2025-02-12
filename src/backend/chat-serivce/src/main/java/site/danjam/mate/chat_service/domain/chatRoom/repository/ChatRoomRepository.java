@@ -20,4 +20,11 @@ public class ChatRoomRepository {
         return chatRoomJpaRepository.findAllChatRoom();
     }
 
+    public Optional<ChatRoom> findExistingPersonalChatRoom(Long userId, Long friendId) {
+        return chatRoomJpaRepository.findExistingPersonalChatRoom(userId, friendId);
+    }
+
+    public ChatRoom save(ChatRoom chatRoom) {
+        return chatRoomJpaRepository.save(chatRoom);
+    }
 }

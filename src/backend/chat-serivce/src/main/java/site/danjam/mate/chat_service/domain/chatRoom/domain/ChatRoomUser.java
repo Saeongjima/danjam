@@ -38,4 +38,11 @@ public class ChatRoomUser extends BaseTimeEntity {
         this.chatRoom = chatRoom;
         this.userId = userId;
     }
+
+    public static ChatRoomUser create(Long userId, ChatRoom chatRoom) {
+        return ChatRoomUser.builder()
+                .userId(userId)
+                .chatRoom(chatRoom)
+                .build();
+    }
 }
