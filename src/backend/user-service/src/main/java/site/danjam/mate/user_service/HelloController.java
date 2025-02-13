@@ -15,7 +15,9 @@ public class HelloController {
     @GetMapping("/welcome")
     public String welcome(HttpServletRequest request){
         log.info("Server Port : {}", request.getServerPort());
-        return "Welcome to User Service : " + request.getServerPort();
+        String userId = request.getHeader("userId");
+        String role = request.getHeader("role");
+        return "Welcome to User Service : " + request.getServerPort() + "\nuserId : " +userId + "\nrole : "+ role;
     }
 
 }

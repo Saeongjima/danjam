@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,20 +25,27 @@ import org.springframework.util.StreamUtils;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenJpaRepository;
 import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
+import site.danjam.mate.user_service.domain.user.domain.User;
+import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
+import site.danjam.mate.user_service.global.common.dto.ApiResponseError;
+import site.danjam.mate.user_service.global.exception.BadRequestException;
+import site.danjam.mate.user_service.global.exception.Code;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
+    private final UserRepository userRepository;
 
     // 생성자에서 경로 설정
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenJpaRepository refreshTokenJpaRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenJpaRepository refreshTokenJpaRepository, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshTokenJpaRepository = refreshTokenJpaRepository;
         this.setFilterProcessesUrl("/user-service/api/login"); // 경로 설정
+        this.userRepository = userRepository;
     }
 
     @MethodDescription(description = "로그인 시도를 받아서 AuthenticationManager에게 전달한다.")
@@ -57,7 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //json에 없는 필드가 들어왔을 때 400 에러를 반환
         catch (UnrecognizedPropertyException e) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return null;
+            throw new BadRequestException("아이디, 비밀번호를 모두 입력해주세요");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -77,7 +85,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication authentication) {
 
         //유저 정보
-        String username = authentication.getName();
+        User user = userRepository.findByUsername(authentication.getName());
+
         //반복자를 이용하여 role을 획득
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -85,11 +94,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         //토큰 생성
-        String accessToken = jwtUtil.createJwt("access", username, role, 86400000L*100L);  // 100일 : 86400000L
-        String refreshToken = jwtUtil.createJwt("refresh", username, role, 86400000L*30L);    // 30일 : 2592000000L
+        String accessToken = jwtUtil.createJwt("access", user.getId(), role, 86400000L*100L);  // 100일 : 86400000L
+        String refreshToken = jwtUtil.createJwt("refresh", user.getId(), role, 86400000L*30L);    // 30일 : 2592000000L
 
         //Refresh 토큰 저장
-        addRefreshToken(username, refreshToken, 86400000L*30L); // 30일
+        addRefreshToken(user.getId(), refreshToken, 86400000L*30L); // 30일
 
         //응답 설정
         response.setHeader("access", accessToken);
@@ -118,12 +127,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @MethodDescription(description = "RefreshToken 저장 메소드")
-    private void addRefreshToken(String username, String refresh, Long expiredMs) {
+    private void addRefreshToken(Long userId, String refresh, Long expiredMs) {
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
         RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setUsername(username);
+        refreshToken.setUserId(userId);
         refreshToken.setRefresh(refresh);
         refreshToken.setExpiration(date.toString());
 
