@@ -1,13 +1,19 @@
 package site.danjam.mate.chat_service.global.client;
 
+import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import site.danjam.mate.chat_service.global.client.dto.UserGenderDTO;
+import site.danjam.mate.chat_service.global.client.dto.UserInfoDTO;
 
-@FeignClient(name = "user-service")
+@FeignClient(name = "/user-service/api")
 public interface UserServiceClient {
+    @GetMapping("/info")
+    UserInfoDTO getUserInfo(@RequestParam("userId") Long userId);
 
-    @GetMapping("/api/gender")
-    UserGenderDTO getUserGender(@RequestParam("userId") Long userId, @RequestParam("friendName") String friendName);
+    @GetMapping("/info")
+    UserInfoDTO getUserInfo(@RequestParam("username") String username);
+
+    @GetMapping("/info")
+    List<UserInfoDTO> getUserInfo(@RequestParam("userIds") List<Long> userIds);
 }

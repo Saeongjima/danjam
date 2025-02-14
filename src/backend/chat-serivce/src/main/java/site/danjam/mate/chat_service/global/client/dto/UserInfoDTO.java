@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserGenderDTO {
+public class UserInfoDTO {
+
+    private Long userId;
     private String username;
     private String gender;
-
-    private String friendName;
-    private String friendGender;
 }

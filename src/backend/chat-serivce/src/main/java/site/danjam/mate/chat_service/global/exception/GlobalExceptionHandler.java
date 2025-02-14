@@ -1,4 +1,4 @@
-package site.danjam.mate.chat_service.global.util;
+package site.danjam.mate.chat_service.global.exception;
 
 import static site.danjam.mate.chat_service.global.exception.Code.VALIDATION_ERROR;
 
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.danjam.mate.chat_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.chat_service.global.common.dto.ApiResponseError;
-import site.danjam.mate.chat_service.global.exception.Code;
-import site.danjam.mate.chat_service.global.exception.InvalidInputException;
 
 @Slf4j
 @RestControllerAdvice
@@ -35,12 +33,15 @@ public class GlobalExceptionHandler {
     }
 
 
-
-    @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<ApiResponseError> handlerInvalidInputException(InvalidInputException e) {
-        return processCustomErrorResponse(e.getErrorCode(), e.getMessage());
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ApiResponseError> handlerBaseException(InvalidInputException e) {
+        return processCustomErrorResponse(e.getErrorCode());
     }
 
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ApiResponseError> handlerBaseException(InvalidInputException e, String message) {
+        return processCustomErrorResponse(e.getErrorCode(), message);
+    }
 
     @MethodDescription(description = "공통 예외 처리 메서드(코드)")
     private ResponseEntity<ApiResponseError> processCustomErrorResponse(Code code) {

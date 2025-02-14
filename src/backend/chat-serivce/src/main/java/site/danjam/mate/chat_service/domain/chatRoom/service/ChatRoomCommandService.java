@@ -3,17 +3,20 @@ package site.danjam.mate.chat_service.domain.chatRoom.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoom;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoomUser;
+import site.danjam.mate.chat_service.domain.chatRoom.dto.GroupChatRoomCreateDTO;
 import site.danjam.mate.chat_service.domain.chatRoom.dto.PersonalChatRoomCreateDTO;
-import site.danjam.mate.chat_service.domain.chatRoom.exception.InvalidRequestException;
+import site.danjam.mate.chat_service.domain.chatRoom.dto.request.GroupChatRoomRequestDTO;
+import site.danjam.mate.chat_service.domain.chatRoom.exception.InvalidRequestGenderException;
 import site.danjam.mate.chat_service.domain.chatRoom.repository.ChatRoomRepository;
 import site.danjam.mate.chat_service.domain.chatRoom.repository.ChatRoomUserRepository;
 import site.danjam.mate.chat_service.global.client.UserServiceClient;
-import site.danjam.mate.chat_service.global.client.dto.UserGenderDTO;
+import site.danjam.mate.chat_service.global.client.dto.UserInfoDTO;
 import site.danjam.mate.chat_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.chat_service.global.common.enums.MateType;
 import site.danjam.mate.chat_service.global.common.enums.Role;
@@ -40,16 +43,23 @@ public class ChatRoomCommandService {
         return PersonalChatRoomCreateDTO.of(existChatRoom, dto.getFriendUsername());
     }
 
-    @MethodDescription(description = "룸 메이트 채팅방 개설 시 서로의 성별이 같은 지 확인합니다.")
-    private void equalsGender(Long userId, String friendName) {
-        UserGenderDTO dto = userServiceClient.getUserGender(userId, friendName);
-        if (!dto.getGender().equals(dto.getFriendGender())) {
-            throw new InvalidRequestException();
+
+    public GroupChatRoomCreateDTO createGroupChatRoom(Long userId, GroupChatRoomRequestDTO request) {
+        List<Long> participants = request.getFriendUsernames().stream()
+                .map(username -> userServiceClient.getUserInfo(username).getUserId())
+                .collect(Collectors.toList());
+        participants.add(userId);
+
+        if (MateType.ROOMMATE.equals(request.getMateType())) {
+            equalsGenderForGroup(userId, participants);
         }
+
+        ChatRoom chatRoom = saveChatRoom(request.getTitle(), request.getMateType(), participants);
+        return GroupChatRoomCreateDTO.from(chatRoom);
     }
 
     @MethodDescription(description = "채팅방을 데이터베이스에 저장합니다.")
-    private ChatRoom saveChatRoom(String title, MateType mateType, List<Long> user) {
+    private ChatRoom saveChatRoom(String title, MateType mateType, List<Long> userIds) {
         ChatRoom chatRoom = ChatRoom.builder()
                 .title(title)
                 .mateType(mateType)
@@ -59,7 +69,7 @@ public class ChatRoomCommandService {
         ChatRoom saveChatRoom = chatRoomRepository.save(chatRoom);
 
         List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
-        for (Long userId : user) {
+        for (Long userId : userIds) {
             chatRoomUsers.add(ChatRoomUser.create(userId, saveChatRoom));
         }
         log.info("saveChatRoomUsers = ", chatRoomUsers);
@@ -67,5 +77,30 @@ public class ChatRoomCommandService {
         chatRoomUserRepository.saveAll(chatRoomUsers);
 
         return chatRoom;
+    }
+
+
+    @MethodDescription(description = "룸 메이트 개인 채팅방 개설 시 서로의 성별이 같은 지 확인합니다.")
+    private void equalsGender(Long userId, String participant) {
+        UserInfoDTO userInfo = userServiceClient.getUserInfo(participant);
+        UserInfoDTO friendInfo = userServiceClient.getUserInfo(userId);
+        if (!userInfo.getGender().equals(friendInfo.getGender())) {
+            throw new InvalidRequestGenderException();
+        }
+    }
+
+    @MethodDescription(description = "룸 메이트 그룹 채팅방 개설 시 서로의 성별이 같은 지 확인합니다.")
+    private void equalsGenderForGroup(Long userId, List<Long> participants) {
+        String gender = userServiceClient.getUserInfo(userId).getGender();
+        List<UserInfoDTO> friendInfos = userServiceClient.getUserInfo(participants);
+
+        List<String> invalidGenders = friendInfos.stream()
+                .filter(user -> !user.getGender().equals(gender))
+                .map(UserInfoDTO::getUsername)
+                .collect(Collectors.toList());
+
+        if (!invalidGenders.isEmpty()) {
+            throw new InvalidRequestGenderException("성별이 같지 않은 유저가 존재합니다." + String.join(", ", invalidGenders));
+        }
     }
 }
