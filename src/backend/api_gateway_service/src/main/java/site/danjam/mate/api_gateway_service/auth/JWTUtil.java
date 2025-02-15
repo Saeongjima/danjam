@@ -43,7 +43,7 @@ public class JWTUtil {
     }
 
     @MethodDescription(description = "토큰이 만료되었는지 확인한다.")
-    public Boolean isExpired(String token){
+    public boolean isExpired(String token){
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 

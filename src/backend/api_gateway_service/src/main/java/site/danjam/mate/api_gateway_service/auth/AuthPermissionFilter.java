@@ -8,6 +8,8 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import site.danjam.mate.api_gateway_service.auth.AuthPermissionFilter.Config;
+import site.danjam.mate.api_gateway_service.exception.ExpiredTokenException;
+import site.danjam.mate.api_gateway_service.exception.InvalidTokenException;
 import site.danjam.mate.api_gateway_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.api_gateway_service.global.exception.BaseException;
 import site.danjam.mate.api_gateway_service.global.exception.Code;
@@ -45,9 +47,9 @@ public class AuthPermissionFilter extends AbstractGatewayFilterFactory<Config> {
             // Access 토큰 검증
             if(!jwtUtil.isValidToken(accessToken.get(0))){
                 if(jwtUtil.isExpired(accessToken.get(0))){
-                    throw new BaseException(Code.EXPIRED_TOKEN, Code.EXPIRED_TOKEN.getMessage());
+                    throw new ExpiredTokenException(Code.EXPIRED_TOKEN);
                 } else {
-                    throw new BaseException(Code.INVALID_TOKEN, Code.INVALID_TOKEN.getMessage());
+                    throw new InvalidTokenException(Code.INVALID_TOKEN);
                 }
             }
 
