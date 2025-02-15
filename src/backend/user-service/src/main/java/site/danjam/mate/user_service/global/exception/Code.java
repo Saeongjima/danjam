@@ -26,7 +26,7 @@ public enum Code {
     //유효하지 않은(잘못된) 입력값(40000 ~ 40099번대)
     INVALID_INPUT(HttpStatus.BAD_REQUEST, 40000, "잘못된 값이 존재합니다."),
     INVALID_QUERY_PARAM(HttpStatus.BAD_REQUEST, 40001, "쿼리 파라미터 타입이 일치하지 않습니다."),
-    NULL_INPUT_VALUE(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
+    REQUIRED_ARGUMENT_EXCEPTION(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, 40003, "지원되지 않는 파일 확장자 입니다."),
     BAD_REQUEST_EXCEPTION(HttpStatus.BAD_REQUEST, 40004, "잘못된 요청입니다."),
 

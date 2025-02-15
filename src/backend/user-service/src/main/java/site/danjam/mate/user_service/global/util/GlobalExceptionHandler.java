@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponseError> handlerBaseExceptionException(BaseException e) {
-        return processCustomErrorResponse(e.getErrorCode());
+        return processCustomErrorResponse(e.getErrorCode(),e.getMessage());
     }
 
     @ExceptionHandler(InvalidInputException.class)

@@ -5,12 +5,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Date;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 @Table(name = "refresh_token")
 public class RefreshToken {
     @Id
@@ -22,4 +24,10 @@ public class RefreshToken {
     private String refresh;
 
     private String expiration;
+
+    public RefreshToken(Long userId, String refreshTokenValue, Long expiredMs){
+        this.userId = userId;
+        this.refresh = refreshTokenValue;
+        this.expiration = (new Date(System.currentTimeMillis() + expiredMs)).toString();
+    }
 }

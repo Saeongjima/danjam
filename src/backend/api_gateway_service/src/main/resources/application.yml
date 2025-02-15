@@ -3,10 +3,10 @@ server:
 
 eureka:
   client:
-    register-with-eureka: ${EUREKA_REGISTER_WITH_EUREKA}
-    fetch-registry: ${EUREKA_FETCH_REGISTRY}
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
-      defaultZone: ${EUREKA_DEFAULT_ZONE}
+      defaultZone: ${EUREKA_SERVER_URL}
 
 spring:
   application:
@@ -29,6 +29,11 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/user-service/api/logout
+            - Method=POST
+        - id: user-service-token-reissue
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/api/token/reissue
             - Method=POST
 
         #로그인 필요한 요청(토큰 검증 필터 o)

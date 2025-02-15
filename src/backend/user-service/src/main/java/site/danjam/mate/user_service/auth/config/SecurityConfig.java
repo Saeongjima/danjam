@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import site.danjam.mate.user_service.auth.jwt.CustomLogoutFilter;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
+import site.danjam.mate.user_service.auth.service.LogoutService;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
@@ -29,16 +30,19 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final RefreshTokenService refreshTokenService;
+    private final LogoutService logoutService;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
                           RefreshTokenService refreshTokenService,
                           UserRepository userRepository,
-                          ObjectMapper objectMapper) {
+                          ObjectMapper objectMapper,
+                          LogoutService logoutService) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
+        this.logoutService = logoutService;
 
     }
 
@@ -73,7 +77,7 @@ public class SecurityConfig {
 
         //로그아웃 필터 추가
         http
-                .addFilterBefore(new CustomLogoutFilter(objectMapper, refreshTokenService), LogoutFilter.class);
+                .addFilterBefore(new CustomLogoutFilter(objectMapper, refreshTokenService,logoutService ), LogoutFilter.class);
 
         //세션 설정
         http
