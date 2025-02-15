@@ -34,14 +34,14 @@ public class ChatMessage extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String message;
 
-    @Column(columnDefinition = "TEXT")
-    private List<String> unreadUsers;
+    @Column(columnDefinition = "JSON")
+    private List<Long> unreadUsers; // userId json
 
     @Enumerated(EnumType.STRING)
     private ChatType chatType;
 
     @Builder
-    public ChatMessage(Long chatRoomId, String sender, String message, List<String> unreadUsers, ChatType chatType) {
+    public ChatMessage(Long chatRoomId, String sender, String message, List<Long> unreadUsers, ChatType chatType) {
         this.chatRoomId = chatRoomId;
         this.sender = sender;
         this.message = message;

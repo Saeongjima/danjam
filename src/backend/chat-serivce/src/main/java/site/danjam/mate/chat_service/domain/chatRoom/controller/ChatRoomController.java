@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.danjam.mate.chat_service.domain.chatRoom.dto.GroupChatRoomCreateDTO;
 import site.danjam.mate.chat_service.domain.chatRoom.dto.PersonalChatRoomCreateDTO;
+import site.danjam.mate.chat_service.domain.chatRoom.dto.request.GroupChatRoomRequestDTO;
 import site.danjam.mate.chat_service.domain.chatRoom.service.ChatRoomCommandService;
 import site.danjam.mate.chat_service.global.common.dto.ApiResponseData;
 import site.danjam.mate.chat_service.global.common.enums.Role;
@@ -16,15 +18,21 @@ import site.danjam.mate.chat_service.global.common.enums.Role;
 @RequiredArgsConstructor
 @RequestMapping("chat-service/api/chat-room")
 public class ChatRoomController {
-
     private final ChatRoomCommandService chatRoomCommandService;
 
-
-    @PostMapping
+    @PostMapping("/personal")
     public ResponseEntity<ApiResponseData<PersonalChatRoomCreateDTO>> createPersonalChatRoom(
-            @RequestHeader("userId") Long userId, @RequestHeader("role") Role role,
+            @RequestHeader("userId") String userId, @RequestHeader("role") Role role,
             @RequestBody PersonalChatRoomCreateDTO dto) {
         return ResponseEntity.ok(ApiResponseData.of(chatRoomCommandService.createPersonalChatRoom(userId, role, dto),
+                "채팅방이 생성되었습니다."));
+    }
+
+    @PostMapping("/group")
+    public ResponseEntity<ApiResponseData<GroupChatRoomCreateDTO>> createGroupChatRoom(
+            @RequestHeader("userId") String userId, @RequestHeader("role") Role role,
+            @RequestBody GroupChatRoomRequestDTO dto) {
+        return ResponseEntity.ok(ApiResponseData.of(chatRoomCommandService.createGroupChatRoom(userId, role, dto),
                 "채팅방이 생성되었습니다."));
     }
 }

@@ -30,7 +30,9 @@ public class ChatRoomCommandService {
     private final ChatRoomUserRepository chatRoomUserRepository;
 
     @MethodDescription(description = "1대1 채팅방을 생성합니다. 채팅방 이름은 상대방의 (큰 타이틀) 닉네임, (작은 타이틀)년도/학번/전공으로 생성됩니다.")
-    public PersonalChatRoomCreateDTO createPersonalChatRoom(Long userId, Role role, PersonalChatRoomCreateDTO dto) {
+    public PersonalChatRoomCreateDTO createPersonalChatRoom(String user, Role role, PersonalChatRoomCreateDTO dto) {
+        Long userId = Long.valueOf(user);
+
         if (MateType.ROOMMATE.equals(dto.getMateType())) {
             equalsGender(userId, dto.getFriendUsername());
         }
@@ -44,7 +46,9 @@ public class ChatRoomCommandService {
     }
 
 
-    public GroupChatRoomCreateDTO createGroupChatRoom(Long userId, GroupChatRoomRequestDTO request) {
+    public GroupChatRoomCreateDTO createGroupChatRoom(String user, Role role, GroupChatRoomRequestDTO request) {
+        Long userId = Long.valueOf(user);
+
         List<Long> participants = request.getFriendUsernames().stream()
                 .map(username -> userServiceClient.getUserInfo(username).getUserId())
                 .collect(Collectors.toList());
@@ -103,4 +107,7 @@ public class ChatRoomCommandService {
             throw new InvalidRequestGenderException("성별이 같지 않은 유저가 존재합니다." + String.join(", ", invalidGenders));
         }
     }
+
+    // TODO : 채팅방 사용자 삭제 로직 추가
+
 }
