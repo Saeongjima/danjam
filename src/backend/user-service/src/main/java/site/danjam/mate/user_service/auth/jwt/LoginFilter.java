@@ -25,6 +25,8 @@ import org.springframework.util.StreamUtils;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenJpaRepository;
 import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
+import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
+import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
@@ -36,14 +38,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final RefreshTokenJpaRepository refreshTokenJpaRepository;
     private final UserRepository userRepository;
+    private final RefreshTokenService refreshTokenService;
 
     // 생성자에서 경로 설정
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenJpaRepository refreshTokenJpaRepository, UserRepository userRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenService refreshTokenService, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.refreshTokenJpaRepository = refreshTokenJpaRepository;
+        this.refreshTokenService = refreshTokenService;
         this.setFilterProcessesUrl("/user-service/api/login"); // 경로 설정
         this.userRepository = userRepository;
     }
@@ -136,6 +138,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshToken.setRefresh(refresh);
         refreshToken.setExpiration(date.toString());
 
-        refreshTokenJpaRepository.save(refreshToken);
+        refreshTokenService.saveRefreshToken(refreshToken);
     }
 }

@@ -27,4 +27,12 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
+    public boolean isExpired(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+    }
+
+    public String getCategory(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category",String.class);
+    }
 }

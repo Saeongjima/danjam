@@ -1,5 +1,6 @@
 package site.danjam.mate.user_service.auth.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import site.danjam.mate.user_service.auth.jwt.CustomLogoutFilter;
+import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
+import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.auth.jwt.JWTUtil;
@@ -21,16 +26,20 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
-    private final RefreshTokenJpaRepository refreshTokenJpaRepository;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
+    private final RefreshTokenService refreshTokenService;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
-                          RefreshTokenJpaRepository refreshTokenJpaRepository,
-                          UserRepository userRepository) {
+                          RefreshTokenService refreshTokenService,
+                          UserRepository userRepository,
+                          ObjectMapper objectMapper) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
-        this.refreshTokenJpaRepository = refreshTokenJpaRepository;
+        this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
+
     }
 
     @MethodDescription(description = "AuthenticationManager를 빈으로 등록한다.")
@@ -60,11 +69,11 @@ public class SecurityConfig {
         //로그인 필터 추가
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
-                        refreshTokenJpaRepository, this.userRepository), UsernamePasswordAuthenticationFilter.class);
+                        refreshTokenService, this.userRepository), UsernamePasswordAuthenticationFilter.class);
 
-//        //로그아웃 필터 추가
-//        http
-//                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
+        //로그아웃 필터 추가
+        http
+                .addFilterBefore(new CustomLogoutFilter(objectMapper, refreshTokenService), LogoutFilter.class);
 
         //세션 설정
         http

@@ -14,6 +14,7 @@ spring:
   cloud:
     gateway:
       routes:
+        #로그인 필요없는 요청(토큰 검증 필터 x)
         - id: user-service-signup
           uri: lb://user-service
           predicates:
@@ -24,6 +25,13 @@ spring:
           predicates:
             - Path=/user-service/api/login
             - Method=POST
+        - id: user-service-logout
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/api/logout
+            - Method=POST
+
+        #로그인 필요한 요청(토큰 검증 필터 o)
         - id: user-service
           uri: lb://user-service
           predicates:
