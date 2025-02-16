@@ -59,8 +59,23 @@ pipeline {
             }
         }
 
-        // 서버에 jar파일 복사 및 배포 단계
-        stage('Deploy Backend') {
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'agong1-docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        dir('src/backend/discovery_service') {
+                            sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker build -t agong1/danjam-discovery-service:latest .
+                            docker push agong1/danjam-discovery-service:latest
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Server') {
             steps {
                 sshPublisher(
                     publishers: [
@@ -68,33 +83,20 @@ pipeline {
                             configName: 'kangmin-oracle-orm',
                             transfers: [
                                 sshTransfer(
-                                    cleanRemote: false,
-                                    excludes: '*-plain.jar',
                                     execCommand: '''
-                                        echo "Adding execution permissions to JAR files..."
-                                        chmod +x /discovery-service/discovery_service-*.jar
+                                        echo "Stopping existing container..."
+                                        docker stop danjam-discovery-service || true
+                                        docker rm danjam-discovery-service || true
 
-                                        echo "Stopping any running instance of discovery-service..."
-                                        pkill -f 'discovery-service' || echo 'No running service found.'
+                                        echo "Pulling latest Docker image..."
+                                        docker pull agong1/danjam-discovery-service:latest
 
-                                        echo "Finding the latest JAR file..."
-                                        latest_jar=$(ls -t /discovery-service/discovery_service-*.jar | head -n 1)
-                                        echo "Starting $latest_jar"
-                                        nohup java -jar $latest_jar > /discovery-service/app.log 2>&1 &
+                                        echo "Running new container..."
+                                        docker run -d --name danjam-discovery-service --network npm_default -p 8761:8761 agong1/danjam-discovery-service:latest
                                     ''',
-                                    execTimeout: 120000,
-                                    flatten: false,
-                                    makeEmptyDirs: false,
-                                    noDefaultExcludes: false,
-                                    patternSeparator: '[, ]+',
-                                    remoteDirectory: '/discovery-service',
-                                    remoteDirectorySDF: false,
-                                    removePrefix: 'src/backend/discovery_service/build/libs',
-                                    sourceFiles: 'src/backend/discovery_service/build/libs/*-SNAPSHOT.jar'
+                                    execTimeout: 120000
                                 )
                             ],
-                            usePromotionTimestamp: false,
-                            useWorkspaceInPromotion: false,
                             verbose: false
                         )
                     ]
