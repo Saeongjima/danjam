@@ -23,13 +23,15 @@ pipeline {
                     withCredentials([file(credentialsId: 'danjam-api-gateway-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
                         echo "Copying env.properties from Secret file"
 
-                        // env.properties를 빌드 시 필요한 위치로 복사
+                        // env.properties를 빌드 시 필요한 위치와 테스트 리소스 디렉토리에 복사
                         withEnv(["SECRET_FILE=${ENV_PROPERTIES_FILE}"]) {
                             sh '''
                             # 필요한 디렉토리 생성
                             mkdir -p src/backend/api_gateway_service/src/main/resources/properties/
+                            mkdir -p src/backend/api_gateway_service/src/test/resources/properties/
                             # env.properties 파일 복사
                             cp $SECRET_FILE src/backend/api_gateway_service/src/main/resources/properties/env.properties
+                            cp $SECRET_FILE src/backend/api_gateway_service/src/test/resources/properties/env.properties
                             '''
                         }
                     }
