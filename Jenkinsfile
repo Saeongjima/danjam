@@ -16,9 +16,27 @@ pipeline {
                 checkout scm
             }
         }
+        // 환경변수 파일 생성 단계
+        stage('Generate env.properties') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'danjam-api-gateway-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
+                        echo "Copying env.properties from Secret file"
+
+                        // env.properties를 빌드 시 필요한 위치로 복사
+                       withEnv(["SECRET_FILE=${ENV_PROPERTIES_FILE}"]) {
+                           sh '''
+                           cp $SECRET_FILE src/backend/api_gateway_service/src/main/resources/properties/env.properties
+                           '''
+                       }
+                    }
+                }
+            }
+        }
+        // 빌드 단계
         stage('Build Backend') {
             steps {
-                dir('src/backend/user-service') { // backend/user-service 디렉토리로 이동
+                dir('src/backend/api_gateway_service') { // backend/api_gateway_service 디렉토리로 이동
                     script {
                         echo "Building Backend..."
                         sh '''
@@ -29,9 +47,10 @@ pipeline {
                 }
             }
         }
+        // 테스트 단계
         stage('Test Backend') {
             steps {
-                dir('src/backend/user-service') {
+                dir('src/backend/api_gateway_service') {
                     script {
                         echo "Running Backend Tests..."
                         sh './gradlew test' // Gradle 테스트
@@ -39,18 +58,49 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Backend') {
+
+        stage('Build and Push Docker Image') {
             steps {
-                dir('src/backend/user-service') {
-                    script {
-                        echo "Deploying Backend..."
-                        sh '''
-                        docker build -t my-backend:latest .
-                        docker tag my-backend:latest my-docker-registry/my-backend:latest
-                        docker push my-docker-registry/my-backend:latest
-                        '''
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'agong1-docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        dir('src/backend/api_gateway_service') {
+                            sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker build -t agong1/danjam-api-gateway-service:latest .
+                            docker push agong1/danjam-api-gateway-service:latest
+                            '''
+                        }
                     }
                 }
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'kangmin-oracle-orm',
+                            transfers: [
+                                sshTransfer(
+                                    execCommand: '''
+                                        echo "Stopping existing container..."
+                                        /usr/bin/docker stop danjam-api-gateway-service || true
+                                        /usr/bin/docker rm danjam-api-gateway-service || true
+
+                                        echo "Pulling latest Docker image..."
+                                        /usr/bin/docker pull agong1/danjam-api-gateway-service:latest
+
+                                        echo "Running new container..."
+                                        /usr/bin/docker run -d --name danjam-api-gateway-service --network npm_default -p 8600:8600 agong1/danjam-api-gateway-service:latest
+                                    ''',
+                                    execTimeout: 120000
+                                )
+                            ],
+                            verbose: false
+                        )
+                    ]
+                )
             }
         }
     }
