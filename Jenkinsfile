@@ -85,14 +85,14 @@ pipeline {
                                 sshTransfer(
                                     execCommand: '''
                                         echo "Stopping existing container..."
-                                        docker stop danjam-discovery-service || true
-                                        docker rm danjam-discovery-service || true
+                                        /usr/bin/docker stop danjam-discovery-service || true
+                                        /usr/bin/docker rm danjam-discovery-service || true
 
                                         echo "Pulling latest Docker image..."
-                                        docker pull agong1/danjam-discovery-service:latest
+                                        /usr/bin/docker pull agong1/danjam-discovery-service:latest
 
                                         echo "Running new container..."
-                                        docker run -d --name danjam-discovery-service --network npm_default -p 8761:8761 agong1/danjam-discovery-service:latest
+                                        /usr/bin/docker run -d --name danjam-discovery-service --network npm_default -p 8761:8761 agong1/danjam-discovery-service:latest
                                     ''',
                                     execTimeout: 120000
                                 )
