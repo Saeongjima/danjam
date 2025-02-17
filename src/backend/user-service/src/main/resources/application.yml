@@ -12,7 +12,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: ${DATABASE_DRIVER}
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
@@ -34,11 +34,11 @@ spring:
       write-dates-as-timestamps: false
   jwt:
     secret: ${JWT_SECRET}
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
+#  data:
+#    redis:
+#      host: ${REDIS_HOST}
+#      port: ${REDIS_PORT}
+#      password: ${REDIS_PASSWORD}
 
   thymeleaf:
     suffix: .html
