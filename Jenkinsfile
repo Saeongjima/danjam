@@ -16,9 +16,30 @@ pipeline {
                 checkout scm
             }
         }
+        // 환경변수 파일 생성 단계
+        stage('Generate env.properties') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'danjam-user-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
+                        echo "Copying env.properties from Secret file"
+
+                        // env.properties를 빌드 시 필요한 위치와 테스트 리소스 디렉토리에 복사
+                        withEnv(["SECRET_FILE=${ENV_PROPERTIES_FILE}"]) {
+                            sh '''
+                            # 필요한 디렉토리 생성
+                            mkdir -p src/backend/user-service/src/main/resources/properties/
+                            # env.properties 파일 복사
+                            cp $SECRET_FILE src/backend/user-service/src/main/resources/properties/env.properties
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+        // 빌드 단계
         stage('Build Backend') {
             steps {
-                dir('src/backend/user-service') { // backend/user-service 디렉토리로 이동
+                dir('src/backend/user-service') { // backend/해당 service 디렉토리로 이동
                     script {
                         echo "Building Backend..."
                         sh '''
@@ -29,6 +50,7 @@ pipeline {
                 }
             }
         }
+        // 테스트 단계
         stage('Test Backend') {
             steps {
                 dir('src/backend/user-service') {
@@ -39,18 +61,49 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Backend') {
+        // Docker 이미지 빌드 및 푸시 단계
+        stage('Build and Push Docker Image') {
             steps {
-                dir('src/backend/user-service') {
-                    script {
-                        echo "Deploying Backend..."
-                        sh '''
-                        docker build -t my-backend:latest .
-                        docker tag my-backend:latest my-docker-registry/my-backend:latest
-                        docker push my-docker-registry/my-backend:latest
-                        '''
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'agong1-docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        dir('src/backend/user-service') {
+                            sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker build -t agong1/danjam-user-service:latest .
+                            docker push agong1/danjam-user-service:latest
+                            '''
+                        }
                     }
                 }
+            }
+        }
+        // 서버에 배포 단계
+        stage('Deploy to Server') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'kangmin-oracle-orm',
+                            transfers: [
+                                sshTransfer(
+                                    execCommand: '''
+                                        echo "Stopping existing container..."
+                                        /usr/bin/docker stop danjam-user-service || true
+                                        /usr/bin/docker rm danjam-user-service || true
+
+                                        echo "Pulling latest Docker image..."
+                                        /usr/bin/docker pull agong1/danjam-user-service:latest
+
+                                        echo "Running new container..."
+                                        /usr/bin/docker run -d --name danjam-user-service --network npm_default -p 8601:8601 agong1/danjam-user-service:latest
+                                    ''',
+                                    execTimeout: 120000
+                                )
+                            ],
+                            verbose: false
+                        )
+                    ]
+                )
             }
         }
     }
