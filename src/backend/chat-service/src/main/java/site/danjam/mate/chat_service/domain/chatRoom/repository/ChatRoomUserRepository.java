@@ -10,7 +10,7 @@ import site.danjam.mate.chat_service.domain.chatRoom.repository.jpa.ChatRoomUser
 @Repository
 @RequiredArgsConstructor
 public class ChatRoomUserRepository {
-    private ChatRoomUserJpaRepository chatRoomUserJpaRepository;
+    private final ChatRoomUserJpaRepository chatRoomUserJpaRepository;
 
     public List<ChatRoomUser> saveAll(List<ChatRoomUser> chatRoomList) {
         return chatRoomUserJpaRepository.saveAll(chatRoomList);
@@ -18,5 +18,17 @@ public class ChatRoomUserRepository {
 
     public List<ChatRoom> findChatRoomByUserId(Long userId) {
         return chatRoomUserJpaRepository.findChatRoomByUserId(userId);
+    }
+
+    public ChatRoomUser findByChatRoomIdAndUserId(Long chatRoomId, Long userId) {
+        return chatRoomUserJpaRepository.findByChatRoomIdAndUserId(chatRoomId, userId);
+    }
+
+    public void delete(ChatRoomUser chatRoomUser) {
+        chatRoomUserJpaRepository.delete(chatRoomUser);
+    }
+
+    public long countByChatRoomId(Long chatRoomId) {
+        return chatRoomUserJpaRepository.countByChatRoomId(chatRoomId);
     }
 }

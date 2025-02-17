@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoom;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoomUser;
+import site.danjam.mate.chat_service.domain.chatRoom.dto.ChatRoomLeaveDTO;
 import site.danjam.mate.chat_service.domain.chatRoom.dto.GroupChatRoomCreateDTO;
 import site.danjam.mate.chat_service.domain.chatRoom.dto.PersonalChatRoomCreateDTO;
 import site.danjam.mate.chat_service.domain.chatRoom.dto.request.GroupChatRoomRequestDTO;
@@ -46,6 +47,7 @@ public class ChatRoomCommandService {
     }
 
 
+    @MethodDescription(description = "그룹 채팅방을 생성합니다.")
     public GroupChatRoomCreateDTO createGroupChatRoom(String user, Role role, GroupChatRoomRequestDTO request) {
         Long userId = Long.valueOf(user);
 
@@ -108,6 +110,21 @@ public class ChatRoomCommandService {
         }
     }
 
-    // TODO : 채팅방 사용자 삭제 로직 추가
 
+    @MethodDescription(description = "사용자가 채팅방을 나갑니다. 채팅방에 유저가 존재하지 않을 경우 채팅방을 삭제합니다.")
+    public ChatRoomLeaveDTO leaveChatRoom(String user, Long chatRoomId) {
+        Long userId = Long.valueOf(user);
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
+
+        ChatRoomUser chatRoomUser = chatRoomUserRepository.findByChatRoomIdAndUserId(chatRoomId, userId);
+
+        chatRoomUserRepository.delete(chatRoomUser);
+
+        if (chatRoomUserRepository.countByChatRoomId(chatRoomId) == 0) {
+            chatRoomRepository.deleteById(chatRoomId);
+        }
+        
+        return ChatRoomLeaveDTO.from(chatRoom);
+    }
 }

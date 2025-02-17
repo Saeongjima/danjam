@@ -10,7 +10,6 @@ import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoom;
 
 @Repository
 public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Long> {
-    Optional<ChatRoom> findById(Long chatRoomId);
 
     @Query("select c from ChatRoom c order by c.createdDateTime desc")
     List<ChatRoom> findAllChatRoom();
