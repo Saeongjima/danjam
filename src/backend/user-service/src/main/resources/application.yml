@@ -12,10 +12,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    driver-class-name: ${DATABASE_DRIVER}
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    driver-class-name: ${DATABASE_DRIVER:org.mariadb.jdbc.Driver}  # 기본값 설정
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3308/fake_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul}
+    username: ${DATABASE_USERNAME:fake_user}
+    password: ${DATABASE_PASSWORD:fake_password}
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,31 +28,26 @@ spring:
             platform: org.hibernate.service.jta.JtaPlatform
         format_sql: true
         show_sql: true
-        dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: ${DATABASE_DIALECT:org.hibernate.dialect.MariaDBDialect}  # 기본값 설정
   jackson:
     serialization:
       write-dates-as-timestamps: false
   jwt:
-    secret: ${JWT_SECRET}
-#  data:
-#    redis:
-#      host: ${REDIS_HOST}
-#      port: ${REDIS_PORT}
-#      password: ${REDIS_PASSWORD}
+    secret: ${JWT_SECRET:fake_jwt_secret}  # 기본값 설정
 
   thymeleaf:
     suffix: .html
 
 minio:
-  endpoint: ${MINIO_ENDPOINT}
-  accessKey: ${MINIO_ACCESS_KEY}
-  secretKey: ${MINIO_SECRET_KEY}
+  endpoint: ${MINIO_ENDPOINT:https://fake-minio.endpoint.com}
+  accessKey: ${MINIO_ACCESS_KEY:fake_access_key}
+  secretKey: ${MINIO_SECRET_KEY:fake_secret_key}
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL}
+      defaultZone: ${EUREKA_SERVER_URL:http://fake-eureka-server:8761/eureka}
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

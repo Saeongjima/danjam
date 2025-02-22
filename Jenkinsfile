@@ -16,26 +16,6 @@ pipeline {
                 checkout scm
             }
         }
-        // 환경변수 파일 생성 단계
-        stage('Generate env.properties') {
-            steps {
-                script {
-                    withCredentials([file(credentialsId: 'danjam-user-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
-                        echo "Copying env.properties from Secret file"
-
-                        // env.properties를 빌드 시 필요한 위치와 테스트 리소스 디렉토리에 복사
-                        withEnv(["SECRET_FILE=${ENV_PROPERTIES_FILE}"]) {
-                            sh '''
-                            # 필요한 디렉토리 생성
-                            mkdir -p src/backend/user-service/src/main/resources/properties/
-                            # env.properties 파일 복사
-                            cp $SECRET_FILE src/backend/user-service/src/main/resources/properties/env.properties
-                            '''
-                        }
-                    }
-                }
-            }
-        }
         // 빌드 단계
         stage('Build Backend') {
             steps {
@@ -50,6 +30,27 @@ pipeline {
                 }
             }
         }
+        // 환경변수 파일 생성 단계
+        stage('Generate env.properties') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'danjam-user-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
+                        echo "Copying env.properties from Secret file"
+
+                        // env.properties를 빌드 시 필요한 위치에 복사
+                        withEnv(["SECRET_FILE=${ENV_PROPERTIES_FILE}"]) {
+                            sh '''
+                            # 필요한 디렉토리 생성
+                            mkdir -p src/backend/user-service/src/main/resources/properties/
+                            # env.properties 파일 복사
+                            cp $SECRET_FILE src/backend/user-service/src/main/resources/properties/env.properties
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
         // 테스트 단계
         stage('Test Backend') {
             steps {
@@ -57,6 +58,17 @@ pipeline {
                     script {
                         echo "Running Backend Tests..."
                         sh './gradlew test' // Gradle 테스트
+                    }
+                }
+            }
+        }
+        // `env.properties` 삭제 단계 (Docker 이미지에 포함되지 않도록 함)
+        stage('Remove env.properties') {
+            steps {
+                dir('src/backend/user-service') {
+                    script {
+                        echo "Removing env.properties before building Docker image..."
+                        sh 'rm -f src/main/resources/properties/env.properties'
                     }
                 }
             }
@@ -77,33 +89,48 @@ pipeline {
                 }
             }
         }
-        // 서버에 배포 단계
+        // 서버에 배포 단계 (env.properties 파일을 다시 복사하여 컨테이너 실행)
         stage('Deploy to Server') {
             steps {
-                sshPublisher(
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: 'kangmin-oracle-orm',
-                            transfers: [
-                                sshTransfer(
-                                    execCommand: '''
-                                        echo "Stopping existing container..."
-                                        /usr/bin/docker stop danjam-user-service || true
-                                        /usr/bin/docker rm danjam-user-service || true
+                script {
+                    withCredentials([file(credentialsId: 'danjam-user-service-env', variable: 'ENV_PROPERTIES_FILE')]) {
+                        sshPublisher(
+                            publishers: [
+                                sshPublisherDesc(
+                                    configName: 'kangmin-oracle-orm',
+                                    transfers: [
+                                        // 1. 서버로 env.properties 파일 전송 (remoteDirectory 수정됨)
+                                        sshTransfer(
+                                            sourceFiles: "${ENV_PROPERTIES_FILE}",
+                                            remoteDirectory: "/user-service",
+                                            removePrefix: "${WORKSPACE}"
+                                        ),
+                                        // 2. Docker 컨테이너 실행 (env.properties 적용)
+                                        sshTransfer(
+                                            execCommand: '''
+                                                echo "Stopping existing container..."
+                                                /usr/bin/docker stop danjam-user-service || true
+                                                /usr/bin/docker rm danjam-user-service || true
 
-                                        echo "Pulling latest Docker image..."
-                                        /usr/bin/docker pull agong1/danjam-user-service:latest
+                                                echo "Pulling latest Docker image..."
+                                                /usr/bin/docker pull agong1/danjam-user-service:latest
 
-                                        echo "Running new container..."
-                                        /usr/bin/docker run -d --name danjam-user-service --network npm_default -p 8601:8601 agong1/danjam-user-service:latest
-                                    ''',
-                                    execTimeout: 120000
+                                                echo "Running new container with environment variables..."
+                                                docker run -d --name danjam-user-service \
+                                                  --network npm_default \
+                                                  -p 8601:8601 \
+                                                  --env-file /user-service/env.properties \
+                                                  agong1/danjam-user-service:latest
+                                            ''',
+                                            execTimeout: 120000
+                                        )
+                                    ],
+                                    verbose: false
                                 )
-                            ],
-                            verbose: false
+                            ]
                         )
-                    ]
-                )
+                    }
+                }
             }
         }
     }
