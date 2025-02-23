@@ -109,8 +109,8 @@ pipeline {
                                        sshTransfer(
                                            execCommand: '''
                                                echo "Checking if env.properties was copied..."
-                                               ls -l /user-service/env.properties || echo "ERROR: env.properties NOT FOUND!"
-                                               cat /user-service/env.properties || echo "ERROR: env.properties is empty!"
+                                               /bin/ls -l /user-service/env.properties || echo "ERROR: env.properties NOT FOUND!"
+                                               /bin/cat /user-service/env.properties || echo "ERROR: env.properties is empty!"
                                            ''',
                                            execTimeout: 120000
                                        ),
