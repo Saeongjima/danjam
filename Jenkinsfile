@@ -103,7 +103,7 @@ pipeline {
                                        sshTransfer(
                                            sourceFiles: "${ENV_PROPERTIES_FILE}",
                                            remoteDirectory: "/user-service",
-                                           removePrefix: "${WORKSPACE}"
+                                           removePrefix: "src/backend/user-service/src/main/resources"
                                        ),
                                        // 2. 복사된 파일 확인 (서버에서 확인)
                                        sshTransfer(
