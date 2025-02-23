@@ -74,7 +74,7 @@ pipeline {
             }
         }
         // Docker 이미지 빌드 및 푸시 단계
-        stage('Build and Push Docker Image') {
+        stage('Docker Build and Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'agong1-docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
@@ -116,7 +116,7 @@ pipeline {
                                                 /usr/bin/docker pull agong1/danjam-user-service:latest
 
                                                 echo "Running new container with environment variables..."
-                                                docker run -d --name danjam-user-service \
+                                                /usr/bin/docker docker run -d --name danjam-user-service \
                                                   --network npm_default \
                                                   -p 8601:8601 \
                                                   --env-file /user-service/env.properties \
