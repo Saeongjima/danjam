@@ -139,7 +139,7 @@ pipeline {
                                                 /usr/bin/docker run -d --name danjam-user-service \
                                                   --network npm_default \
                                                   -p 8601:8601 \
-                                                  --env-file /user-service/env.properties \
+                                                  --env-file /home/ubuntu/danjam/user-service/env.properties \
                                                   agong1/danjam-user-service:latest
                                             ''',
                                             execTimeout: 120000
