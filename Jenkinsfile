@@ -103,9 +103,9 @@ pipeline {
                                         sshTransfer(
                                             execCommand: '''
                                                 echo "Ensuring /user-service/ directory exists..."
-                                                usr/bin/mkdir -p /user-service/
-                                                usr/bin/chmod 777 /user-service/
-                                                usr/bin/ls -ld /user-service/
+                                                /usr/bin/mkdir -p /user-service/
+                                                /usr/bin/chmod 777 /user-service/
+                                                /usr/bin/ls -ld /user-service/
                                             ''',
                                             execTimeout: 60000
                                         ),
@@ -120,8 +120,8 @@ pipeline {
                                         sshTransfer(
                                             execCommand: '''
                                                 echo "Setting permissions for env.properties..."
-                                                usr/bin/chmod 644 /user-service/env.properties || echo "ERROR: Failed to set permissions!"
-                                                usr/bin/ls -l /user-service/env.properties
+                                                /usr/bin/chmod 644 /user-service/env.properties || echo "ERROR: Failed to set permissions!"
+                                                /usr/bin/ls -l /user-service/env.properties
                                             ''',
                                             execTimeout: 600000
                                         ),
