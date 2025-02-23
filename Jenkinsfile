@@ -116,7 +116,7 @@ pipeline {
                                                 /usr/bin/docker pull agong1/danjam-user-service:latest
 
                                                 echo "Running new container with environment variables..."
-                                                /usr/bin/docker docker run -d --name danjam-user-service \
+                                                /usr/bin/docker run -d --name danjam-user-service \
                                                   --network npm_default \
                                                   -p 8601:8601 \
                                                   --env-file /user-service/env.properties \
