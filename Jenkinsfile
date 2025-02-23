@@ -99,32 +99,32 @@ pipeline {
                                 sshPublisherDesc(
                                     configName: 'kangmin-oracle-orm',
                                     transfers: [
-                                        // 1. Ensure /user-service/ directory exists and set permissions
-                                        sshTransfer(
-                                            execCommand: '''
-                                                echo "Ensuring /user-service/ directory exists..."
-                                                /usr/bin/mkdir -p /user-service/
-                                                /usr/bin/chmod 777 /user-service/
-                                                /usr/bin/ls -ld /user-service/
-                                            ''',
-                                            execTimeout: 60000
-                                        ),
-                                        // 2. Copy env.properties file
-                                        sshTransfer(
-                                            sourceFiles: "${ENV_PROPERTIES_FILE}",
-                                            remoteDirectory: "/user-service",
-                                            removePrefix: "${WORKSPACE}",
-                                            verbose: true
-                                        ),
-                                        // 3. Check if file exists and set correct permissions
-                                        sshTransfer(
-                                            execCommand: '''
-                                                echo "Setting permissions for env.properties..."
-                                                /usr/bin/chmod 644 /user-service/env.properties || echo "ERROR: Failed to set permissions!"
-                                                /usr/bin/ls -l /user-service/env.properties
-                                            ''',
-                                            execTimeout: 600000
-                                        ),
+//                                         // 1. Ensure /user-service/ directory exists and set permissions
+//                                         sshTransfer(
+//                                             execCommand: '''
+//                                                 echo "Ensuring /user-service/ directory exists..."
+//                                                 /usr/bin/mkdir -p /user-service/
+//                                                 /usr/bin/chmod 777 /user-service/
+//                                                 /usr/bin/ls -ld /user-service/
+//                                             ''',
+//                                             execTimeout: 60000
+//                                         ),
+//                                         // 2. Copy env.properties file
+//                                         sshTransfer(
+//                                             sourceFiles: "${ENV_PROPERTIES_FILE}",
+//                                             remoteDirectory: "/user-service",
+//                                             removePrefix: "${WORKSPACE}",
+//                                             verbose: true
+//                                         ),
+//                                         // 3. Check if file exists and set correct permissions
+//                                         sshTransfer(
+//                                             execCommand: '''
+//                                                 echo "Setting permissions for env.properties..."
+//                                                 /usr/bin/chmod 644 /user-service/env.properties || echo "ERROR: Failed to set permissions!"
+//                                                 /usr/bin/ls -l /user-service/env.properties
+//                                             ''',
+//                                             execTimeout: 600000
+//                                         ),
                                         // 4. Docker 컨테이너 실행
                                         sshTransfer(
                                             execCommand: '''
