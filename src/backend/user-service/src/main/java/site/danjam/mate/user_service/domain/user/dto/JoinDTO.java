@@ -32,6 +32,7 @@ public class JoinDTO {
     @NotBlank(message = "전공을 입력해주세요.")
     private String major;
     @Size(min = 2, max = 32, message = "닉네임은 2자 이상, 32자 이내여야 합니다.")
+    @NotBlank(message = "닉네임을 입력해주세요.")
     private String nickname;
 
     @NotBlank(message = "비밀번호를 입혁해주세요.")

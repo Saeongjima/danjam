@@ -10,7 +10,7 @@ import site.danjam.mate.user_service.domain.user.service.JoinCheckService;
 import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
 
 @RestController
-@RequestMapping("user-service/api/check")
+@RequestMapping("user-service/api")
 @RequiredArgsConstructor
 public class JoinCheckController {
     private final JoinCheckService joinCheckService;

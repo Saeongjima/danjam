@@ -1,0 +1,53 @@
+server:
+  port: 8601
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: user-service
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER:org.mariadb.jdbc.Driver}  # 기본값 설정
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3308/fake_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul}
+    username: ${DATABASE_USERNAME:fake_user}
+    password: ${DATABASE_PASSWORD:fake_password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            platform: org.hibernate.service.jta.JtaPlatform
+        format_sql: true
+        show_sql: true
+        dialect: ${DATABASE_DIALECT:org.hibernate.dialect.MariaDBDialect}  # 기본값 설정
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  jwt:
+    secret: ${JWT_SECRET:fake_jwt_secret}  # 기본값 설정
+
+  thymeleaf:
+    suffix: .html
+
+minio:
+  endpoint: ${MINIO_ENDPOINT:https://fake-minio.endpoint.com}
+  accessKey: ${MINIO_ACCESS_KEY:fake_access_key}
+  secretKey: ${MINIO_SECRET_KEY:fake_secret_key}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://fake-eureka-server:8761/eureka}
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

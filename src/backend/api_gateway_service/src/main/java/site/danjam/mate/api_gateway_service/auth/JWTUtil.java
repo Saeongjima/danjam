@@ -43,7 +43,7 @@ public class JWTUtil {
     }
 
     @MethodDescription(description = "토큰이 만료되었는지 확인한다.")
-    public Boolean isExpired(String token){
+    public boolean isExpired(String token){
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
@@ -61,9 +61,9 @@ public class JWTUtil {
         return response.writeWith(Mono.just(buffer));
     }
 
-    @MethodDescription(description = "토큰에서 username을 추출한다.")
-    public String getUsername(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username",String.class);
+    @MethodDescription(description = "토큰에서 userId를 추출한다.")
+    public String getUserId(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId",String.class);
     }
 
     @MethodDescription(description = "토큰에서 role을 추출한다.")
