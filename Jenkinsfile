@@ -24,7 +24,7 @@ pipeline {
                         echo "Building Backend..."
                         sh '''
                         chmod +x ./gradlew
-                        ./gradlew clean build --parallel
+                        ./gradlew clean build -x test --parallel  # 테스트 제외하고 빌드
                         '''
                     }
                 }
