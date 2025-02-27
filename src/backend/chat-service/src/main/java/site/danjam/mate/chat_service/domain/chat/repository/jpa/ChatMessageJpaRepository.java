@@ -21,4 +21,7 @@ public interface ChatMessageJpaRepository extends JpaRepository<ChatMessage, Lon
             "AND JSON_CONTAINS(unread_users, :userId, '$')", nativeQuery = true)
     Integer countUnreadMessages(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
 
+    Optional<ChatMessage> findByChatRoomId(Long chatRoomId);
+
+    void deleteByChatRoomId(Long chatRoomId);
 }

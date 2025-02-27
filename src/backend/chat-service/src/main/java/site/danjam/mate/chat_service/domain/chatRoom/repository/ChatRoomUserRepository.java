@@ -31,4 +31,8 @@ public class ChatRoomUserRepository {
     public long countByChatRoomId(Long chatRoomId) {
         return chatRoomUserJpaRepository.countByChatRoomId(chatRoomId);
     }
+
+    public boolean existsByChatRoomIdAndUserId(Long chatRoomId, Long userId) {
+        return chatRoomUserJpaRepository.existsByChatRoomIdAndUserId(chatRoomId, userId);
+    }
 }

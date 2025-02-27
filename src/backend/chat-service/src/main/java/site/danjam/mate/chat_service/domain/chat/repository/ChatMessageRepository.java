@@ -12,11 +12,18 @@ public class ChatMessageRepository {
     private final ChatMessageJpaRepository chatMessageJpaRepository;
 
     public Optional<ChatMessage> findLastMessageByChatRoomId(Long chatRoomId) {
-        return chatMessageJpaRepository.findLastMessageByChatRoomId(chatRoomId);
+        return Optional.ofNullable(chatMessageJpaRepository.findLastMessageByChatRoomId(chatRoomId)).orElseThrow();
     }
 
     public Integer countUnreadMessages(Long chatRoomId, Long userId) {
         return chatMessageJpaRepository.countUnreadMessages(chatRoomId, userId);
     }
 
+    public Optional<ChatMessage> findByChatRoomId(Long chatRoomId) {
+        return Optional.ofNullable(chatMessageJpaRepository.findByChatRoomId(chatRoomId)).orElseThrow();
+    }
+
+    public void deleteByChatRoomId(Long chatRoomId) {
+        chatMessageJpaRepository.deleteByChatRoomId(chatRoomId);
+    }
 }
