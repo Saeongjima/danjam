@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.mate_service.global.exception.AccessDeniedException;
-import site.danjam.mate.mate_service.global.exception.AlreadyProfileExistException;
+import site.danjam.mate.mate_service.mate.exception.AlreadyProfileExistException;
 import site.danjam.mate.mate_service.global.exception.ValidationExcepiton;
 import site.danjam.mate.mate_service.global.util.RequiredAuthUser;
 import site.danjam.mate.mate_service.mate.enums.MateType;
@@ -34,9 +34,7 @@ public class StudyMateProfileService implements MateProfileService {
     @Override
     @Transactional
     @RequiredAuthUser
-    public void createMateProfile(Object inputDTO, String username, String role) {
-
-        Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
+    public void createMateProfile(Object inputDTO, Long userId, String role) {
 
         // 이미 해당 프로필이 있는지 확인
         if(studyMateProfileRepository.existsStudyMateProfileByUserId(userId)){

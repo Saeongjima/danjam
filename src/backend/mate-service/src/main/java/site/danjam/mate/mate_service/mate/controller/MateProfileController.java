@@ -31,7 +31,7 @@ public class MateProfileController {
     public ResponseEntity<ApiResponseMessage> createProfile(
             @PathVariable String type,
             @RequestBody Object profileInputDTO,
-            @RequestHeader("username") String username,
+            @RequestHeader("userId") Long userId,
             @RequestHeader("role") String role
     ) {
         // 입력된 타입을 MateType으로 변환
@@ -39,7 +39,7 @@ public class MateProfileController {
 
         // MateType에 해당하는 구현체 찾기
         MateProfileService service = serviceRegistry.getService(mateType);
-        service.createMateProfile(profileInputDTO, username, role);
+        service.createMateProfile(profileInputDTO, userId, role);
         return ResponseEntity.ok(ApiResponseMessage.of("성공적으로 프로필을 생성하였습니다."));
     }
 

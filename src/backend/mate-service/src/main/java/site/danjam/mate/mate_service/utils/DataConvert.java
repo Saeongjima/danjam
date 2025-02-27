@@ -7,6 +7,7 @@ import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.global.exception.BaseException;
 import site.danjam.mate.mate_service.global.exception.Code;
+import site.danjam.mate.mate_service.mate.exception.InvalidMateTypeException;
 
 public class DataConvert {
     @MethodDescription(description = "클라이언트로 입력 받은 Set을 String문자열로 변환하여 반환합니다. ")
@@ -24,7 +25,7 @@ public class DataConvert {
         try{
             return MateType.valueOf(type.toUpperCase());
         }catch(IllegalArgumentException e){
-            throw new BaseException(Code.INVALID_MATE_TYPE);
+            throw new InvalidMateTypeException(Code.INVALID_MATE_TYPE);
         }
     }
 

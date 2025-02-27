@@ -6,7 +6,7 @@ import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 public interface MateProfileService {
 
     @MethodDescription(description = "메이트 프로필을 저장하는 메서드")
-    void createMateProfile(Object inputDTO, String username, String role);
+    void createMateProfile(Object inputDTO, Long userId, String role);
 
     @MethodDescription(description = "메이트 프로필을 조회하는 메서드. 해당 메이트 프로필DTO가 return 되어야한다.")
     Object getMateProfile(String username, String role);
