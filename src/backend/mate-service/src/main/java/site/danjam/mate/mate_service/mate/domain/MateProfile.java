@@ -24,10 +24,6 @@ import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 @MappedSuperclass
 public abstract class MateProfile extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-
     @Column(nullable = false, unique = true)
     protected Long userId;
 

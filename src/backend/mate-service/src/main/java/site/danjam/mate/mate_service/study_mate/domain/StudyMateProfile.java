@@ -6,6 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,6 +32,9 @@ import site.danjam.mate.mate_service.utils.DataConvert;
 @SuperBuilder
 public class StudyMateProfile extends MateProfile {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Column(nullable = false)
     private String userSubjects; //ex) "[데이터베이스,자율주행]"
@@ -41,7 +48,6 @@ public class StudyMateProfile extends MateProfile {
     private AverageGrade averageGrade;
 
     // 선호하는 스터디 종류
-    @Column(nullable = false)
     @OneToMany(mappedBy = "studyMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PreferredStudyType> preferredStudyTypes;
 

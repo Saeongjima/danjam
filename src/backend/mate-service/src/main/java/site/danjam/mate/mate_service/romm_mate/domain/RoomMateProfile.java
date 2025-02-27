@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,10 @@ import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 @AllArgsConstructor
 @SuperBuilder
 public class RoomMateProfile extends MateProfile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Column(nullable = false)
     private String isSmoking; // Y: 흡연, N: 비흡연

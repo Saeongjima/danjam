@@ -27,8 +27,7 @@ public enum Code {
     INVALID_INPUT(HttpStatus.BAD_REQUEST, 40000, "잘못된 값이 존재합니다."),
     INVALID_QUERY_PARAM(HttpStatus.BAD_REQUEST, 40001, "쿼리 파라미터 타입이 일치하지 않습니다."),
     NULL_INPUT_VALUE(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
-    ALREADY_PROFILE_EXIST(HttpStatus.BAD_REQUEST, 40003, "프로필이 이미 존재합니다."),
-    CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 4005, "해당 리소스를 찾을 수 없습니다."),
+    CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 40005, "해당 리소스를 찾을 수 없습니다."),
 
     //보안 관련(40300 ~ 40399)
     REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40300, "로그인이 필요합니다."),
@@ -45,8 +44,8 @@ public enum Code {
     /**
      * Mate서비스 에러(60000)
      */
-    INVALID_MATE_TYPE(HttpStatus.BAD_REQUEST, 60004, "존재하지 않는 메이트 타입입니다.");
-
+    INVALID_MATE_TYPE(HttpStatus.BAD_REQUEST, 60004, "존재하지 않는 메이트 타입입니다."),
+    ALREADY_PROFILE_EXIST(HttpStatus.BAD_REQUEST, 60003, "프로필이 이미 존재합니다.");
 
     private final HttpStatus status;
     private final Integer code;
