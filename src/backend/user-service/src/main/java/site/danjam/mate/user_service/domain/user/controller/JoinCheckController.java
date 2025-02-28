@@ -10,7 +10,7 @@ import site.danjam.mate.user_service.domain.user.service.JoinCheckService;
 import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("user-service/api")
 @RequiredArgsConstructor
 public class JoinCheckController {
     private final JoinCheckService joinCheckService;
@@ -25,6 +25,7 @@ public class JoinCheckController {
         return ResponseEntity.ok(ApiResponseMessage.of(String.valueOf(joinCheckService.isEmailDuplicate(email))));
     }
 
+    //
     @GetMapping("/nickname")
     public ResponseEntity<ApiResponseMessage> checkNicknameAvailability(@RequestParam("nickname") String nickname) {
         return ResponseEntity.ok(ApiResponseMessage.of(String.valueOf(joinCheckService.isNicknameDuplicate(nickname))));
