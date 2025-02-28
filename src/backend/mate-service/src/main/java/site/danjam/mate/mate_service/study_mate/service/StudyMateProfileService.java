@@ -69,12 +69,11 @@ public class StudyMateProfileService implements MateProfileService {
 
     @Override
     @RequiredAuthUser
-    public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId) {
+    public void updateMateProfile(Object inputDTO, Long userId, String role, Long mateProfileId) {
+
         /**
          * 1. 사전작업 : 권한/유효성 검증, 타입 변환
          */
-
-        Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         StudyMateProfile studyMateProfile = studyMateProfileRepository.findById(mateProfileId);
         // 본인 프로필이 맞는지 검증
         if(!studyMateProfile.getUserId().equals(userId)){

@@ -63,7 +63,7 @@ public class MateProfileController {
             @PathVariable String type,
             @PathVariable Long profileId,
             @RequestBody Object profileInputDTO,
-            @RequestHeader("username") String username,
+            @RequestHeader("userId") Long userId,
             @RequestHeader("role") String role
     ){
         // 입력된 타입을 MateType으로 변환
@@ -71,7 +71,7 @@ public class MateProfileController {
         // MateType에 해당되는 구현체 찾기
         MateProfileService service = serviceRegistry.getService(mateType);
 
-        service.updateMateProfile(profileInputDTO,username,role,profileId);
+        service.updateMateProfile(profileInputDTO,userId,role,profileId);
         return ResponseEntity.ok(ApiResponseMessage.of("성공적으로 수정하였습니다."));
     }
 }

@@ -85,7 +85,7 @@ public class RoomMateProfileService implements MateProfileService {
     @Override
     @RequiredAuthUser
     @Transactional
-    public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId){
+    public void updateMateProfile(Object inputDTO, Long userId, String role, Long mateProfileId){
         /**
          * 1. 사전작업 : 권한/유효성 검증, 타입 변환
          */
@@ -93,7 +93,6 @@ public class RoomMateProfileService implements MateProfileService {
         RoomMateProfile roomMateProfile = roomMateProfileRepository.findById(mateProfileId)
                 .orElseThrow(()-> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
-        Long userId = 1L;//todo - openfeign을 이용해서 suerId조회해야함.
         // 본인 프로필이 맞는지 검증
         if(!roomMateProfile.getUserId().equals(userId)){
             throw new AccessDeniedException();
