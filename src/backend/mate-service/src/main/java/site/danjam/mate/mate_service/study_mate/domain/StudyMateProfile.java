@@ -9,7 +9,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +21,6 @@ import site.danjam.mate.mate_service.mate.domain.MateProfile;
 import site.danjam.mate.mate_service.study_mate.dto.StudyMateProfileInputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
-import site.danjam.mate.mate_service.study_mate.enums.StudyType;
 import site.danjam.mate.mate_service.utils.DataConvert;
 
 @Entity
@@ -41,7 +39,7 @@ public class StudyMateProfile extends MateProfile {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StudyTime preferredStudyTime;
+    private StudyTime studyTime;
 
     @Column(nullable = false)
     @Enumerated
@@ -54,7 +52,7 @@ public class StudyMateProfile extends MateProfile {
     @MethodDescription(description = "필드들을 업데이트할 때 사용합니다.")
     public void updateMateProfile(StudyMateProfileInputDTO studyMateProfileInputDTO){
         this.userSubjects = DataConvert.setToString(studyMateProfileInputDTO.getUserSubjects());
-        this.preferredStudyTime = studyMateProfileInputDTO.getPreferredStudyTime();
+        this.studyTime = studyMateProfileInputDTO.getStudyTime();
         this.averageGrade = studyMateProfileInputDTO.getAverageGrade();
     }
 

@@ -17,7 +17,7 @@ public class StudyMateProfileInputDTO {
     private Set<StudyType> preferredStudyTypes;
 
     @NotNull(message = "희망하는 스터디 소요 시간을 선택해주세요.")
-    private StudyTime preferredStudyTime;
+    private StudyTime studyTime;
 
     private Set<String> userSubjects;
 

@@ -6,7 +6,6 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.study_mate.domain.StudyMateProfile;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;

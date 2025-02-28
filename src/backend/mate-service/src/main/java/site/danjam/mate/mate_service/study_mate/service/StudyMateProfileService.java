@@ -112,7 +112,7 @@ public class StudyMateProfileService implements MateProfileService {
                 .userId(userId)
                 .mateType(MateType.STUDYMATE)
                 .averageGrade(studyMateProfileInputDTO.getAverageGrade())
-                .preferredStudyTime(studyMateProfileInputDTO.getPreferredStudyTime())
+                .studyTime(studyMateProfileInputDTO.getStudyTime())
                 .userSubjects(DataConvert.setToString(studyMateProfileInputDTO.getUserSubjects()))
                 .build();
     }
@@ -134,7 +134,7 @@ public class StudyMateProfileService implements MateProfileService {
         return StudyMateProfileDTO.builder()
                 .id(studyMateProfile.getId())
                 .averageGrade(studyMateProfile.getAverageGrade().toString())
-                .preferredStudyTime(studyMateProfile.getPreferredStudyTime().toString())
+                .preferredStudyTime(studyMateProfile.getStudyTime().toString())
                 .preferredStudyTypes(studyMateProfile.getPreferredStudyTypesNames())
                 .userSubjects(DataConvert.stringToSet(studyMateProfile.getUserSubjects()))
                 .build();
