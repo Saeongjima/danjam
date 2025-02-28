@@ -30,8 +30,11 @@ public enum Code {
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, 40003, "지원되지 않는 파일 확장자 입니다."),
     NOT_EQUAL_GENDER(HttpStatus.NOT_ACCEPTABLE, 40004, "성별이 같지 않습니다."),
 
-    //유효하지 않은 리소스(40100 ~ 40199번대
+    //유효하지 않은 리소스(40100 ~ 40199번대)
     CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 40100, "해당 리소스를 찾을 수 없습니다."),
+    NOT_FIND_CHATROOM(HttpStatus.BAD_REQUEST, 40101, "해당 채팅방을 찾을 수 없습니다."),
+    NOT_FIND_CHATROOM_USER(HttpStatus.BAD_REQUEST, 40102, "해당 채팅방에 속하는 유저를 찾을 수 없습니다."),
+    NOT_FIND_CHAT_MESSAGE(HttpStatus.BAD_REQUEST, 40103, "해당 메시지가 존재하지 않습니다."),
 
 
     //보안 관련(40200 ~ 40299번대)
