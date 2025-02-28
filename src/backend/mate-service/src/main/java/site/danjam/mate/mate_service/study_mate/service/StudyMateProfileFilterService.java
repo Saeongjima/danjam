@@ -12,7 +12,6 @@ public class StudyMateProfileFilterService {
 
     private final StudyMateProfileRepository studyMateProfileRepository;
 
-
     public Set<StudyMateFilterOutputDTO> getStudyMateFilterOutputDTOList(Long userId, String role) {
         return null;
     }
