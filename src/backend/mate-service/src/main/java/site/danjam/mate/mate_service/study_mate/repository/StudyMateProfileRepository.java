@@ -9,6 +9,7 @@ import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.global.exception.CanNotFindResourceException;
 import site.danjam.mate.mate_service.global.exception.Code;
 import site.danjam.mate.mate_service.study_mate.domain.StudyMateProfile;
+import site.danjam.mate.mate_service.study_mate.dto.StudyMateFilterInputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
 import site.danjam.mate.mate_service.study_mate.enums.StudyType;
@@ -43,11 +44,8 @@ public class StudyMateProfileRepository{
 
     @MethodDescription(description = "프로필 필터링")
     public List<StudyMateProfile> findProfilesByFilters(
-            @Param("preferredStudyTypes") Set<StudyType> preferredStudyTypes,
-            @Param("preferredStudyTimes") Set<StudyTime> preferredStudyTimes,
-            @Param("preferredAverageGrades") Set<AverageGrade> preferredAverageGrades,
-            @Param("userId") Set<Long> userIds
+            StudyMateFilterInputDTO studyMateFilterInputDTO
     ){
-        return studyMateProfileJpaRepository.findProfilesByFilters(preferredStudyTypes, preferredStudyTimes, preferredAverageGrades, userIds);
+        return studyMateProfileJpaRepository.findProfilesByFilters(studyMateFilterInputDTO.getPreferredStudyTypes(), studyMateFilterInputDTO.getPreferredStudyTimes(), studyMateFilterInputDTO.getPreferredAverageGrades());
     }
 }

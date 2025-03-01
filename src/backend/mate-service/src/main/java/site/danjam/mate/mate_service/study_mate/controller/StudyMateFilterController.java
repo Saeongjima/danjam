@@ -14,14 +14,14 @@ import site.danjam.mate.mate_service.study_mate.dto.StudyMateFilterOutputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
 import site.danjam.mate.mate_service.study_mate.enums.StudyType;
-import site.danjam.mate.mate_service.study_mate.service.StudyMateProfileFilterService;
+import site.danjam.mate.mate_service.study_mate.service.StudyMateFilterService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("mate-service/study-mate")
-public class FilterController {
+public class StudyMateFilterController {
 
-    private final StudyMateProfileFilterService studyMateProfileFilterService;
+    private final StudyMateFilterService studyMateFilterService;
 
     @MethodDescription(description = "스터디 메이트 프로필들을 조회한다.")
     public ResponseEntity<ApiResponseData<Set<StudyMateFilterOutputDTO>>> getStudyMateFilterOutputDTOList(
@@ -51,7 +51,7 @@ public class FilterController {
                         .preferredStudyTimes(preferredStudyTimes)
                         .preferredAverageGrades(preferredAverageGrades)
                         .build();
-        studyMateProfileFilterService.getStudyMateFilterOutputDTOList(userId, role);
+        studyMateFilterService.getStudyMateFilterOutputDTOList(studyMateFilterInputDTO,userId, role);
         return null;
     }
 }
