@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoom;
+import site.danjam.mate.chat_service.domain.chatRoom.exception.NotFoundChatRoomException;
 import site.danjam.mate.chat_service.domain.chatRoom.repository.jpa.ChatRoomJpaRepository;
 
 @Repository
@@ -13,7 +14,7 @@ public class ChatRoomRepository {
     private final ChatRoomJpaRepository chatRoomJpaRepository;
 
     public ChatRoom findById(Long chatRoomId) {
-        return chatRoomJpaRepository.findById(chatRoomId).orElseThrow();
+        return chatRoomJpaRepository.findById(chatRoomId).orElseThrow(NotFoundChatRoomException::new);
     }
 
     public List<ChatRoom> findAllChatRoom() {

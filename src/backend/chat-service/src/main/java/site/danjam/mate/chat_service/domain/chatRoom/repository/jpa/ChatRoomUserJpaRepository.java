@@ -21,7 +21,6 @@ public interface ChatRoomUserJpaRepository extends JpaRepository<ChatRoomUser, C
 
     boolean existsByChatRoomIdAndUserId(Long chatRoomId, Long userId);
 
-
     @Query("select cu.userId from ChatRoomUser cu where cu.chatRoom.id = :chatRoomId")
     List<Long> findAllUserIdsByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 }

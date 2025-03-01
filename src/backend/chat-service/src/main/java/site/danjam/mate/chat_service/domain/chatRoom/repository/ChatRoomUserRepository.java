@@ -1,10 +1,12 @@
 package site.danjam.mate.chat_service.domain.chatRoom.repository;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoom;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoomUser;
+import site.danjam.mate.chat_service.domain.chatRoom.exception.NotFoundChatRoomUserException;
 import site.danjam.mate.chat_service.domain.chatRoom.repository.jpa.ChatRoomUserJpaRepository;
 
 @Repository
@@ -34,5 +36,10 @@ public class ChatRoomUserRepository {
 
     public boolean existsByChatRoomIdAndUserId(Long chatRoomId, Long userId) {
         return chatRoomUserJpaRepository.existsByChatRoomIdAndUserId(chatRoomId, userId);
+    }
+
+    public List<Long> findAllUserIdsByChatRoomId(Long chatRoomId) {
+        return Optional.ofNullable(chatRoomUserJpaRepository.findAllUserIdsByChatRoomId(chatRoomId))
+                .orElseThrow(NotFoundChatRoomUserException::new);
     }
 }
