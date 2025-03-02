@@ -43,19 +43,20 @@ public class MateProfileController {
         return ResponseEntity.ok(ApiResponseMessage.of("성공적으로 프로필을 생성하였습니다."));
     }
 
-    @MethodDescription(description = "type에 해당되는 메이트 프로필 조회")
-    @GetMapping("/{type}/profiles")
-    public ResponseEntity<ApiResponseData<Object>> getProfile(
-            @PathVariable String type,
-            @RequestHeader("username") String username,
-            @RequestHeader("role") String role
-    ){
-        // 입력된 타입을 MateType으로 변환
-        MateType mateType = DataConvert.stringToMateType(type);
-        // MateType에 해당되는 구현체 찾기
-        MateProfileService service = serviceRegistry.getService(mateType);
-        return ResponseEntity.ok(ApiResponseData.of(service.getMateProfile(username,role),Code.SUCCESS.getMessage()));
-    }
+//    @MethodDescription(description = "type에 해당되는 메이트 프로필 조회")
+//    @GetMapping("/{type}/profiles/{nickname}")
+//    public ResponseEntity<ApiResponseData<Object>> getProfile(
+//            @PathVariable String type,
+//            @RequestHeader("username") String username,
+//            @RequestHeader("role") String role,
+//            @PathVariable String nickname
+//    ){
+//        // 입력된 타입을 MateType으로 변환
+//        MateType mateType = DataConvert.stringToMateType(type);
+//        // MateType에 해당되는 구현체 찾기
+//        MateProfileService service = serviceRegistry.getService(mateType);
+//        return ResponseEntity.ok(ApiResponseData.of(service.getMateProfile(username,role),Code.SUCCESS.getMessage()));
+//    }
 
     @MethodDescription(description = "type에 해당되는 메이트 프로필 수정")
     @PutMapping("/{type}/profiles/{profileId}")

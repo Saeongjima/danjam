@@ -18,7 +18,7 @@ public class StudyMateFilterService {
     private final StudyMateProfileRepository studyMateProfileRepository;
 
     @RequiredAuthUser
-    public Set<StudyMateFilterOutputDTO> getStudyMateFilterOutputDTOList(StudyMateFilterInputDTO studyMateFilterInputDTO,Long userId, String role) {
+    public Set<StudyMateFilterOutputDTO> getStudyMateFilterOutputDTOList(StudyMateFilterInputDTO studyMateFilterInputDTO, Long userId, String role) {
         List<StudyMateProfile> profilesByFilters = studyMateProfileRepository.findProfilesByFilters(studyMateFilterInputDTO);
         List<Long> userIds = profilesByFilters.stream()
                 .map(StudyMateProfile::getUserId)
@@ -26,7 +26,10 @@ public class StudyMateFilterService {
         for(StudyMateProfile studyMateProfile: profilesByFilters){
             System.out.println("studyMateProfile.getId() = " + studyMateProfile.getId());
             System.out.println("studyMateProfile.getUserId() = " + studyMateProfile.getUserId());
-            System.out.println("studyMateProfile.getUserSubjects() = " + studyMateProfile.getUserSubjects());
+            System.out.println("studyMateProfile.getStudyTypes() = " + studyMateProfile.getPreferredStudyTypes().stream().map(preferredStudyType -> preferredStudyType.getStudyType().toString()));
+            System.out.println("studyMateProfile.getStudyTime() = " + studyMateProfile.getStudyTime());
+            System.out.println("studyMateProfile.getAverageGrade() = " + studyMateProfile.getAverageGrade());
+            System.out.println("---------------------------------------------------------");
         }
         return null;
     }
