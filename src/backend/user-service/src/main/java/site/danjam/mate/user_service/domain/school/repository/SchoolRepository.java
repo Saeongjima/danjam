@@ -13,4 +13,8 @@ public class SchoolRepository {
     public School findBySchool(Long id) {
         return schoolJpaRepository.findById(id).orElseThrow(NotFoundSchoolException::new);
     }
+
+    public School save(School school){
+        return schoolJpaRepository.save(school);
+    }
 }
