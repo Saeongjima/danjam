@@ -128,7 +128,6 @@ public class RoomMateProfileService implements MateProfileService {
     private RoomMateProfile createBuildRoomMateProfile(RoomMateProfileInputDTO roomMateProfileInputDTO, Long userId) {
         return RoomMateProfile.builder()
                 .userId(userId)
-                .mateType(MateType.ROOMMATE)
                 .isSmoking(roomMateProfileInputDTO.getIsSmoking())
                 .hotLevel(roomMateProfileInputDTO.getHotLevel())
                 .coldLevel(roomMateProfileInputDTO.getColdLevel())

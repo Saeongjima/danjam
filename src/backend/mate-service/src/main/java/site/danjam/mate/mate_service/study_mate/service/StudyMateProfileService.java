@@ -110,7 +110,6 @@ public class StudyMateProfileService implements MateProfileService {
     private StudyMateProfile createBuildStudyMateProfile(StudyMateProfileInputDTO studyMateProfileInputDTO, Long userId){
         return StudyMateProfile.builder()
                 .userId(userId)
-                .mateType(MateType.STUDYMATE)
                 .averageGrade(studyMateProfileInputDTO.getAverageGrade())
                 .studyTime(studyMateProfileInputDTO.getStudyTime())
                 .userSubjects(DataConvert.setToString(studyMateProfileInputDTO.getUserSubjects()))

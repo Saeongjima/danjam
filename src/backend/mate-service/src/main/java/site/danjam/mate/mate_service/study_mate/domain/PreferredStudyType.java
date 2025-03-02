@@ -19,7 +19,7 @@ import lombok.Setter;
 import site.danjam.mate.mate_service.study_mate.enums.StudyType;
 
 @Entity
-@Getter @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

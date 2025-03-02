@@ -22,7 +22,6 @@ import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 public class DataInitializer implements ApplicationRunner {
 
     private final SchoolRepository schoolRepository;
-    private final MyProfileRepository myProfileRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 

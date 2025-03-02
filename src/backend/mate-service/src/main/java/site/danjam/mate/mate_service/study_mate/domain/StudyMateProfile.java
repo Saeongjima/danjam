@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.mate_service.mate.domain.MateProfile;
+import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 import site.danjam.mate.mate_service.study_mate.dto.StudyMateProfileInputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
@@ -28,7 +28,7 @@ import site.danjam.mate.mate_service.utils.DataConvert;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class StudyMateProfile extends MateProfile {
+public class StudyMateProfile extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +44,9 @@ public class StudyMateProfile extends MateProfile {
     @Column(nullable = false)
     @Enumerated
     private AverageGrade averageGrade;
+
+    @Column(nullable = false, unique = true)
+    protected Long userId;
 
     // 선호하는 스터디 종류
     @OneToMany(mappedBy = "studyMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -67,5 +70,8 @@ public class StudyMateProfile extends MateProfile {
                 .collect(Collectors.toSet()); // 중복 제거 후 Set으로 변환
     }
 
-
+    @MethodDescription(description = "선호하는 스터디 타입을 주입하기 위해 사용하는 메서드.")
+    public void setPreferredStudyTypes(Set<PreferredStudyType> preferredStudyTypes) {
+        this.preferredStudyTypes = preferredStudyTypes;
+    }
 }

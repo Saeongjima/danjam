@@ -16,6 +16,7 @@ public class DataConvert {
         for (Object element : data) {
             sb.append(element).append(",");
         }
+        sb.deleteCharAt(sb.length()-1);
         sb.append("]");
         return sb.toString();
     }
