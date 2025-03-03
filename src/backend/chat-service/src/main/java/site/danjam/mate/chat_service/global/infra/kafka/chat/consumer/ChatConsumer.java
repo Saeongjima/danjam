@@ -11,15 +11,15 @@ import site.danjam.mate.chat_service.domain.chat.dto.ChatMessageRes;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PersonalChatConsumer {
+public class ChatConsumer {
 
     private final SimpMessageSendingOperations messagingTemplate;
 
-    @KafkaListener(topics = "${spring.kafka.topic.personal-chat}", groupId = "${spring.kafka.consumer.group-id.personal-chat}", containerFactory = "personalChatListenerContainerFactory")
-    public void personalChatListener(ChatMessageDTO messageDTO) {
+    @KafkaListener(topics = "${spring.kafka.topic.chat}", groupId = "${spring.kafka.consumer.group-id.chat}", containerFactory = "chatListenerContainerFactory")
+    public void chatListener(ChatMessageDTO messageDTO) {
         Long chatRoomId = messageDTO.getChatRoomId();
         ChatMessageRes response = ChatMessageRes.from(messageDTO);
 
-        messagingTemplate.convertAndSend("/queue/personal/" + chatRoomId, response);
+        messagingTemplate.convertAndSend("/queue/" + chatRoomId, response);
     }
 }

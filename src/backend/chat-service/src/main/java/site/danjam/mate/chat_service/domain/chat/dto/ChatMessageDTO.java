@@ -26,15 +26,15 @@ public class ChatMessageDTO {
     private LocalDateTime modifiedAt;
 
     public static ChatMessageDTO from(ChatMessage chat) {
-        return new ChatMessageDTO(
-                chat.getId(),
-                chat.getChatRoomId(),
-                chat.getSender(),
-                chat.getUnreadUsers(),
-                chat.getMessage(),
-                chat.getChatType(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        return ChatMessageDTO.builder()
+                .id(chat.getId())
+                .chatRoomId(chat.getChatRoomId())
+                .sender(chat.getSender())
+                .unreadUsers(chat.getUnreadUsers())
+                .message(chat.getMessage())
+                .chatType(chat.getChatType())
+                .createdAt(chat.getCreatedDateTime())
+                .modifiedAt(chat.getModifiedDateTime())
+                .build();
     }
 }

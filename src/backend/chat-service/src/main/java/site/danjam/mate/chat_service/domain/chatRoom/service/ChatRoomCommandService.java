@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoom;
 import site.danjam.mate.chat_service.domain.chatRoom.domain.ChatRoomUser;
 import site.danjam.mate.chat_service.domain.chatRoom.dto.ChatRoomLeaveDTO;
@@ -24,6 +25,7 @@ import site.danjam.mate.chat_service.global.common.enums.Role;
 
 @Service
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class ChatRoomCommandService {
     private final UserServiceClient userServiceClient;
@@ -86,6 +88,7 @@ public class ChatRoomCommandService {
     }
 
 
+    // todo : 트랜잭션 분리하기 (현재  public 메서드의 Transactional 이 들어가있음 -> readOnly 로 변경)
     @MethodDescription(description = "룸 메이트 개인 채팅방 개설 시 서로의 성별이 같은 지 확인합니다.")
     private void equalsGender(Long userId, String participant) {
         UserInfoDTO userInfo = userServiceClient.getUserInfo(participant);
@@ -95,6 +98,7 @@ public class ChatRoomCommandService {
         }
     }
 
+    // todo : 트랜잭션 분리하기 (현재  public 메서드의 Transactional 이 들어가있음 -> readOnly 로 변경)
     @MethodDescription(description = "룸 메이트 그룹 채팅방 개설 시 서로의 성별이 같은 지 확인합니다.")
     private void equalsGenderForGroup(Long userId, List<Long> participants) {
         String gender = userServiceClient.getUserInfo(userId).getGender();
@@ -110,7 +114,6 @@ public class ChatRoomCommandService {
         }
     }
 
-
     @MethodDescription(description = "사용자가 채팅방을 나갑니다. 채팅방에 유저가 존재하지 않을 경우 채팅방을 삭제합니다.")
     public ChatRoomLeaveDTO leaveChatRoom(String user, Long chatRoomId) {
         Long userId = Long.valueOf(user);
@@ -124,7 +127,7 @@ public class ChatRoomCommandService {
         if (chatRoomUserRepository.countByChatRoomId(chatRoomId) == 0) {
             chatRoomRepository.deleteById(chatRoomId);
         }
-        
+
         return ChatRoomLeaveDTO.from(chatRoom);
     }
 }

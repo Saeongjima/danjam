@@ -15,7 +15,7 @@ import site.danjam.mate.chat_service.domain.chat.dto.ChatMessageDTO;
 
 @EnableKafka
 @Configuration
-public class PersonalChatProducerConfig {
+public class ChatProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -33,12 +33,12 @@ public class PersonalChatProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, ChatMessageDTO> personalChatProducerFactory() {
+    public ProducerFactory<String, ChatMessageDTO> chatProducerFactory() {
         return new DefaultKafkaProducerFactory<>(chatEventProducerConfig());
     }
 
     @Bean
     public KafkaTemplate<String, ChatMessageDTO> serverChatKafkaTemplate() {
-        return new KafkaTemplate<>(personalChatProducerFactory());
+        return new KafkaTemplate<>(chatProducerFactory());
     }
 }

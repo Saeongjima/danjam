@@ -10,14 +10,14 @@ import site.danjam.mate.chat_service.domain.chat.dto.ChatMessageDTO;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PersonalChatProducer {
+public class ChatProducer {
 
-    @Value("${spring.kafka.topic.personal-chat}")
-    private String personalChatTopic;
+    @Value("${spring.kafka.topic.chat}")
+    private String chatTopic;
 
-    private final KafkaTemplate<String, ChatMessageDTO> personalChatEventKafkaTemplate;
+    private final KafkaTemplate<String, ChatMessageDTO> chatEventKafkaTemplate;
 
-    public void sendToPersonalChatEventTopic(ChatMessageDTO chatDto) {
-        personalChatEventKafkaTemplate.send(personalChatTopic, chatDto);
+    public void sendToChatEventTopic(ChatMessageDTO chatDto) {
+        chatEventKafkaTemplate.send(chatTopic, chatDto);
     }
 }

@@ -16,16 +16,16 @@ import site.danjam.mate.chat_service.domain.chat.dto.ChatMessageDTO;
 
 @EnableKafka
 @Configuration
-public class PersonalChatConsumerConfig {
+public class ChatConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.consumer.group-id.personal-chat}")
+    @Value("${spring.kafka.consumer.group-id.chat}")
     private String groupId;
 
     @Bean
-    public Map<String, Object> personalChatConsumerConfiguration() {
+    public Map<String, Object> chatConsumerConfiguration() {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.CLIENT_ID_CONFIG, groupId);
@@ -33,17 +33,17 @@ public class PersonalChatConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, ChatMessageDTO> personalChatConsumerFactory() {
+    public ConsumerFactory<String, ChatMessageDTO> chatConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(
-                personalChatConsumerConfiguration(),
+                chatConsumerConfiguration(),
                 new StringDeserializer(),
                 new JsonDeserializer<>(ChatMessageDTO.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ChatMessageDTO> personalChatListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, ChatMessageDTO> chatListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ChatMessageDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(personalChatConsumerFactory());
+        factory.setConsumerFactory(chatConsumerFactory());
         return factory;
     }
 }
