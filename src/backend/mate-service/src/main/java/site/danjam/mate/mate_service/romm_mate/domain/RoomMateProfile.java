@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import site.danjam.mate.mate_service.romm_mate.enums.ShowerTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder
 public class RoomMateProfile extends BaseTimeEntity {
