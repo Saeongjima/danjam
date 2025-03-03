@@ -37,6 +37,7 @@ public class UserQueryDSLRepositoryImpl implements UserQueryDSLRepository{
                     profile.entryYear.stringValue(),
                     profile.birth,
                     profile.profileImgUrl,
+                    profile.greeting,
                     user.gender
                     ))
                     .from(user)

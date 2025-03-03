@@ -34,8 +34,7 @@ public class StudyMateFilterOutputDTO {
         this.nickname = userDto.getNickname();
         this.mbti = userDto.getMbti();
         this.major = userDto.getMajor();
-        // greeting은 UserFilterOutputDTO에 없다면 null로 두거나 별도의 처리 필요
-        this.greeting = null;
+        this.greeting = userDto.getGreeting();
         this.entryYear = userDto.getEntryYear();
         this.birth = userDto.getBirth();
         this.profileImgUrl = userDto.getProfileImgUrl();

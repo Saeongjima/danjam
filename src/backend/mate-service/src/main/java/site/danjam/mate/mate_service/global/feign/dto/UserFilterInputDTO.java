@@ -26,7 +26,7 @@ public class UserFilterInputDTO {
         this.userIds = userIds;
         this.mbti = studyMateFilterInputDTO.getMbti();
 
-        if(studyMateFilterInputDTO.getGender().size()==1){
+        if(studyMateFilterInputDTO.getGender()!=null&&studyMateFilterInputDTO.getGender().size()==1){
             this.gender=studyMateFilterInputDTO.getGender().get(0);
         }
         else

@@ -13,5 +13,6 @@ public class UserFilterOutputDTO {
     String entryYear;
     String birth;
     String profileImgUrl;
+    String greeting;
     Integer gender;
 }
