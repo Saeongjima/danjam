@@ -19,7 +19,7 @@ import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
 @Entity
-@Getter @Setter
+@Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

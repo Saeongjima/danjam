@@ -20,10 +20,10 @@ import site.danjam.mate.mate_service.romm_mate.domain.RoomMateProfile;
 import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileDTO;
 import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileInputDTO;
 import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
-import site.danjam.mate.mate_service.romm_mate.repository.HopeDormitoryRepository;
-import site.danjam.mate.mate_service.romm_mate.repository.HopeRoomPersonRepository;
-import site.danjam.mate.mate_service.romm_mate.repository.OwnSleepHabitRepository;
-import site.danjam.mate.mate_service.romm_mate.repository.RoomMateProfileRepository;
+import site.danjam.mate.mate_service.romm_mate.repository.HopeDormitoryJpaRepository;
+import site.danjam.mate.mate_service.romm_mate.repository.HopeRoomPersonJpaRepository;
+import site.danjam.mate.mate_service.romm_mate.repository.OwnSleepHabitJpaRepository;
+import site.danjam.mate.mate_service.romm_mate.repository.RoomMateProfileJpaRepository;
 import site.danjam.mate.mate_service.mate.service.MateProfileService;
 import site.danjam.mate.mate_service.utils.ValidationUtil;
 
@@ -31,10 +31,10 @@ import site.danjam.mate.mate_service.utils.ValidationUtil;
 @RequiredArgsConstructor
 public class RoomMateProfileService implements MateProfileService {
 
-    private final RoomMateProfileRepository roomMateProfileRepository;
-    private final HopeDormitoryRepository hopeDormitoryRepository;
-    private final HopeRoomPersonRepository hopeRoomPersonRepository;
-    private final OwnSleepHabitRepository ownSleepHabitRepository;
+    private final RoomMateProfileJpaRepository roomMateProfileJpaRepository;
+    private final HopeDormitoryJpaRepository hopeDormitoryJpaRepository;
+    private final HopeRoomPersonJpaRepository hopeRoomPersonJpaRepository;
+    private final OwnSleepHabitJpaRepository ownSleepHabitJpaRepository;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -43,7 +43,7 @@ public class RoomMateProfileService implements MateProfileService {
     public void createMateProfile(Object inputDTO, Long userId, String role){
 
         // 이미 해당 프로필이 있는지 확인
-        if(roomMateProfileRepository.findByUserId(userId).isPresent()){
+        if(roomMateProfileJpaRepository.findByUserId(userId).isPresent()){
             throw new AlreadyProfileExistException();
         }
 
@@ -58,7 +58,7 @@ public class RoomMateProfileService implements MateProfileService {
 
         // RoomMAteProfileInputDTO를 RoomMateProfile로 변환하여 저장
         RoomMateProfile roomMateProfile = createBuildRoomMateProfile(roomMateProfileInputDTO, userId);
-        roomMateProfileRepository.save(roomMateProfile);
+        roomMateProfileJpaRepository.save(roomMateProfile);
 
         // HopeDormitories 저장
         saveHopeDormitories(roomMateProfileInputDTO.getHopeDormitories(),roomMateProfile);
@@ -76,7 +76,7 @@ public class RoomMateProfileService implements MateProfileService {
 
         Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         // 유저의 메이트 프로필이 있는지 확인
-        RoomMateProfile roomMateProfile = roomMateProfileRepository.findByUserId(userId)
+        RoomMateProfile roomMateProfile = roomMateProfileJpaRepository.findByUserId(userId)
                 .orElseThrow(() -> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
         return createBuildRoomMateProfileDTO(roomMateProfile);
@@ -90,7 +90,7 @@ public class RoomMateProfileService implements MateProfileService {
          * 1. 사전작업 : 권한/유효성 검증, 타입 변환
          */
 
-        RoomMateProfile roomMateProfile = roomMateProfileRepository.findById(mateProfileId)
+        RoomMateProfile roomMateProfile = roomMateProfileJpaRepository.findById(mateProfileId)
                 .orElseThrow(()-> new CanNotFindResourceException(Code.CAN_NOT_FIND_RESOURCE.getMessage() + " 해당 프로필을 찾을 수 없습니다."));
 
         // 본인 프로필이 맞는지 검증
@@ -115,9 +115,9 @@ public class RoomMateProfileService implements MateProfileService {
         /**
          * 3. 기존 데이터 삭제 후 저장
          */
-        hopeRoomPersonRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
-        hopeDormitoryRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
-        ownSleepHabitRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
+        hopeRoomPersonJpaRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
+        hopeDormitoryJpaRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
+        ownSleepHabitJpaRepository.deleteAllByRoomMateProfileId(roomMateProfile.getId());
         saveHopeDormitories(roomMateProfileInputDTO.getHopeDormitories(),roomMateProfile);
         saveHopeRoomPersons(roomMateProfileInputDTO.getHopeRoomPersons(),roomMateProfile);
         saveOwnSleepHabits(roomMateProfileInputDTO.getSleepHabits(),roomMateProfile);
@@ -145,7 +145,7 @@ public class RoomMateProfileService implements MateProfileService {
                     .roomMateProfile(roomMateProfile)
                     .hopeDormitory(hopeDormitory)
                     .build();
-            hopeDormitoryRepository.save(hopeDormitoryEntity);
+            hopeDormitoryJpaRepository.save(hopeDormitoryEntity);
         }
     }
 
@@ -156,7 +156,7 @@ public class RoomMateProfileService implements MateProfileService {
                     .roomMateProfile(roomMateProfile)
                     .hopeRoomPerson(hopeRoomPerson)
                     .build();
-            hopeRoomPersonRepository.save(hopeRoomPersonEntity);
+            hopeRoomPersonJpaRepository.save(hopeRoomPersonEntity);
         }
     }
 
@@ -169,7 +169,7 @@ public class RoomMateProfileService implements MateProfileService {
                         .roomMateProfile(roomMateProfile)
                         .sleepHabit(sleepHabit)
                         .build();
-                ownSleepHabitRepository.save(ownSleepHabitEntity);
+                ownSleepHabitJpaRepository.save(ownSleepHabitEntity);
             }
         }
     }
