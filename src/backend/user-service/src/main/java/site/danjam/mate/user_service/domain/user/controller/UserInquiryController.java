@@ -32,8 +32,8 @@ public class UserInquiryController {
         return ResponseEntity.ok(ApiResponseData.of(userInquiryService.getUserId(username), "User Id 조회 성공"));
     }
 
-    @MethodDescription(description = "외부 서비스에서 userId리스트와 필터링항목들을 바탕으로 필터링할 때 사용합니다.")
-    @PostMapping("/filter")
+    @MethodDescription(description = "외부 서비스에서 userId 리스트(1차필터링)와 필터링 항목들을 바탕으로 필터링할 때 사용합니다.")
+    @PostMapping("/filters")
     public ResponseEntity<ApiResponseData<List<UserFilterOutputDTO>>> getUserFilterOutputList(
         @RequestBody UserFilterInputDTO userFilterInputDTO
     ){

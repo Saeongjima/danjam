@@ -30,6 +30,7 @@ public class UserQueryDSLRepositoryImpl implements UserQueryDSLRepository{
         QUser requester = new QUser("requestUser");
 
         return queryFactory.select(Projections.constructor(UserFilterOutputDTO.class,
+                    user.id,
                     user.nickname,
                     profile.mbti,
                     profile.major,
@@ -56,7 +57,7 @@ public class UserQueryDSLRepositoryImpl implements UserQueryDSLRepository{
 
                             //3, mbti 필터링
                             filter.getMbti() != null && !filter.getMbti().isEmpty()
-                                    ? profile.mbti.containsIgnoreCase(filter.getMbti())
+                                    ? profile.mbti.likeIgnoreCase(filter.getMbti())
                                     : null,
 
                             //4. 성별 필터
@@ -66,20 +67,20 @@ public class UserQueryDSLRepositoryImpl implements UserQueryDSLRepository{
 
                             //5. 생년월일 필터: "YYYY-MM-DD"에서 앞 4자리(연도)를 기준으로 비교
                             filter.getMinBirthYear() != null && !filter.getMinBirthYear().isEmpty()
-                                    ? profile.birth.substring(1,5).goe(filter.getMinBirthYear())
+                                    ? profile.birth.substring(0,4).goe(filter.getMinBirthYear())
                                     : null,
 
 
                             filter.getMaxBirthYear() != null && !filter.getMaxBirthYear().isEmpty()
-                                    ? profile.birth.substring(1, 5).loe(filter.getMaxBirthYear())
+                                    ? profile.birth.substring(0, 4).loe(filter.getMaxBirthYear())
                                     : null,
 
                             //6. 입학년도 필터
                             filter.getMinEntryYear() != null
-                                    ? profile.entryYear.goe(filter.getMinEntryYear())
+                                    ? profile.entryYear.goe(Integer.parseInt(filter.getMinEntryYear()))
                                     : null,
                             filter.getMaxEntryYear() != null
-                                    ? profile.entryYear.loe(filter.getMaxEntryYear())
+                                    ? profile.entryYear.loe(Integer.parseInt(filter.getMaxEntryYear()))
                                     : null
 
     //  todo - colleges필터도 추가되어야함. 아직 school관련 colleges데이터가 없음. 논의 해봐야함.
