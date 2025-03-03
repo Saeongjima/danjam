@@ -19,7 +19,7 @@ public class UserFilterService {
         return null;
     }
 
-    // MBTI 필터링 수정(반대되는 mbti를 모두 가지고 있을경우 조건 제거)
+    @MethodDescription(description = "MBTI 필터링 수정(반대되는 mbti를 모두 가지고 있을경우 조건 제거)" )
     private UserFilterInputDTO fixFilterlingCondition(UserFilterInputDTO userFilterInputDTO) {
 
         String mbti = fixFilterlingMBTI(userFilterInputDTO.getMbti());

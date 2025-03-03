@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class UserFilterOutputDTO {
+    Long userId;
     String nickname;
     String mbti;
     String major;

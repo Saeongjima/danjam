@@ -14,7 +14,7 @@ public class UserFilterInputDTO {
     private Integer gender;
     private String minBirthYear;
     private String maxBirthYear;
-    private String minEntryYear;
-    private String maxEntryYear;
+    private Integer minEntryYear;
+    private Integer maxEntryYear;
     private Set<String> colleges;
 }
