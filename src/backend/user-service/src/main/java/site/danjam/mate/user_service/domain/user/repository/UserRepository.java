@@ -36,4 +36,5 @@ public class UserRepository {
     public Optional<User> findById(Long userId){
         return userJpaRepository.findById(userId);
     }
+
 }
