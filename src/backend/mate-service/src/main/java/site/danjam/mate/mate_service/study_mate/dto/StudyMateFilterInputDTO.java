@@ -1,5 +1,6 @@
 package site.danjam.mate.mate_service.study_mate.dto;
 
+import java.util.List;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class StudyMateFilterInputDTO {
     private String minEntryYear;
     private String maxEntryYear;
     private Set<String> colleges;
-    private Set<Integer> gender; // 0: 여자, 1: 남자
+    private List<Integer> gender; // 0: 여자, 1: 남자
 
     private Set<StudyType> preferredStudyTypes; // 희망하는 스터디
     private Set<StudyTime> preferredStudyTimes; // 희망하는 스터디 소요 시간

@@ -21,7 +21,7 @@ import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 import site.danjam.mate.mate_service.study_mate.dto.StudyMateProfileInputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.AverageGrade;
 import site.danjam.mate.mate_service.study_mate.enums.StudyTime;
-import site.danjam.mate.mate_service.utils.DataConvert;
+import site.danjam.mate.mate_service.global.util.DataConvert;
 
 @Entity
 @Getter

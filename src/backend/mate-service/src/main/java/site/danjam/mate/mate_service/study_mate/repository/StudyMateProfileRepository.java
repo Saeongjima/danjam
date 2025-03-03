@@ -48,4 +48,9 @@ public class StudyMateProfileRepository{
     ){
         return studyMateProfileJpaRepository.findProfilesByFilters(studyMateFilterInputDTO.getPreferredStudyTypes(), studyMateFilterInputDTO.getPreferredStudyTimes(), studyMateFilterInputDTO.getPreferredAverageGrades());
     }
+
+    @MethodDescription(description = "유저Id리스트를 바탕으로 StudyMateProfile List를 조회합니다.")
+    public List<StudyMateProfile> findByUserIds(List<Long> userIdsByUserService) {
+        return studyMateProfileJpaRepository.findAllByUserIdIn(userIdsByUserService);
+    }
 }

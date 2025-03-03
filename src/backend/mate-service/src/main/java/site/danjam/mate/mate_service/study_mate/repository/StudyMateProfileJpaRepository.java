@@ -29,4 +29,6 @@ public interface StudyMateProfileJpaRepository extends JpaRepository<StudyMatePr
             @Param("preferredStudyTimes") Set<StudyTime> preferredStudyTimes,
             @Param("preferredAverageGrades") Set<AverageGrade> preferredAverageGrades
             );
+
+    List<StudyMateProfile> findAllByUserIdIn(List<Long> userIds);
 }

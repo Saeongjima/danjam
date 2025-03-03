@@ -20,7 +20,7 @@ import site.danjam.mate.mate_service.study_mate.dto.StudyMateProfileInputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.StudyType;
 import site.danjam.mate.mate_service.study_mate.repository.PreferredStudyTypeRepository;
 import site.danjam.mate.mate_service.study_mate.repository.StudyMateProfileRepository;
-import site.danjam.mate.mate_service.utils.DataConvert;
+import site.danjam.mate.mate_service.global.util.DataConvert;
 import site.danjam.mate.mate_service.utils.ValidationUtil;
 
 @Service

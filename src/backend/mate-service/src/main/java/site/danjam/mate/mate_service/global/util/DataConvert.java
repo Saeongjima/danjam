@@ -1,11 +1,10 @@
-package site.danjam.mate.mate_service.utils;
+package site.danjam.mate.mate_service.global.util;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.mate_service.global.exception.BaseException;
 import site.danjam.mate.mate_service.global.exception.Code;
 import site.danjam.mate.mate_service.mate.exception.InvalidMateTypeException;
 
