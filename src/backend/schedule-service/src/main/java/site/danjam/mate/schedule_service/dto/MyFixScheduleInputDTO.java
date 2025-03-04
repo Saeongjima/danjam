@@ -2,11 +2,13 @@ package site.danjam.mate.schedule_service.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import site.danjam.mate.schedule_service.global.enums.DayOfWeek;
 
 import java.time.LocalTime;
 
-@Data
+@Getter
 public class MyFixScheduleInputDTO {
 
     @NotNull(message = "요일을 입력해주세요.")

@@ -3,12 +3,14 @@ package site.danjam.mate.schedule_service.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import site.danjam.mate.schedule_service.global.enums.DayOfWeek;
 
 import java.time.LocalTime;
 
 @Entity
-@Data
+@Setter @Getter
 @Table(name = "myfixschedule")
 public class MyFixScheduleEntity {
     @Id

@@ -2,10 +2,11 @@ package site.danjam.mate.schedule_service.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Builder
 public class MyScheduleOutputDTO {
     private String title;

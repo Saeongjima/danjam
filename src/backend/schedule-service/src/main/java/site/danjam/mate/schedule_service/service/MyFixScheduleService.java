@@ -9,6 +9,7 @@ import site.danjam.mate.schedule_service.dto.MyFixScheduleInputDTO;
 import site.danjam.mate.schedule_service.dto.MyFixScheduleOutputDTO;
 import site.danjam.mate.schedule_service.entity.MyFixScheduleEntity;
 import site.danjam.mate.schedule_service.global.exception.BaseException;
+import site.danjam.mate.schedule_service.global.exception.UserScheduleException;
 import site.danjam.mate.schedule_service.repository.MyFixScheduleRepository;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MyFixScheduleService {
 
     private final MyFixScheduleRepository myFixScheduleRepository;
@@ -23,7 +25,7 @@ public class MyFixScheduleService {
     //고정 스케줄 저장
     public void setMyFixSchedule(Long userId, String role, MyFixScheduleInputDTO myFixScheduleInputDTO){
         if(userId == null){
-            throw new BaseException("유저의 시간표를 저장할 수 없습니다.");
+            throw new UserScheduleException("유저의 시간표를 저장할 수 없습니다.");
         }
 
         ModelMapper modelMapper = new ModelMapper();
@@ -33,9 +35,10 @@ public class MyFixScheduleService {
     }
 
     //고정 스케줄 조회
+    @Transactional(readOnly = true)
     public List<MyFixScheduleOutputDTO> getMyFixSchedule(Long userId){
         if(userId == null){
-            throw new BaseException("유저의 시간표를 불러올 수 없습니다.");
+            throw new UserScheduleException("유저의 시간표를 불러올 수 없습니다.");
         }
         ModelMapper modelMapper = new ModelMapper();
         List<MyFixScheduleOutputDTO> myFixScheduleOutputDTOS = new ArrayList<>();
@@ -53,13 +56,7 @@ public class MyFixScheduleService {
     //고정 스케줄 수정
     @Transactional
     public void updateMyFixSchedule(Long userId, Long scheduleId, MyFixScheduleInputDTO myFixScheduleInputDTO){
-        if(userId == null){
-            throw new BaseException("유저의 시간표를 불러올 수 없습니다.");
-        }
-
-        if(scheduleId == null){
-            throw new BaseException("해당 시간표를 불러올 수 없습니다.");
-        }
+        exceptionHandler(userId,scheduleId);
 
         MyFixScheduleEntity myFixScheduleEntity = myFixScheduleRepository.findById(scheduleId).orElseThrow(()-> new BaseException("수정할 스케줄이 존재하지 않습니다."));
 
@@ -73,13 +70,7 @@ public class MyFixScheduleService {
     //고정 스케줄 삭제
     @Transactional
     public void deleteMyFixSchedule(Long userId, Long scheduleId){
-        if(userId == null){
-            throw new BaseException("유저의 시간표를 찾을 수 없습니다.");
-        }
-
-        if(scheduleId == null){
-            throw new BaseException("해당 시간표는 존재하지 않습니다.");
-        }
+        exceptionHandler(userId, scheduleId);
 
         MyFixScheduleEntity myFixScheduleEntity = myFixScheduleRepository.findById(scheduleId).orElseThrow(()->new BaseException("삭제할 시간표를 찾을 수 없습니다."));
         //수정하려는 시간표가 내 시간표인지 확인
@@ -88,6 +79,15 @@ public class MyFixScheduleService {
         }
 
         myFixScheduleRepository.deleteById(scheduleId);
+    }
+
+    private void exceptionHandler(Long userId, Long scheduleId){
+        if(userId == null){
+            throw new UserScheduleException("유저의 시간표를 찾을 수 없습니다.");
+        }
+        if(scheduleId == null){
+            throw new UserScheduleException("해당 시간표는 존재하지 않습니다.");
+        }
     }
 
 

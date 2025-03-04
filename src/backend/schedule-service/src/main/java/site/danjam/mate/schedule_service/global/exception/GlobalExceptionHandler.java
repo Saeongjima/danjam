@@ -46,5 +46,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(code.getStatus()).body(response);
     }
 
+    @MethodDescription(description = "스케줄 로직 오류 발생시, 예외처리")
+    @ExceptionHandler(UserScheduleException.class)
+    public ResponseEntity<ApiResponseData<?>>
+    handleNotFoundUserExceptionException(UserScheduleException e){
+        Code code = Code.SCHEDULE_ERROR;
+        ApiResponseData<?> response = ApiResponseData.of(code.getCode(), e.getMessage(),null);
+        return ResponseEntity.status(code.getStatus()).body(response);
+    }
+
 }
 
