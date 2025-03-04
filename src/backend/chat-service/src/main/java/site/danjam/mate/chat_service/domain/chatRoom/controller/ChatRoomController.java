@@ -30,7 +30,7 @@ public class ChatRoomController {
 
     @PostMapping("/personal")
     public ResponseEntity<ApiResponseData<PersonalChatRoomCreateDTO>> createPersonalChatRoom(
-            @RequestHeader("userId") String userId, @RequestHeader("role") Role role,
+            @RequestHeader("userId") Long userId, @RequestHeader("role") Role role,
             @RequestBody PersonalChatRoomCreateDTO dto) {
         return ResponseEntity.ok(ApiResponseData.of(chatRoomCommandService.createPersonalChatRoom(userId, role, dto),
                 "채팅방이 생성되었습니다."));
@@ -38,7 +38,7 @@ public class ChatRoomController {
 
     @PostMapping("/group")
     public ResponseEntity<ApiResponseData<GroupChatRoomCreateDTO>> createGroupChatRoom(
-            @RequestHeader("userId") String userId, @RequestHeader("role") Role role,
+            @RequestHeader("userId") Long userId, @RequestHeader("role") Role role,
             @RequestBody GroupChatRoomRequestDTO dto) {
         return ResponseEntity.ok(ApiResponseData.of(chatRoomCommandService.createGroupChatRoom(userId, role, dto),
                 "채팅방이 생성되었습니다."));
@@ -46,12 +46,12 @@ public class ChatRoomController {
 
     @GetMapping
     public ResponseEntity<ApiResponseData<List<ChatRoomListDTO>>> getChatRoomList(
-            @RequestHeader("userId") String userId) {
+            @RequestHeader("userId") Long userId) {
         return ResponseEntity.ok(ApiResponseData.of(chatRoomQueryService.getUserChatRoom(userId), "채팅방 목록 조회 성공"));
     }
 
     @DeleteMapping("/{chatRoomId}")
-    public ResponseEntity<ApiResponseData<ChatRoomLeaveDTO>> leaveChatRoom(@RequestHeader("userId") String userId,
+    public ResponseEntity<ApiResponseData<ChatRoomLeaveDTO>> leaveChatRoom(@RequestHeader("userId") Long userId,
                                                                            @PathVariable("chatRoomId") Long chatRoomId) {
         return ResponseEntity.ok(
                 ApiResponseData.of(chatRoomCommandService.leaveChatRoom(userId, chatRoomId), "정상적으로 채팅방을 나갔습니다."));

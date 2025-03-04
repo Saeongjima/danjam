@@ -33,8 +33,7 @@ public class ChatRoomCommandService {
     private final ChatRoomUserRepository chatRoomUserRepository;
 
     @MethodDescription(description = "1대1 채팅방을 생성합니다. 채팅방 이름은 상대방의 (큰 타이틀) 닉네임, (작은 타이틀)년도/학번/전공으로 생성됩니다.")
-    public PersonalChatRoomCreateDTO createPersonalChatRoom(String user, Role role, PersonalChatRoomCreateDTO dto) {
-        Long userId = Long.valueOf(user);
+    public PersonalChatRoomCreateDTO createPersonalChatRoom(Long userId, Role role, PersonalChatRoomCreateDTO dto) {
 
         if (MateType.ROOMMATE.equals(dto.getMateType())) {
             equalsGender(userId, dto.getFriendUsername());
@@ -50,8 +49,7 @@ public class ChatRoomCommandService {
 
 
     @MethodDescription(description = "그룹 채팅방을 생성합니다.")
-    public GroupChatRoomCreateDTO createGroupChatRoom(String user, Role role, GroupChatRoomRequestDTO request) {
-        Long userId = Long.valueOf(user);
+    public GroupChatRoomCreateDTO createGroupChatRoom(Long userId, Role role, GroupChatRoomRequestDTO request) {
 
         List<Long> participants = request.getFriendUsernames().stream()
                 .map(username -> userServiceClient.getUserInfo(username).getUserId())
@@ -115,8 +113,7 @@ public class ChatRoomCommandService {
     }
 
     @MethodDescription(description = "사용자가 채팅방을 나갑니다. 채팅방에 유저가 존재하지 않을 경우 채팅방을 삭제합니다.")
-    public ChatRoomLeaveDTO leaveChatRoom(String user, Long chatRoomId) {
-        Long userId = Long.valueOf(user);
+    public ChatRoomLeaveDTO leaveChatRoom(Long userId, Long chatRoomId) {
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
 

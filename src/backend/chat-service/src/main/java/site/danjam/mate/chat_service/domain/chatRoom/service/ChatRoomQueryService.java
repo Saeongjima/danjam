@@ -20,8 +20,7 @@ public class ChatRoomQueryService {
     private final ChatMessageRepository chatMessageRepository;
 
     @MethodDescription(description = "채팅방 리스트를 가져옵니다. 각 채팅방은 마지막으로 수신한 메시지를 가져옵니다.")
-    public List<ChatRoomListDTO> getUserChatRoom(String user) {
-        Long userId = Long.valueOf(user);
+    public List<ChatRoomListDTO> getUserChatRoom(Long userId) {
         List<ChatRoom> chatRooms = chatRoomUserRepository.findChatRoomByUserId(userId);
         Map<ChatRoom, ChatMessage> lastMessage = new HashMap<>();
 
