@@ -12,6 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import site.danjam.mate.chat_service.domain.chat.dto.ChatMessageDTO;
+import site.danjam.mate.chat_service.domain.chat.dto.ChatMessageReadAckRes;
 
 @EnableKafka
 @Configuration
@@ -38,7 +39,17 @@ public class ChatProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, ChatMessageDTO> serverChatKafkaTemplate() {
+    public KafkaTemplate<String, ChatMessageDTO> ChatKafkaTemplate() {
         return new KafkaTemplate<>(chatProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, ChatMessageReadAckRes> ackProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(chatEventProducerConfig());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ChatMessageReadAckRes> ackKafkaTemplate() {
+        return new KafkaTemplate<>(ackProducerFactory());
     }
 }

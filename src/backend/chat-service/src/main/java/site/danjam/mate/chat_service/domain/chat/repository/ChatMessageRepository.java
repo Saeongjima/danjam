@@ -1,5 +1,6 @@
 package site.danjam.mate.chat_service.domain.chat.repository;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -30,5 +31,13 @@ public class ChatMessageRepository {
 
     public ChatMessage save(ChatMessage chatMessage) {
         return chatMessageJpaRepository.save(chatMessage);
+    }
+
+    public List<ChatMessage> findByChatRoomIdAndUnreadUsersContains(Long chatRoomId, Long userId) {
+        return chatMessageJpaRepository.findByChatRoomIdAndUnreadUsersContains(chatRoomId, userId);
+    }
+
+    public List<ChatMessage> findByChatRoomId(Long chatRoomId) {
+        return chatMessageJpaRepository.findByChatRoomId(chatRoomId);
     }
 }
