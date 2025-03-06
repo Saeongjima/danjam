@@ -49,5 +49,11 @@ spring:
             - Path=/mate-service/**
           filters:
             - name: AuthPermissionFilter
+        - id: schedule-service
+          uri: lb://schedule-service
+          predicates:
+            - Path=/schedule-service/**
+          filters:
+            - name: AuthPermissionFilter
   jwt:
     secret: ${SPRING_JWT_SECRET}

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER:org.mariadb.jdbc.Driver}
+    username: ${DATABASE_USERNAME:fake_user}
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3308/fake_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul}
+    password: ${DATABASE_PASSWORD:fake_password}
+  application:
+    name: schedule-service
+  jpa:
+    properties:
+      hibernate:
+        format_sql: 'true'
+    database-platform: ${DATABASE_DIALECT:org.hibernate.dialect.MariaDBDialect}
+    hibernate:
+      ddl-auto: update
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://fake-eureka-server:8761/eureka}
+server:
+  port: 8081
