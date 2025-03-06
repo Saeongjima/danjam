@@ -60,9 +60,8 @@ public class ChatCommandService {
             chatMessageRepository.save(chatMessage);
             int unreadCount = chatMessage.getUnreadUsers().size();
 
-            ChatMessageReadAckRes ackRes = ChatMessageReadAckRes.builder().messageId(messageId).unreadCount(unreadCount)
-                    .build();
-            //
+            ChatMessageReadAckRes ackRes = createChatMessageReadAck(messageId, unreadCount);
+            chatProducer.sendToChatAckTopic(ackRes);
         } else {
             throw new NotFoundChatRoomUserException();
         }
@@ -83,5 +82,14 @@ public class ChatCommandService {
     @MethodDescription(description = "채팅방에 유저가 존재하는 지 확인합니다.")
     private boolean isUserInChatRoom(Long chatRoomId, Long userId) {
         return chatRoomUserRepository.existsByChatRoomIdAndUserId(chatRoomId, userId);
+    }
+
+    @MethodDescription(description = "채팅 Ack 객체를 생성합니다.")
+    private ChatMessageReadAckRes createChatMessageReadAck(Long messageId, int unreadCount) {
+        return ChatMessageReadAckRes
+                .builder()
+                .messageId(messageId)
+                .unreadCount(unreadCount)
+                .build();
     }
 }
