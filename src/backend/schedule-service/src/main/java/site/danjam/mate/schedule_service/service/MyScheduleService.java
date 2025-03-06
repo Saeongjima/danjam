@@ -69,7 +69,7 @@ public class MyScheduleService {
     }
 
     public void deleteMySchedule(Long userId, String role, Long scheduleId){
-        MyScheduleEntity myScheduleEntity = myScheduleRepository.findById(scheduleId).orElseThrow(BaseException::new);
+        MyScheduleEntity myScheduleEntity = myScheduleRepository.findById(scheduleId).orElseThrow(()->new UserScheduleException("해당 스케줄이 존재하지 않습니다."));
 
         if(!myScheduleEntity.getUserId().equals(userId)){
             throw new UserScheduleException("유저의 스케줄이 아닙니다.");
