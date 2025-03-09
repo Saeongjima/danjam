@@ -1,9 +1,12 @@
 package site.danjam.mate.user_service.domain.user.repository;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.danjam.mate.user_service.domain.user.domain.User;
+import site.danjam.mate.user_service.domain.user.dto.UserFilterInputDTO;
+import site.danjam.mate.user_service.domain.user.dto.UserFilterOutputDTO;
 import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
 import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
@@ -35,5 +38,9 @@ public class UserRepository {
 
     public Optional<User> findById(Long userId){
         return userJpaRepository.findById(userId);
+    }
+
+    public List<UserFilterOutputDTO> filterUsers(UserFilterInputDTO userFilterInputDTO){
+        return userJpaRepository.filterUsers(userFilterInputDTO);
     }
 }

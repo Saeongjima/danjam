@@ -56,7 +56,7 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "my_profile_id")
     private MyProfile myProfile;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id")
     private School school;
 

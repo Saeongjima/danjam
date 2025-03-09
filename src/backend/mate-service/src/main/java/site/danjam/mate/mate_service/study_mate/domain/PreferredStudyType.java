@@ -19,11 +19,11 @@ import lombok.Setter;
 import site.danjam.mate.mate_service.study_mate.enums.StudyType;
 
 @Entity
-@Getter @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "preferredStudyType")
+@Table(name = "preferred_study_type")
 public class PreferredStudyType {
 
     @Id
@@ -35,7 +35,7 @@ public class PreferredStudyType {
     private StudyType studyType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyMateProfileId", nullable = false)
+    @JoinColumn(name = "study_mate_profile_id", nullable = false)
     private StudyMateProfile studyMateProfile;
 
 }

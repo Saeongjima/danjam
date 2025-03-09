@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.mate_service.global.exception.AccessDeniedException;
-import site.danjam.mate.mate_service.global.exception.AlreadyProfileExistException;
+import site.danjam.mate.mate_service.mate.exception.AlreadyProfileExistException;
 import site.danjam.mate.mate_service.global.exception.ValidationExcepiton;
+import site.danjam.mate.mate_service.global.util.RequiredAuthUser;
 import site.danjam.mate.mate_service.mate.enums.MateType;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.mate_service.global.exception.Code;
-import site.danjam.mate.mate_service.global.utils.AuthUtil;
 import site.danjam.mate.mate_service.mate.service.MateProfileService;
 import site.danjam.mate.mate_service.study_mate.domain.PreferredStudyType;
 import site.danjam.mate.mate_service.study_mate.domain.StudyMateProfile;
@@ -19,7 +20,7 @@ import site.danjam.mate.mate_service.study_mate.dto.StudyMateProfileInputDTO;
 import site.danjam.mate.mate_service.study_mate.enums.StudyType;
 import site.danjam.mate.mate_service.study_mate.repository.PreferredStudyTypeRepository;
 import site.danjam.mate.mate_service.study_mate.repository.StudyMateProfileRepository;
-import site.danjam.mate.mate_service.utils.DataConvert;
+import site.danjam.mate.mate_service.global.util.DataConvert;
 import site.danjam.mate.mate_service.utils.ValidationUtil;
 
 @Service
@@ -31,14 +32,9 @@ public class StudyMateProfileService implements MateProfileService {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void createMateProfile(Object inputDTO, String username, String role) {
-
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
-
-        Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
+    @Transactional
+    @RequiredAuthUser
+    public void createMateProfile(Object inputDTO, Long userId, String role) {
 
         // 이미 해당 프로필이 있는지 확인
         if(studyMateProfileRepository.existsStudyMateProfileByUserId(userId)){
@@ -60,11 +56,9 @@ public class StudyMateProfileService implements MateProfileService {
 
 
     @Override
+    @RequiredAuthUser
+    @Transactional(readOnly = true)
     public StudyMateProfileDTO getMateProfile(String username, String role) {
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
 
         Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         // 유저의 메이트 프로필이 있는지 확인
@@ -74,16 +68,12 @@ public class StudyMateProfileService implements MateProfileService {
     }
 
     @Override
-    public void updateMateProfile(Object inputDTO, String username, String role, Long mateProfileId) {
+    @RequiredAuthUser
+    public void updateMateProfile(Object inputDTO, Long userId, String role, Long mateProfileId) {
+
         /**
          * 1. 사전작업 : 권한/유효성 검증, 타입 변환
          */
-        // 요청 권한을 확인
-        if(!AuthUtil.checkAuthUser(role)){
-            throw new AccessDeniedException();
-        }
-
-        Long userId = 1L; //todo - openfeign을 이용해서 suerId조회해야함.
         StudyMateProfile studyMateProfile = studyMateProfileRepository.findById(mateProfileId);
         // 본인 프로필이 맞는지 검증
         if(!studyMateProfile.getUserId().equals(userId)){
@@ -120,9 +110,8 @@ public class StudyMateProfileService implements MateProfileService {
     private StudyMateProfile createBuildStudyMateProfile(StudyMateProfileInputDTO studyMateProfileInputDTO, Long userId){
         return StudyMateProfile.builder()
                 .userId(userId)
-                .mateType(MateType.STUDYMATE)
                 .averageGrade(studyMateProfileInputDTO.getAverageGrade())
-                .preferredStudyTime(studyMateProfileInputDTO.getPreferredStudyTime())
+                .studyTime(studyMateProfileInputDTO.getStudyTime())
                 .userSubjects(DataConvert.setToString(studyMateProfileInputDTO.getUserSubjects()))
                 .build();
     }
@@ -144,7 +133,7 @@ public class StudyMateProfileService implements MateProfileService {
         return StudyMateProfileDTO.builder()
                 .id(studyMateProfile.getId())
                 .averageGrade(studyMateProfile.getAverageGrade().toString())
-                .preferredStudyTime(studyMateProfile.getPreferredStudyTime().toString())
+                .preferredStudyTime(studyMateProfile.getStudyTime().toString())
                 .preferredStudyTypes(studyMateProfile.getPreferredStudyTypesNames())
                 .userSubjects(DataConvert.stringToSet(studyMateProfile.getUserSubjects()))
                 .build();
