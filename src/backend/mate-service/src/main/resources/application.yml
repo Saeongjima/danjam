@@ -38,7 +38,8 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6380}
       password: ${REDIS_PASSWORD:password}
-
+  elasticsearch:
+    host: ${ELASTICSEARCH_HOST:localhost:9200}
 eureka:
   client:
     register-with-eureka: true
