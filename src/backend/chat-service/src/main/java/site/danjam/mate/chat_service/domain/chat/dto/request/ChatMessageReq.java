@@ -1,5 +1,6 @@
 package site.danjam.mate.chat_service.domain.chat.dto.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.chat_service.domain.chat.enums.ChatType;
@@ -11,7 +12,7 @@ public class ChatMessageReq {
     private ChatType chatType;
 
     @Builder
-    private ChatCreateReq(String message, ChatType chatType) {
+    private ChatMessageReq(String message, ChatType chatType) {
         this.message = message;
         this.chatType = chatType;
     }
