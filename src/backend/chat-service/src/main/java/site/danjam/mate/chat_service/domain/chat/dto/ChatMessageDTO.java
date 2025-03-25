@@ -18,7 +18,7 @@ import site.danjam.mate.chat_service.domain.chat.enums.ChatType;
 public class ChatMessageDTO {
     private Long id;
     private Long chatRoomId;
-    private String sender;
+    private Long senderId;
     private List<Long> unreadUsers;
     private String message;
     private ChatType chatType;
@@ -29,7 +29,7 @@ public class ChatMessageDTO {
         return ChatMessageDTO.builder()
                 .id(chat.getId())
                 .chatRoomId(chat.getChatRoomId())
-                .sender(chat.getSender())
+                .senderId(chat.getSenderId())
                 .unreadUsers(chat.getUnreadUsers())
                 .message(chat.getMessage())
                 .chatType(chat.getChatType())

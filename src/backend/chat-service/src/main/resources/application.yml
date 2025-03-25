@@ -1,0 +1,53 @@
+server:
+  application:
+    name: chat-service
+  port: 0
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            platform: org.hibernate.service.jta.JtaPlatform
+        format_sql: true
+        show_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  thymeleaf:
+    suffix: .html
+  cloud:
+    discovery:
+      enabled: true
+  eureka:
+    client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        defaultZone: ${EUREKA_SERVER_URL}
+    instance:
+      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
+    topic:
+      chat: ${KAFKA_TOPIC_CHAT}
+    consumer:
+      group-id:
+        chat: ${KAFKA_GROUP_ID_CHAT}

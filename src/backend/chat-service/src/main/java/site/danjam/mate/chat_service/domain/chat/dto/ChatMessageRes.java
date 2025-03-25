@@ -15,7 +15,7 @@ import site.danjam.mate.chat_service.domain.chat.enums.ChatType;
 public class ChatMessageRes {
     private Long id;
     private Long chatRoomId;
-    private String sender;
+    private Long senderId;
     private String message;
     private String timestamp;
     private ChatType chatType;
@@ -25,7 +25,7 @@ public class ChatMessageRes {
         return ChatMessageRes.builder()
                 .id(chat.getId())
                 .chatRoomId(chat.getChatRoomId())
-                .sender(chat.getSender())
+                .senderId(chat.getSenderId())
                 .message(chat.getMessage())
                 .timestamp(chat.getCreatedAt().toString())
                 .chatType(chat.getChatType())
