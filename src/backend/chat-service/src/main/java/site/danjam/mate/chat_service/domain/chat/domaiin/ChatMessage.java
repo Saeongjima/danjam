@@ -29,7 +29,7 @@ public class ChatMessage extends BaseTimeEntity {
     private Long chatRoomId;
 
     @Column(nullable = false)
-    private String sender;
+    private Long senderId;
 
     @Column(columnDefinition = "TEXT")
     private String message;
@@ -41,9 +41,9 @@ public class ChatMessage extends BaseTimeEntity {
     private ChatType chatType;
 
     @Builder
-    public ChatMessage(Long chatRoomId, String sender, String message, List<Long> unreadUsers, ChatType chatType) {
+    public ChatMessage(Long chatRoomId, Long senderId, String message, List<Long> unreadUsers, ChatType chatType) {
         this.chatRoomId = chatRoomId;
-        this.sender = sender;
+        this.senderId = senderId;
         this.message = message;
         this.unreadUsers = unreadUsers;
         this.chatType = chatType;

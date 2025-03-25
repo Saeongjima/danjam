@@ -9,4 +9,10 @@ import site.danjam.mate.chat_service.domain.chat.enums.ChatType;
 public class ChatMessageReq {
     private String message;
     private ChatType chatType;
+
+    @Builder
+    private ChatCreateReq(String message, ChatType chatType) {
+        this.message = message;
+        this.chatType = chatType;
+    }
 }

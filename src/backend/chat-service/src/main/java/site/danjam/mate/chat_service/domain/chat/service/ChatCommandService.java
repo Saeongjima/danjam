@@ -27,9 +27,7 @@ public class ChatCommandService {
     private final ChatProducer chatProducer;
 
     @MethodDescription(description = "메시지를 전송합니다.")
-    public void sendMessage(Long chatRoomId, ChatMessageReq request, String user) {
-        Long userId = Long.valueOf(user);
-
+    public void sendMessage(Long chatRoomId, ChatMessageReq request, Long userId) {
         // todo : MateType 프로필 공유를 위해 chatRoom 에서 mateType 뽑아오기
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
 
@@ -44,7 +42,7 @@ public class ChatCommandService {
                 .filter(u -> !u.equals(userId))
                 .collect(Collectors.toList());
 
-        ChatMessage chatMessage = createChatMessage(request, user, chatRoomId, unreadUsers);
+        ChatMessage chatMessage = createChatMessage(request, userId, chatRoomId, unreadUsers);
         ChatMessageDTO chatMessageDto = ChatMessageDTO.from(chatMessage);
 
         chatProducer.sendToChatEventTopic(chatMessageDto);
@@ -52,11 +50,11 @@ public class ChatCommandService {
 
 
     @MethodDescription(description = "클라언트로부터 Ack 를 받아 메시지 읽음 처리를 합니다.")
-    public void markMessageAsRead(Long chatRoomId, Long messageId, String user) {
+    public void markMessageAsRead(Long chatRoomId, Long messageId, Long userId) {
         ChatMessage chatMessage = chatMessageRepository.findById(messageId);
 
-        if (chatMessage.getUnreadUsers().contains(user)) {
-            chatMessage.getUnreadUsers().remove(user);
+        if (chatMessage.getUnreadUsers().contains(userId)) {
+            chatMessage.getUnreadUsers().remove(userId);
             chatMessageRepository.save(chatMessage);
             int unreadCount = chatMessage.getUnreadUsers().size();
 
@@ -68,11 +66,11 @@ public class ChatCommandService {
     }
 
     @MethodDescription(description = "채팅 메시지 객체를 생성합니다.")
-    private ChatMessage createChatMessage(ChatMessageReq request, String sender, Long chatRoomId,
+    private ChatMessage createChatMessage(ChatMessageReq request, Long senderId, Long chatRoomId,
                                           List<Long> unreadUsers) {
         return chatMessageRepository.save(ChatMessage.builder()
                 .message(request.getMessage())
-                .sender(sender)
+                .senderId(senderId)
                 .chatRoomId(chatRoomId)
                 .chatType(request.getChatType())
                 .unreadUsers(unreadUsers)
