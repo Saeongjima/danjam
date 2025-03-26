@@ -9,12 +9,12 @@ import site.danjam.mate.chat_service.global.client.dto.UserInfoDTO;
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
     @GetMapping("/user-service/api/user/inquiry/info")
-    UserInfoDTO getUserInfo(@RequestParam("userId") Long userId);
+    UserInfoDTO getUserInfoById(@RequestParam("userId") Long userId);
 
     @GetMapping("/user-service/api/user/inquiry/info")
-    UserInfoDTO getUserInfo(@RequestParam("username") String username);
+    UserInfoDTO getUserInfoByUsername(@RequestParam("username") String username);
 
     @GetMapping("/user-service/api/user/inquiry/info")
-    List<UserInfoDTO> getUserInfo(@RequestParam("userIds") List<Long> userIds);
+    List<UserInfoDTO> getUserInfoByIds(@RequestParam("userIds") List<Long> userIds);
 }
 
