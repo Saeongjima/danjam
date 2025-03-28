@@ -15,7 +15,7 @@ import site.danjam.mate.mate_service.romm_mate.enums.Level;
 import site.danjam.mate.mate_service.romm_mate.enums.ShowerTime;
 import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
-@Getter @Setter
+@Getter
 public class RoomMateProfileInputDTO {
 
     @NotEmpty(message = "기숙사 옵션을 선택해주세요.")

@@ -9,9 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +19,9 @@ import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
 @Entity
-@Getter @Setter
+@Getter
 @SuperBuilder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class OwnSleepHabit extends BaseTimeEntity {
 

@@ -1,0 +1,46 @@
+server:
+  port: 8602
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: mate-service
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER:org.mariadb.jdbc.Driver}
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3308/fake_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul}
+    username: ${DATABASE_USERNAME:fake_user}
+    password: ${DATABASE_PASSWORD:fake_password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            platform: org.hibernate.service.jta.JtaPlatform
+        format_sql: true
+        show_sql: true
+        dialect: ${DATABASE_DIALECT:org.hibernate.dialect.MariaDBDialect}
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://fake-eureka-server:8761/eureka}
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+
