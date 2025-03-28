@@ -73,7 +73,7 @@ public enum Code {
     public String getMessage(String message) {
         return Optional.ofNullable(message)
                 .filter(Predicate.not(String::isBlank))
-                .orElse(this.getMessage());
+                .orElse(this.message);
     }
 
     public String getDetailMessage(String message) {

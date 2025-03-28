@@ -9,6 +9,8 @@ eureka:
       defaultZone: ${EUREKA_SERVER_URL}
 
 spring:
+  main:
+    web-application-type: reactive
   application:
     name: api-gateway-service
   cloud:

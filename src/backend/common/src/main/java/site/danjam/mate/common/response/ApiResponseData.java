@@ -1,6 +1,5 @@
 package site.danjam.mate.common.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

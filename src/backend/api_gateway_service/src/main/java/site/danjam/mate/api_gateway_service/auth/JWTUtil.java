@@ -1,7 +1,7 @@
 package site.danjam.mate.api_gateway_service.auth;
 
-import java.nio.charset.StandardCharsets;
 import io.jsonwebtoken.Jwts;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -16,15 +16,16 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import site.danjam.mate.api_gateway_service.global.common.annotation.MethodDescription;
+import site.danjam.mate.common.annotation.MethodDescription;
 
 @Component
 public class JWTUtil {
 
     private final SecretKey secretKey;
 
-    public JWTUtil(@Value("${spring.jwt.secret}")String secret) {
-        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+    public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
+        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+                Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
     @MethodDescription(description = "HTTP 헤더에서 토큰을 추출한다.")
@@ -43,8 +44,9 @@ public class JWTUtil {
     }
 
     @MethodDescription(description = "토큰이 만료되었는지 확인한다.")
-    public boolean isExpired(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+    public boolean isExpired(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration()
+                .before(new Date());
     }
 
     @MethodDescription(description = "토큰 검증과정에서 발생한 에러를 처리한다.")
@@ -62,18 +64,21 @@ public class JWTUtil {
     }
 
     @MethodDescription(description = "토큰에서 userId를 추출한다.")
-    public String getUserId(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId",String.class);
+    public String getUserId(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("userId", String.class);
     }
 
     @MethodDescription(description = "토큰에서 role을 추출한다.")
-    public String getRole(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role",String.class);
+    public String getRole(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("role", String.class);
     }
 
     @MethodDescription(description = "토큰에서 category를 추출한다.")
-    public String getCategory(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category",String.class);
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("category", String.class);
     }
 
 
