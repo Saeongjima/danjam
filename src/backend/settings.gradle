@@ -1,0 +1,8 @@
+rootProject.name = 'backend'
+include 'api_gateway_service'
+include 'user-service'
+include 'chat-service'
+include 'discovery_service'
+include 'schedule-service'
+include 'mate-service'
+include 'common'
