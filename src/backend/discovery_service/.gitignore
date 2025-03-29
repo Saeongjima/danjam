@@ -1,6 +1,5 @@
 
 ### SpringBoot 직접 추가 ###
-docker-compose.yml
 src/main/resources/properties/env.properties
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,git,java,maven,eclipse,intellij,gradle,netbeans,visualstudiocode

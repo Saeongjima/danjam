@@ -8,11 +8,11 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import site.danjam.mate.api_gateway_service.auth.AuthPermissionFilter.Config;
-import site.danjam.mate.api_gateway_service.exception.ExpiredTokenException;
-import site.danjam.mate.api_gateway_service.exception.InvalidTokenException;
-import site.danjam.mate.api_gateway_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.api_gateway_service.global.exception.BaseException;
-import site.danjam.mate.api_gateway_service.global.exception.Code;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.BaseException;
+import site.danjam.mate.common.exception.Code;
+import site.danjam.mate.common.exception.ExpiredTokenException;
+import site.danjam.mate.common.exception.InvalidTokenException;
 
 @Slf4j
 @Component
@@ -40,13 +40,13 @@ public class AuthPermissionFilter extends AbstractGatewayFilterFactory<Config> {
             List<String> accessToken = jwtUtil.getHeaderToken(request, "access");
 
             // Access 토큰이 없다면 401 에러를 반환한다.
-            if (accessToken == null || accessToken.isEmpty()){
+            if (accessToken == null || accessToken.isEmpty()) {
                 throw new BaseException(Code.REQUIRED_LOGIN, Code.REQUIRED_LOGIN.getMessage());
             }
 
             // Access 토큰 검증
-            if(!jwtUtil.isValidToken(accessToken.get(0))){
-                if(jwtUtil.isExpired(accessToken.get(0))){
+            if (!jwtUtil.isValidToken(accessToken.get(0))) {
+                if (jwtUtil.isExpired(accessToken.get(0))) {
                     throw new ExpiredTokenException(Code.EXPIRED_TOKEN);
                 } else {
                     throw new InvalidTokenException(Code.INVALID_TOKEN);
