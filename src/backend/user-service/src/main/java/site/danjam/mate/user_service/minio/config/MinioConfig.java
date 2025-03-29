@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.global.common.minio.config;
+package site.danjam.mate.user_service.minio.config;
 
 
 import io.minio.MinioClient;

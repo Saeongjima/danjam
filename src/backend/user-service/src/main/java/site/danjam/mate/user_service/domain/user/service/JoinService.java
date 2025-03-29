@@ -5,15 +5,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.enums.Role;
 import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
 import site.danjam.mate.user_service.domain.myProfile.repository.MyProfileRepository;
 import site.danjam.mate.user_service.domain.school.domain.School;
 import site.danjam.mate.user_service.domain.school.repository.SchoolRepository;
-import site.danjam.mate.user_service.domain.user.domain.Role;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.JoinDTO;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service

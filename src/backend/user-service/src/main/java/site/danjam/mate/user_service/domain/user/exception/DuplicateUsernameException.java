@@ -1,11 +1,11 @@
 package site.danjam.mate.user_service.domain.user.exception;
 
-import static site.danjam.mate.user_service.global.exception.Code.DUPLICATE_USERNAME;
 
-import site.danjam.mate.user_service.global.exception.BaseException;
+import site.danjam.mate.common.exception.BaseException;
+import site.danjam.mate.common.exception.Code;
 
 public class DuplicateUsernameException extends BaseException {
     public DuplicateUsernameException() {
-        super(DUPLICATE_USERNAME);
+        super(Code.USER_DUPLICATE_USERNAME);
     }
 }

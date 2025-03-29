@@ -10,15 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.GenericFilterBean;
-import site.danjam.mate.user_service.auth.exception.ExpiredTokenException;
-import site.danjam.mate.user_service.auth.exception.InValidTokenException;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.Code;
+import site.danjam.mate.common.exception.ExpiredTokenException;
+import site.danjam.mate.common.exception.InvalidTokenException;
+import site.danjam.mate.common.response.ApiResponseError;
+import site.danjam.mate.common.response.ApiResponseMessage;
 import site.danjam.mate.user_service.auth.service.LogoutService;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseError;
-import site.danjam.mate.user_service.global.exception.RequiredArgumentException;
-import site.danjam.mate.user_service.global.exception.Code;
+import site.danjam.mate.common.exception.RequiredArgumentException;
 
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {
@@ -48,10 +48,10 @@ public class CustomLogoutFilter extends GenericFilterBean {
             refreshTokenService.removeRefreshTokenCookie(response);
             sendSuccessResponse(response, HttpServletResponse.SC_OK, "성공적으로 로그아웃 되었습니다.");
         } catch (RequiredArgumentException e) {
-            sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage() + " : " +"쿠키에 refresh토큰이 존재하지 않습니다.", Code.BAD_REQUEST_EXCEPTION);
+            sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage() + " : " +"쿠키에 refresh토큰이 존재하지 않습니다.", Code.USER_REQUIRED_REFRESH_TOKEN);
         } catch (ExpiredTokenException e) {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Code.EXPIRED_TOKEN.getMessage(), Code.EXPIRED_TOKEN);
-        } catch (InValidTokenException e) {
+        } catch (InvalidTokenException e) {
             sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Code.INVALID_TOKEN.getMessage(), Code.INVALID_TOKEN);
         } catch (Exception e) {
             sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "서버 오류", Code.INTERNAL_SERVER_ERROR);

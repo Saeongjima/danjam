@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,13 +20,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.exception.RequiredArgumentException;
+import site.danjam.mate.common.exception.RequiredArgumentException;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -63,7 +63,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //json에 없는 필드가 들어왔을 때 400 에러를 반환
         catch (UnrecognizedPropertyException e) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            throw new RequiredArgumentException("아이디, 비밀번호를 모두 입력해주세요");
+            throw new RequiredArgumentException(Code.USER_REQUIRED_ARGUMENT, "아이디, 비밀번호를 모두 입력해주세요");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -11,15 +11,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.security.GlobalSecurityContextFilter;
 import site.danjam.mate.user_service.auth.jwt.CustomLogoutFilter;
-import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
 import site.danjam.mate.user_service.auth.service.LogoutService;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.auth.jwt.JWTUtil;
 import site.danjam.mate.user_service.auth.jwt.LoginFilter;
-import site.danjam.mate.user_service.auth.repository.RefreshTokenJpaRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -31,19 +30,22 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final RefreshTokenService refreshTokenService;
     private final LogoutService logoutService;
+    private final GlobalSecurityContextFilter globalSecurityContextFilter;
+
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
                           RefreshTokenService refreshTokenService,
                           UserRepository userRepository,
                           ObjectMapper objectMapper,
-                          LogoutService logoutService) {
+                          LogoutService logoutService,
+                          GlobalSecurityContextFilter globalSecurityContextFilter) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
         this.logoutService = logoutService;
-
+        this.globalSecurityContextFilter = globalSecurityContextFilter;
     }
 
     @MethodDescription(description = "AuthenticationManager를 빈으로 등록한다.")
@@ -74,6 +76,10 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
                         refreshTokenService, this.userRepository), UsernamePasswordAuthenticationFilter.class);
+
+        // GlobalSecurityContextFilter 추가
+        http
+                .addFilterBefore(globalSecurityContextFilter, UsernamePasswordAuthenticationFilter.class);
 
         //로그아웃 필터 추가
         http

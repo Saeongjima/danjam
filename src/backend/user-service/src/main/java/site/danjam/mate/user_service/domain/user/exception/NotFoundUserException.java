@@ -1,11 +1,10 @@
 package site.danjam.mate.user_service.domain.user.exception;
 
-import static site.danjam.mate.user_service.global.exception.Code.CAN_NOT_FIND_USER;
-
-import site.danjam.mate.user_service.global.exception.BaseException;
+import site.danjam.mate.common.exception.BaseException;
+import site.danjam.mate.common.exception.Code;
 
 public class NotFoundUserException extends BaseException {
     public NotFoundUserException() {
-        super(CAN_NOT_FIND_USER);
+        super(Code.USER_CAN_NOT_FIND_USER);
     }
 }

@@ -1,7 +1,4 @@
-package site.danjam.mate.user_service.auth.exception;
-
-import site.danjam.mate.user_service.global.exception.BaseException;
-import site.danjam.mate.user_service.global.exception.Code;
+package site.danjam.mate.common.exception;
 
 public class RefreshTokenOwnerMismatchException extends BaseException {
     public RefreshTokenOwnerMismatchException(String message) {

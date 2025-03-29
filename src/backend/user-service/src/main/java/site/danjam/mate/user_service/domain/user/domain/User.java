@@ -19,9 +19,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import site.danjam.mate.common.enums.Role;
+import site.danjam.mate.common.utils.BaseTimeEntity;
 import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
 import site.danjam.mate.user_service.domain.school.domain.School;
-import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
 
 @Entity
 @Getter

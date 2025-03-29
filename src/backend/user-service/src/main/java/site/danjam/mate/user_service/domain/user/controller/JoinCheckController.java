@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import site.danjam.mate.common.response.ApiResponseMessage;
 import site.danjam.mate.user_service.domain.user.service.JoinCheckService;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
-
 @RestController
 @RequestMapping("user-service/api")
 @RequiredArgsConstructor

@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import site.danjam.mate.common.response.ApiResponseMessage;
 import site.danjam.mate.user_service.domain.user.dto.JoinDTO;
 import site.danjam.mate.user_service.domain.user.service.JoinService;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
 
 @RestController
 @RequestMapping("user-service/api")

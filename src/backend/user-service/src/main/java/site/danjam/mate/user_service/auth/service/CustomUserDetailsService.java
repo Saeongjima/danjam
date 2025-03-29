@@ -5,10 +5,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.auth.dto.CustomUserDetails;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
 @Service
 @RequiredArgsConstructor

@@ -4,9 +4,9 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import site.danjam.mate.user_service.domain.user.domain.Role;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.exception.AccessDeniedException;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.enums.Role;
+import site.danjam.mate.common.exception.AccessDeniedException;
 
 @Aspect
 @Component

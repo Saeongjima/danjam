@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.response.ApiResponseData;
 import site.danjam.mate.user_service.domain.user.service.UserInquiryService;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseData;
 
 @RestController
 @RequestMapping("user-service/api/user/inquiry")

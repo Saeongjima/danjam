@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.global.common.minio;
+package site.danjam.mate.user_service.minio;
 
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -18,8 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.common.minio.exception.MinioException;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.MinioException;
 import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service

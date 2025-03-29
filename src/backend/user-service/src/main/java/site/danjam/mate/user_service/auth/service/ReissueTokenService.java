@@ -6,13 +6,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.CanNotFindUserException;
+import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
-import site.danjam.mate.user_service.auth.exception.CanNotFindUserException;
 import site.danjam.mate.user_service.auth.jwt.JWTUtil;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class ReissueTokenService {
         //RefreshToken 검증 후 가져오기
         RefreshToken refreshToken = refreshTokenService.getRefreshTokenAfterCheck(refreshTokenValue);
 
-        User user = userRepository.findById(refreshToken.getUserId()).orElseThrow(()-> new CanNotFindUserException("토큰의 주인인 유저를 찾을 수 없습니다."));
+        User user = userRepository.findById(refreshToken.getUserId()).orElseThrow(()-> new CanNotFindUserException(Code.USER_CAN_NOT_FIND_USER, "토큰의 주인인 유저를 찾을 수 없습니다."));
 
         //기존 토큰 DB에서 삭제
         refreshTokenRepository.deleteRefreshToken(refreshTokenValue);

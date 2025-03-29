@@ -2,8 +2,8 @@ package site.danjam.mate.user_service.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
 @Service
 @RequiredArgsConstructor

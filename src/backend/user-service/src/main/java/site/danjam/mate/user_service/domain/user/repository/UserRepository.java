@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.exception.NotFoundUserException;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
 @Repository
 @RequiredArgsConstructor

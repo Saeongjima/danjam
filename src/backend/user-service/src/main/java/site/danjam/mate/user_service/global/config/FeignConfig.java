@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.domain.user.config;
+package site.danjam.mate.user_service.global.config;
 
 import feign.Client;
 import org.springframework.context.annotation.Bean;

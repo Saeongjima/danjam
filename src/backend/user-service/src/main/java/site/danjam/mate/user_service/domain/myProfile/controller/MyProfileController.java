@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import site.danjam.mate.common.response.ApiResponseData;
+import site.danjam.mate.common.response.ApiResponseMessage;
 import site.danjam.mate.user_service.domain.myProfile.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.myProfile.dto.MyProfileDTO;
 import site.danjam.mate.user_service.domain.myProfile.dto.UpdateLoginDTO;
 import site.danjam.mate.user_service.domain.myProfile.dto.UpdateSchoolDTO;
 import site.danjam.mate.user_service.domain.myProfile.service.MyProfileInfoService;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseData;
-import site.danjam.mate.user_service.global.common.dto.ApiResponseMessage;
 
 @RestController
 @RequestMapping("/api/myProfile")

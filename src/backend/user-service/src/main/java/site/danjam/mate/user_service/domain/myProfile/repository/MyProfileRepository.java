@@ -4,7 +4,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
-import site.danjam.mate.user_service.domain.myProfile.exception.NotFoundMyProfileException;
+import site.danjam.mate.common.exception.NotFoundMyProfileException;
 import site.danjam.mate.user_service.domain.user.domain.User;
 
 @Repository

@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.danjam.mate.user_service.global.common.entity.BaseTimeEntity;
+import site.danjam.mate.common.utils.BaseTimeEntity;
 
 @Entity
 @Getter

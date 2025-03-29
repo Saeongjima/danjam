@@ -5,9 +5,8 @@ import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.domain.user.domain.User;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private final User user;

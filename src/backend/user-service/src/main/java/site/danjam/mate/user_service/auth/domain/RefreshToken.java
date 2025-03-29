@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 import java.util.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter

@@ -22,11 +22,21 @@ public enum Code {
     /**
      * api_gateway 관련 200번대
      */
+    GATEWAY_REQUIRED_ARGUMENT_EXCEPTION(HttpStatus.BAD_REQUEST, 201, "입력값이 없는 항목이 있습니다."),
 
     /**
      * user_service 관련 300번대
      */
     USER_INTERNAL_SEVER_MINIO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 301, "Minio 서버 오류가 발생했습니다."),
+    USER_INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, 302, "지원되지 않는 파일 확장자 입니다."),
+    USER_REQUIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, 303, "리프레시 토큰이 필요합니다."),
+    USER_REQUIRED_ARGUMENT(HttpStatus.BAD_REQUEST, 304, "필수 입력값이 없습니다."),
+    USER_REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 305, "리프레시 토큰이 만료되었습니다."),
+    USER_INVALID_TOKEN(HttpStatus.BAD_REQUEST, 306, "유효하지 않은 토큰입니다."),
+    USER_CAN_NOT_FIND_USER(HttpStatus.BAD_REQUEST, 307, "해당 유저를 찾을 수 없습니다."),
+    USER_CAN_NOT_FIND_MYPROFILE(HttpStatus.BAD_REQUEST, 40103, "프로필을 찾을 수 없습니다."),
+    USER_NO_MATCHING_SCHOOL_FOUND(HttpStatus.NOT_FOUND, 40101, "일치하는 학교를 찾을 수 없습니다."),
+    USER_DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, 40104, "이미 사용중인 유저 이름입니다."),
     /**
      * chat_service 관련 400번대
      */
