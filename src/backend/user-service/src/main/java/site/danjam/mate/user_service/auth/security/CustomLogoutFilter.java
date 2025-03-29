@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.auth.jwt;
+package site.danjam.mate.user_service.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

@@ -11,7 +11,7 @@ import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.common.exception.ExpiredTokenException;
 import site.danjam.mate.common.exception.InvalidTokenException;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
-import site.danjam.mate.user_service.auth.jwt.JWTUtil;
+import site.danjam.mate.user_service.auth.security.JWTUtil;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
 import site.danjam.mate.common.exception.RequiredArgumentException;
 

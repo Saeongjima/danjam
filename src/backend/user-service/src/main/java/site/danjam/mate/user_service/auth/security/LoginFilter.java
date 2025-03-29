@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.auth.jwt;
+package site.danjam.mate.user_service.auth.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.util.StreamUtils;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.exception.Code;
+import site.danjam.mate.common.response.ApiResponseError;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
@@ -108,8 +110,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @MethodDescription(description = "로그인 실패 시 실행되는 메소드")
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) {
-        response.setStatus((401));
+                                              AuthenticationException failed) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        ResponseEntity<ApiResponseError> responseBody = ResponseEntity.badRequest().body(ApiResponseError.of(Code.USER_MISMATCH_ID_PW));
+        ObjectMapper objectMapper = new ObjectMapper();
+        response.getWriter().write(objectMapper.writeValueAsString(responseBody.getBody()));
     }
 
     //todo - 추후에 reissue에서도 사용되는 메서드 이므로 공통 메서드로 리팩토링해야함.

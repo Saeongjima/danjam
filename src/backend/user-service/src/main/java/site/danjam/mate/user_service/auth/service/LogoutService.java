@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.auth.jwt.JWTUtil;
+import site.danjam.mate.user_service.auth.security.JWTUtil;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
 
 @Service

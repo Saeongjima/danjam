@@ -1,4 +1,4 @@
-package site.danjam.mate.user_service.auth.config;
+package site.danjam.mate.user_service.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +13,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.security.GlobalSecurityContextFilter;
-import site.danjam.mate.user_service.auth.jwt.CustomLogoutFilter;
+import site.danjam.mate.user_service.auth.security.CustomLogoutFilter;
 import site.danjam.mate.user_service.auth.service.LogoutService;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.auth.jwt.JWTUtil;
-import site.danjam.mate.user_service.auth.jwt.LoginFilter;
+import site.danjam.mate.user_service.auth.security.JWTUtil;
+import site.danjam.mate.user_service.auth.security.LoginFilter;
 
 @Configuration
 @EnableWebSecurity

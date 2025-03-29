@@ -9,15 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 public class GlobalCustomUserDetails implements UserDetails {
-    private final String username;
     private final String role;
-    private final Long id;
+    private final Long userId;
     private final boolean enabled;
 
-    public GlobalCustomUserDetails(String username, String role, Long id) {
-        this.username = username;
+    public GlobalCustomUserDetails(String role, Long id) {
         this.role = role;
-        this.id = id;
+        this.userId = id;
         this.enabled = true;
     }
 
@@ -35,7 +33,7 @@ public class GlobalCustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return userId.toString();
     }
 
     @Override

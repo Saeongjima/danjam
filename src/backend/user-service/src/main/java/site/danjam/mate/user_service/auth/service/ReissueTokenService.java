@@ -10,7 +10,7 @@ import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.exception.CanNotFindUserException;
 import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
-import site.danjam.mate.user_service.auth.jwt.JWTUtil;
+import site.danjam.mate.user_service.auth.security.JWTUtil;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
