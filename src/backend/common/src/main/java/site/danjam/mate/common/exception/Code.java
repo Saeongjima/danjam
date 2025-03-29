@@ -26,7 +26,7 @@ public enum Code {
     /**
      * user_service 관련 300번대
      */
-
+    USER_INTERNAL_SEVER_MINIO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 301, "Minio 서버 오류가 발생했습니다."),
     /**
      * chat_service 관련 400번대
      */
