@@ -22,8 +22,12 @@ public class GlobalCustomUserDetails implements UserDetails {
     // 필수 메서드 구현
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+        return Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + role)
+        );
     }
+
+
 
     // 사용하지 않음
     @Override
