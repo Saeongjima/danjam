@@ -32,7 +32,7 @@ public abstract class BaseTimeEntity {
     @Column(length = 100)
     private String modifiedBy;
 
-    private LocalDateTime deletedAt;
+    private LocalDateTime deletedDateTime;
 
     @Column(length = 100)
     private String deletedBy;
@@ -41,7 +41,7 @@ public abstract class BaseTimeEntity {
 
     public void softDelete(String userName) {
         this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now();
+        this.deletedDateTime = LocalDateTime.now();
         this.deletedBy = userName;
     }
 }
