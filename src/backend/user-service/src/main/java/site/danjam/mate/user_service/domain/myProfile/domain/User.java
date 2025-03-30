@@ -2,47 +2,57 @@ package site.danjam.mate.user_service.domain.myProfile.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.common.utils.BaseTimeEntity;
-import site.danjam.mate.user_service.domain.user.domain.User;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table
-public class MyProfile extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
     @Column(nullable = false)
-    private String birth;
+    private Integer gender;
+
+    @Column(name = "school_id")
+    private Long schoolId;
+
+    @Column(name = "major_id")
+    private Long majorId;
+
     @Column(nullable = false)
     private Integer entryYear;
-    @Column(nullable = false)
-    private String major;
+
     @Column(columnDefinition = "TEXT")
     String profileImgUrl;
+
+    @Column
     String mbti;
+
+    @Column(nullable = false)
+    private String birth;
+
+    @Column
     String greeting;
 
-    @OneToOne(mappedBy = "myProfile", fetch = FetchType.LAZY)
-    private User user;
-
     @Builder
-    public MyProfile(String birth, Integer entryYear, String major, User user) {
+    public User(String birth, Integer entryYear) {
         this.birth = birth;
         this.entryYear = entryYear;
-        this.major = major;
-        this.user = user;
     }
 
     public void updateMbti(String mbti) {
@@ -57,9 +67,8 @@ public class MyProfile extends BaseTimeEntity {
         this.profileImgUrl = profileImgUrl;
     }
 
-    public void updateSchoolInfo(Integer entryYear, String major) {
+    public void updateSchoolInfo(Integer entryYear) {
         this.entryYear = entryYear;
-        this.major = major;
     }
 }
 

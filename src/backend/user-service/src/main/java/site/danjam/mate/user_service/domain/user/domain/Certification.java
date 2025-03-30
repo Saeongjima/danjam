@@ -10,10 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,66 +19,55 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 import site.danjam.mate.common.enums.Role;
 import site.danjam.mate.common.utils.BaseTimeEntity;
-import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
-import site.danjam.mate.user_service.domain.school.domain.School;
+import site.danjam.mate.user_service.domain.myProfile.domain.User;
 
 @Entity
 @Getter
 @Where(clause = "deleted_at is null")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
-public class User extends BaseTimeEntity {
+public class Certification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true)
-    private String name;
+
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
-    @Column(nullable = false)
-    private Integer gender;
+
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false, unique = true)
-    private String nickname;
+
     @Column(nullable = false)
     private String email;
+
     @Column(columnDefinition = "TEXT")
     private String authImgUrl;
 
-    private LocalDateTime deletedAt;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(nullable = false, unique = true)
+    private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "my_profile_id")
-    private MyProfile myProfile;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "school_id")
-    private School school;
+    private User user;
 
     @Builder
-    public User(String name, String username, Integer gender, String password,
-                String nickname, String email, String authImgUrl, Role role) {
+    public Certification(String name, String username, String password,
+                         String email, String authImgUrl, Role role) {
         this.name = name;
         this.username = username;
-        this.gender = gender;
         this.password = password;
-        this.nickname = nickname;
         this.email = email;
         this.authImgUrl = authImgUrl;
         this.role = role;
     }
 
-    public void updateMyProfile(MyProfile myProfile) {
-        this.myProfile = myProfile;
+    public void updateMyProfile(User user) {
+        this.user = user;
     }
 
-    public void updateSchool(School school) {
-        this.school = school;
-    }
 
     public void updateUsername(String username) {
         this.username = username;
@@ -94,7 +81,4 @@ public class User extends BaseTimeEntity {
         this.authImgUrl = authImgUrl;
     }
 
-    public void deleteUser() {
-        this.deletedAt = LocalDateTime.now();
-    }
 }
