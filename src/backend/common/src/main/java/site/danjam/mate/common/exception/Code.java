@@ -40,6 +40,7 @@ public enum Code {
     USER_NO_MATCHING_SCHOOL_FOUND(HttpStatus.NOT_FOUND, 40101, "일치하는 학교를 찾을 수 없습니다."),
     USER_DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, 40104, "이미 사용중인 유저 이름입니다."),
     USER_MISMATCH_ID_PW(HttpStatus.BAD_REQUEST, 40105, "아이디와 비밀번호가 일치하지 않습니다."),
+    USER_CAN_NOT_FIND_MAJOR(HttpStatus.BAD_REQUEST, 40106, "해당 학과를 찾을 수 없습니다."),
     /**
      * chat_service 관련 400번대
      */

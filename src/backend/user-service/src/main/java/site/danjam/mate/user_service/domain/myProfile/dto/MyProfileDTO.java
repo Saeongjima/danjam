@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
-import site.danjam.mate.user_service.domain.myProfile.domain.MyProfile;
-import site.danjam.mate.user_service.domain.user.domain.User;
+import site.danjam.mate.user_service.domain.myProfile.domain.User;
+import site.danjam.mate.user_service.domain.user.domain.Certification;
 
 @Getter
 @AllArgsConstructor
@@ -25,14 +25,14 @@ public class MyProfileDTO {
     private Integer gender; //성별
     private MateProfileDTO mateProfileDTO;
 
-    public static MyProfileDTO from(MyProfile myProfile, User user, MateProfileDTO mateProfileDTO) {
+    public static MyProfileDTO from(User user, Certification certification, MateProfileDTO mateProfileDTO, String major ) {
         return MyProfileDTO.builder()
-                .profileImgUrl(myProfile.getProfileImgUrl())
+                .profileImgUrl(user.getProfileImgUrl())
                 .nickname(user.getNickname())
-                .birth(myProfile.getBirth())
-                .major(myProfile.getMajor())
-                .greeting(myProfile.getGreeting())
-                .mbti(myProfile.getMbti())
+                .birth(user.getBirth())
+                .major(major)
+                .greeting(user.getGreeting())
+                .mbti(user.getMbti())
                 .gender(user.getGender())
                 .mateProfileDTO(mateProfileDTO)
                 .build();

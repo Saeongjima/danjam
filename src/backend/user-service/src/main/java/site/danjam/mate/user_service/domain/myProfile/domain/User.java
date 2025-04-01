@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.common.utils.BaseTimeEntity;
+import site.danjam.mate.user_service.domain.school.domain.School;
 
 @Entity
 @Getter
@@ -50,9 +51,12 @@ public class User extends BaseTimeEntity {
     String greeting;
 
     @Builder
-    public User(String birth, Integer entryYear) {
+    public User(String nickname, Integer gender, String birth, Integer entryYear, Long majorId) {
         this.birth = birth;
         this.entryYear = entryYear;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.majorId = majorId;
     }
 
     public void updateMbti(String mbti) {
@@ -67,8 +71,14 @@ public class User extends BaseTimeEntity {
         this.profileImgUrl = profileImgUrl;
     }
 
-    public void updateSchoolInfo(Integer entryYear) {
+    public void updateSchoolInfo(Integer entryYear, Long schoolId, Long majorId) {
         this.entryYear = entryYear;
+        this.schoolId = schoolId;
+        this.majorId = majorId;
+    }
+
+    public void updateSchool(School school) {
+        this.schoolId = school.getId();
     }
 }
 

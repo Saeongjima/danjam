@@ -39,9 +39,9 @@ public abstract class BaseTimeEntity {
 
     private boolean isDeleted = false;
 
-    public void softDelete(String userName) {
+    public void softDelete(String userId) {
         this.isDeleted = true;
         this.deletedDateTime = LocalDateTime.now();
-        this.deletedBy = userName;
+        this.deletedBy = userId;
     }
 }

@@ -50,7 +50,7 @@ public class Certification extends BaseTimeEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "my_profile_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
@@ -64,7 +64,7 @@ public class Certification extends BaseTimeEntity {
         this.role = role;
     }
 
-    public void updateMyProfile(User user) {
+    public void updateUser(User user) {
         this.user = user;
     }
 

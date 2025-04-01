@@ -27,7 +27,7 @@ import site.danjam.mate.common.response.ApiResponseError;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
-import site.danjam.mate.user_service.domain.user.domain.User;
+import site.danjam.mate.user_service.domain.user.domain.Certification;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.common.exception.RequiredArgumentException;
 
@@ -85,7 +85,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication authentication) {
 
         //유저 정보
-        User user = userRepository.findByUsername(authentication.getName());
+        Certification certification = userRepository.findByUsername(authentication.getName());
 
         //반복자를 이용하여 role을 획득
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -94,11 +94,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         //토큰 생성
-        String accessToken = jwtUtil.createJwt("access", user.getId(), role, EXPIRED_MS);
-        String refreshToken = jwtUtil.createJwt("refresh", user.getId(), role, EXPIRED_MS);
+        String accessToken = jwtUtil.createJwt("access", certification.getId(), role, EXPIRED_MS);
+        String refreshToken = jwtUtil.createJwt("refresh", certification.getId(), role, EXPIRED_MS);
 
         //Refresh 토큰 저장
-        addRefreshToken(user.getId(), refreshToken, EXPIRED_MS);
+        addRefreshToken(certification.getId(), refreshToken, EXPIRED_MS);
 
         //응답 설정
         response.setHeader("access", accessToken);
