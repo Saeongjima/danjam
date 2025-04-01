@@ -11,6 +11,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.GenericFilterBean;
 import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.AccessDeniedException;
 import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.common.exception.ExpiredTokenException;
 import site.danjam.mate.common.exception.InvalidTokenException;

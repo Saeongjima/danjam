@@ -27,8 +27,8 @@ public class Major {
     @Column(nullable = false)
     private String majorName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "school_id")
-    private School school;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "college_id")
+    private College college;
 
 }
