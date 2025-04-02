@@ -15,6 +15,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.common.utils.BaseTimeEntity;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.Filter;
 
 @Entity
 @Getter
@@ -22,6 +26,9 @@ import site.danjam.mate.common.utils.BaseTimeEntity;
 @AllArgsConstructor
 @Table(name = "school")
 @Builder
+@SQLDelete(sql = "UPDATE school SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@FilterDef(name = "deletedSchoolFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedSchoolFilter", condition = "deleted_at is null")
 public class School extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +41,9 @@ public class School extends BaseTimeEntity {
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private List<College> collegeList;
 
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private List<Dormitory> dormitoryList;
+
+    @Column(name = "deleted_at")
+    private java.time.LocalDateTime deletedAt;
 }

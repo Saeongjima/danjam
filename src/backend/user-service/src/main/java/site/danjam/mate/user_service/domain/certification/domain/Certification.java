@@ -16,16 +16,20 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.Filter;
 import site.danjam.mate.common.enums.Role;
 import site.danjam.mate.common.utils.BaseTimeEntity;
 import site.danjam.mate.user_service.domain.user.domain.User;
 
 @Entity
 @Getter
-@Where(clause = "deleted_at is null")
+@FilterDef(name = "deletedCertificationFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedCertificationFilter", condition = "(:isDeleted = true OR is_deleted = false)")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user")
+@Table(name = "certification")
 public class Certification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +59,7 @@ public class Certification extends BaseTimeEntity {
 
     @Builder
     public Certification(String name, String username, String password,
-                         String email, String authImgUrl, Role role) {
+            String email, String authImgUrl, Role role) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -67,7 +71,6 @@ public class Certification extends BaseTimeEntity {
     public void updateUser(User user) {
         this.user = user;
     }
-
 
     public void updateUsername(String username) {
         this.username = username;

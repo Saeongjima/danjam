@@ -38,7 +38,6 @@ public class DataInitializer {
                     .name("korea_sejong")
                     .korName("고려대학교 세종캠퍼스")
                     .collegeList(new ArrayList<>())
-                    .dormitoryList(new ArrayList<>())
                     .build();
             schoolRepository.save(koreaSejong);
 
@@ -47,7 +46,6 @@ public class DataInitializer {
                     .name("hongik_sejong")
                     .korName("홍익대학교 세종캠퍼스")
                     .collegeList(new ArrayList<>())
-                    .dormitoryList(new ArrayList<>())
                     .build();
             schoolRepository.save(hongikSejong);
 
