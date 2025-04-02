@@ -15,7 +15,6 @@ public enum Code {
      */
     SUCCESS(HttpStatus.OK, 0, "성공적으로 처리되었습니다."),
 
-
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, 100, "잘못된 입력값이 존재합니다."),
     MISSING_HEADER(HttpStatus.BAD_REQUEST, 101, "Header에 값이 존재하지 않습니다."),
 
@@ -41,6 +40,8 @@ public enum Code {
     USER_DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, 40104, "이미 사용중인 유저 이름입니다."),
     USER_MISMATCH_ID_PW(HttpStatus.BAD_REQUEST, 40105, "아이디와 비밀번호가 일치하지 않습니다."),
     USER_CAN_NOT_FIND_MAJOR(HttpStatus.BAD_REQUEST, 40106, "해당 학과를 찾을 수 없습니다."),
+    USER_CAN_NOT_FIND_SCHOOL(HttpStatus.BAD_REQUEST, 40107, "해당 학교를 찾을 수 없습니다."),
+    USER_CAN_NOT_FIND_COLLEGE(HttpStatus.BAD_REQUEST, 40108, "단과대학을 찾을 수 없습니다."),
     /**
      * chat_service 관련 400번대
      */
@@ -57,7 +58,7 @@ public enum Code {
      * mate_service 관련 700번대
      */
 
-    //유효하지 않은(잘못된) 입력값(40000 ~ 40099번대)
+    // 유효하지 않은(잘못된) 입력값(40000 ~ 40099번대)
     INVALID_INPUT(HttpStatus.BAD_REQUEST, 40000, "잘못된 값이 존재합니다."),
     INVALID_QUERY_PARAM(HttpStatus.BAD_REQUEST, 40001, "쿼리 파라미터 타입이 일치하지 않습니다."),
     NULL_INPUT_VALUE(HttpStatus.BAD_REQUEST, 40002, "입력값이 없는 항목이 있습니다."),
@@ -65,7 +66,7 @@ public enum Code {
     INVALID_MATE_TYPE(HttpStatus.BAD_REQUEST, 40004, "존재하지 않는 메이트 타입입니다."),
     CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 4005, "해당 리소스를 찾을 수 없습니다."),
 
-    //보안 관련(40300 ~ 40399)
+    // 보안 관련(40300 ~ 40399)
     REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40300, "로그인이 필요합니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 40301, "유효하지 않은 토큰입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 40302, "토큰이 만료되었습니다."),
@@ -73,7 +74,6 @@ public enum Code {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, 40304, "접근 권한이 없습니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 1, "예기치 못한 서버 오류가 발생했습니다.");
-
 
     private final HttpStatus status;
     private final Integer code;

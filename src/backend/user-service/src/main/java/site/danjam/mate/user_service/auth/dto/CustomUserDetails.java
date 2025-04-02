@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.domain.user.domain.Certification;
+import site.danjam.mate.user_service.domain.certification.domain.Certification;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private final Certification certification;

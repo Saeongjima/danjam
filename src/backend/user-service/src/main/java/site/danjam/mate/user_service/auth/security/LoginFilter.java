@@ -27,25 +27,25 @@ import site.danjam.mate.common.response.ApiResponseError;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
-import site.danjam.mate.user_service.domain.user.domain.Certification;
-import site.danjam.mate.user_service.domain.user.repository.UserRepository;
+import site.danjam.mate.user_service.domain.certification.domain.Certification;
+import site.danjam.mate.user_service.domain.certification.repository.CertificationRepository;
 import site.danjam.mate.common.exception.RequiredArgumentException;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final UserRepository userRepository;
+    private final CertificationRepository certificationRepository;
     private final RefreshTokenService refreshTokenService;
     private final Long EXPIRED_MS = 86400000L*100L; //todo - 토큰 만료시간 변경 필요
 
     // 생성자에서 경로 설정
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenService refreshTokenService, UserRepository userRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenService refreshTokenService, CertificationRepository certificationRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshTokenService = refreshTokenService;
         this.setFilterProcessesUrl("/user-service/api/login"); // 경로 설정
-        this.userRepository = userRepository;
+        this.certificationRepository = certificationRepository;
     }
 
     @MethodDescription(description = "로그인 시도를 받아서 AuthenticationManager에게 전달한다.")
@@ -85,7 +85,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication authentication) {
 
         //유저 정보
-        Certification certification = userRepository.findByUsername(authentication.getName());
+        Certification certification = certificationRepository.findByUsername(authentication.getName());
 
         //반복자를 이용하여 role을 획득
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

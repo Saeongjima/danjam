@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import site.danjam.mate.user_service.domain.school.domain.Major;
 
 public interface MajorJpaRepository extends JpaRepository<Major, Long> {
-    Optional<Major> findByMajorNameAndSchoolId(String majorName, Long schoolId);
+    Optional<Major> findByMajorNameAndCollege_School_Id(String majorName, Long schoolId);
 }

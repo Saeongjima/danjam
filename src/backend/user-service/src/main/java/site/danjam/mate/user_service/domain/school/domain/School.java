@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,9 @@ import site.danjam.mate.common.utils.BaseTimeEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "school")
+@Builder
 public class School extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +34,4 @@ public class School extends BaseTimeEntity {
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private List<College> collegeList;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    private List<Dormitory> dormitoryList;
-
-    @Builder
-    public School(String name, String korName) {
-        this.name = name;
-        this.korName = korName;
-    }
 }
