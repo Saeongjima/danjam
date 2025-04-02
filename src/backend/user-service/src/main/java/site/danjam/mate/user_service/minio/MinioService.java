@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.common.exception.MinioException;
+import site.danjam.mate.common.exception.user_service.MinioException;
 import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.common.exception.CanNotFindUserException;
+import site.danjam.mate.common.exception.user_service.CanNotFindUserException;
 import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
 import site.danjam.mate.user_service.auth.security.JWTUtil;

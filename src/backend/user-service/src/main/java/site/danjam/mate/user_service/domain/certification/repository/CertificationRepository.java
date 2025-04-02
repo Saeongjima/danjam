@@ -3,8 +3,8 @@ package site.danjam.mate.user_service.domain.certification.repository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import site.danjam.mate.common.exception.user_service.CanNotFindUserException;
 import site.danjam.mate.user_service.domain.certification.domain.Certification;
-import site.danjam.mate.common.exception.NotFoundUserException;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class CertificationRepository {
     }
 
     public Certification findByUsername(String username) {
-        return certificationJpaRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
+        return certificationJpaRepository.findByUsername(username).orElseThrow(()->new CanNotFindUserException());
     }
 
     public Optional<Certification> findById(Long userId){

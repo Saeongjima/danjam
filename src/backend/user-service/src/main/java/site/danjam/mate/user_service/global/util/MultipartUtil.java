@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.common.exception.MultipartException;
+import site.danjam.mate.common.exception.user_service.MultipartException;
 
 @Component
 public class MultipartUtil {

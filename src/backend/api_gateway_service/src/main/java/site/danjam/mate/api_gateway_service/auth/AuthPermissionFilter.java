@@ -17,10 +17,9 @@ import site.danjam.mate.api_gateway_service.auth.AuthPermissionFilter.Config;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.exception.BaseException;
 import site.danjam.mate.common.exception.Code;
-import site.danjam.mate.common.exception.ExpiredTokenException;
-import site.danjam.mate.common.exception.InvalidTokenException;
-import site.danjam.mate.common.exception.RequiredArgumentException;
-import site.danjam.mate.common.response.ApiResponseData;
+import site.danjam.mate.common.exception.global.ExpiredTokenException;
+import site.danjam.mate.common.exception.global.InvalidTokenException;
+import site.danjam.mate.common.exception.global.RequiredArgumentException;
 import site.danjam.mate.common.response.ApiResponseError;
 
 @Slf4j

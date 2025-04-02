@@ -11,15 +11,14 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.GenericFilterBean;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.common.exception.AccessDeniedException;
 import site.danjam.mate.common.exception.Code;
-import site.danjam.mate.common.exception.ExpiredTokenException;
-import site.danjam.mate.common.exception.InvalidTokenException;
+import site.danjam.mate.common.exception.global.ExpiredTokenException;
+import site.danjam.mate.common.exception.global.InvalidTokenException;
 import site.danjam.mate.common.response.ApiResponseError;
 import site.danjam.mate.common.response.ApiResponseMessage;
 import site.danjam.mate.user_service.auth.service.LogoutService;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
-import site.danjam.mate.common.exception.RequiredArgumentException;
+import site.danjam.mate.common.exception.global.RequiredArgumentException;
 
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {

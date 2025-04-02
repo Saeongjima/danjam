@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.common.exception.CanNotFindResourceException;
-import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.GreetingDTO;
@@ -20,9 +18,9 @@ import site.danjam.mate.user_service.domain.school.domain.School;
 import site.danjam.mate.user_service.domain.school.repository.MajorRepository;
 import site.danjam.mate.user_service.domain.school.repository.SchoolRepository;
 import site.danjam.mate.user_service.domain.certification.domain.Certification;
-import site.danjam.mate.user_service.domain.certification.exception.DuplicateUsernameException;
+import site.danjam.mate.common.exception.user_service.DuplicateUsernameException;
 import site.danjam.mate.user_service.domain.certification.repository.CertificationRepository;
-import site.danjam.mate.common.exception.InvalidInputException;
+import site.danjam.mate.common.exception.global.InvalidInputException;
 import site.danjam.mate.user_service.global.util.MultipartUtil;
 
 @Service

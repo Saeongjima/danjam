@@ -2,7 +2,7 @@ package site.danjam.mate.user_service.domain.school.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import site.danjam.mate.common.exception.CanNotFindResourceException;
+import site.danjam.mate.common.exception.global.CanNotFindResourceException;
 import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.domain.school.domain.College;
 

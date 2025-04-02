@@ -29,7 +29,7 @@ import site.danjam.mate.user_service.auth.dto.LoginInputDTO;
 import site.danjam.mate.user_service.auth.service.RefreshTokenService;
 import site.danjam.mate.user_service.domain.certification.domain.Certification;
 import site.danjam.mate.user_service.domain.certification.repository.CertificationRepository;
-import site.danjam.mate.common.exception.RequiredArgumentException;
+import site.danjam.mate.common.exception.global.RequiredArgumentException;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 

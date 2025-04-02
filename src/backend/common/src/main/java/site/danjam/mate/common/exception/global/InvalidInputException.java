@@ -1,4 +1,7 @@
-package site.danjam.mate.common.exception;
+package site.danjam.mate.common.exception.global;
+
+import site.danjam.mate.common.exception.BaseException;
+import site.danjam.mate.common.exception.Code;
 
 public class InvalidInputException extends BaseException {
 

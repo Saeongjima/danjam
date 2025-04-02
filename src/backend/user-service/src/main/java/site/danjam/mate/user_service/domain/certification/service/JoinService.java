@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.enums.Role;
-import site.danjam.mate.common.exception.CanNotFindResourceException;
-import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.repository.UserRepository;
 import site.danjam.mate.user_service.domain.school.domain.Major;
