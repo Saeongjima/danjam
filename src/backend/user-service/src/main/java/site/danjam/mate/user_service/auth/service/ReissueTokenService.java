@@ -6,13 +6,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.user_service.CanNotFindUserException;
+import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
-import site.danjam.mate.user_service.auth.exception.CanNotFindUserException;
-import site.danjam.mate.user_service.auth.jwt.JWTUtil;
+import site.danjam.mate.user_service.auth.security.JWTUtil;
 import site.danjam.mate.user_service.auth.repository.RefreshTokenRepository;
-import site.danjam.mate.user_service.domain.user.domain.User;
-import site.danjam.mate.user_service.domain.user.repository.UserRepository;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
+import site.danjam.mate.user_service.domain.certification.domain.Certification;
+import site.danjam.mate.user_service.domain.certification.repository.CertificationRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class ReissueTokenService {
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenService refreshTokenService;
-    private final UserRepository userRepository;
+    private final CertificationRepository certificationRepository;
     private final Long EXPIRED_MS = 86400000L*100L; //todo - 토큰 만료시간 변경 필요
 
     @Transactional
@@ -31,7 +32,7 @@ public class ReissueTokenService {
         //RefreshToken 검증 후 가져오기
         RefreshToken refreshToken = refreshTokenService.getRefreshTokenAfterCheck(refreshTokenValue);
 
-        User user = userRepository.findById(refreshToken.getUserId()).orElseThrow(()-> new CanNotFindUserException("토큰의 주인인 유저를 찾을 수 없습니다."));
+        Certification certification = certificationRepository.findById(refreshToken.getUserId()).orElseThrow(()-> new CanNotFindUserException(Code.USER_CAN_NOT_FIND_USER, "토큰의 주인인 유저를 찾을 수 없습니다."));
 
         //기존 토큰 DB에서 삭제
         refreshTokenRepository.deleteRefreshToken(refreshTokenValue);
@@ -40,11 +41,11 @@ public class ReissueTokenService {
         refreshTokenService.removeRefreshTokenCookie(response);
 
         //토큰 생성
-        String newAccessToken = jwtUtil.createJwt("access", user.getId(), user.getRole().toString(), EXPIRED_MS);
-        String newRefreshToken = jwtUtil.createJwt("refresh", user.getId(), user.getRole().toString(), EXPIRED_MS);
+        String newAccessToken = jwtUtil.createJwt("access", certification.getId(), certification.getRole().toString(), EXPIRED_MS);
+        String newRefreshToken = jwtUtil.createJwt("refresh", certification.getId(), certification.getRole().toString(), EXPIRED_MS);
 
         //토큰 DB에 저장
-        refreshTokenRepository.save(new RefreshToken(user.getId(),newRefreshToken,EXPIRED_MS));
+        refreshTokenRepository.save(new RefreshToken(certification.getId(),newRefreshToken,EXPIRED_MS));
 
         //토큰 응답 헤더, 쿠키에 저장
         response.setHeader("access", newAccessToken);

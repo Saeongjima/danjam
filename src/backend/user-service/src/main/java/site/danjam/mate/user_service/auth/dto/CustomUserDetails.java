@@ -5,38 +5,37 @@ import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import site.danjam.mate.user_service.domain.user.domain.User;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.user_service.domain.certification.domain.Certification;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private final User user;
+    private final Certification certification;
 
     @MethodDescription(description = "user를 반환합니다.")
-    public User getUser() {
-        return user;
+    public Certification getCertification() {
+        return certification;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> user.getRole().name());
+        return Collections.singleton(() -> certification.getRole().name());
     }
 
     @MethodDescription(description = "password를 반환합니다.")
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return certification.getPassword();
     }
 
     @MethodDescription(description = "username을 반환합니다.")
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return certification.getUsername();
     }
 
     @MethodDescription(description = "id를 반환합니다.")
     public Long getId() {
-        return user.getId();
+        return certification.getId();
     }
 
     //UserDetails 인터페이스의 메소드들

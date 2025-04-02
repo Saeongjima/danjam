@@ -34,12 +34,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly 'org.projectlombok:lombok'
 
     // Database
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
@@ -67,15 +67,14 @@ dependencies {
     //openfeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+    //common
+    implementation project(':common')
+
     //Fake Data
     implementation ('com.github.javafaker:javafaker:1.0.2') { exclude module: 'snakeyaml' }
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.2'
 
-    // queryDSL
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
 }
 
 // Spring Cloud Dependency Management
@@ -89,18 +88,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// QueryDSL
-def querydslDir = 'src/main/generated'
-
-//Q 클래스 생성 위치
-sourceSets {
-    main.java.srcDirs += [ querydslDir ]
-}
-
-tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-}
-
-clean.doLast {
-    file(querydslDir).deleteDir()
-}

@@ -32,16 +32,16 @@ public abstract class BaseTimeEntity {
     @Column(length = 100)
     private String modifiedBy;
 
-    private LocalDateTime deletedAt;
+    private LocalDateTime deletedDateTime;
 
     @Column(length = 100)
     private String deletedBy;
 
     private boolean isDeleted = false;
 
-    public void softDelete(String userName) {
+    public void softDelete(String userId) {
         this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now();
-        this.deletedBy = userName;
+        this.deletedDateTime = LocalDateTime.now();
+        this.deletedBy = userId;
     }
 }

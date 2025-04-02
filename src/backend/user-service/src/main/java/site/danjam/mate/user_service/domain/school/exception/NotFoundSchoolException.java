@@ -1,11 +1,11 @@
 package site.danjam.mate.user_service.domain.school.exception;
 
-import static site.danjam.mate.user_service.global.exception.Code.NO_MATCHING_SCHOOL_FOUND;
 
-import site.danjam.mate.user_service.global.exception.BaseException;
+import site.danjam.mate.common.exception.BaseException;
+import site.danjam.mate.common.exception.Code;
 
 public class NotFoundSchoolException extends BaseException {
     public NotFoundSchoolException() {
-        super(NO_MATCHING_SCHOOL_FOUND);
+        super(Code.USER_NO_MATCHING_SCHOOL_FOUND);
     }
 }

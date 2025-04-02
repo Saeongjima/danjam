@@ -17,14 +17,13 @@ public class GlobalSecurityContextFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String username = request.getHeader("X-USER-NAME");
         String role = request.getHeader("X-USER-ROLE");
         String userId = request.getHeader("X-USER-ID");
 
-        if (username != null && role != null && userId != null) {
+        if (role != null && userId != null) {
             try {
                 Long id = Long.parseLong(userId);
-                GlobalCustomUserDetails customUserDetails = new GlobalCustomUserDetails(username, role, id);
+                GlobalCustomUserDetails customUserDetails = new GlobalCustomUserDetails(role, id);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, null,
                         customUserDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);

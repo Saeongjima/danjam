@@ -9,8 +9,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.global.exception.MultipartException;
+import site.danjam.mate.common.annotation.MethodDescription;
+import site.danjam.mate.common.exception.user_service.MultipartException;
 
 @Component
 public class MultipartUtil {

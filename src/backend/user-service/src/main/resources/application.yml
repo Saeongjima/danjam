@@ -18,7 +18,7 @@ spring:
     password: ${DATABASE_PASSWORD:fake_password}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:

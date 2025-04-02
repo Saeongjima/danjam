@@ -3,10 +3,8 @@ package site.danjam.mate.user_service.auth.repository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.user_service.auth.domain.RefreshToken;
-import site.danjam.mate.user_service.auth.exception.CanNotFindTokenException;
-import site.danjam.mate.user_service.auth.exception.InValidTokenException;
-import site.danjam.mate.user_service.global.common.annotation.MethodDescription;
 
 @Repository
 @RequiredArgsConstructor
