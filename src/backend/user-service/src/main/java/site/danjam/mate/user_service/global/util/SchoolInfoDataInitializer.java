@@ -3,9 +3,13 @@ package site.danjam.mate.user_service.global.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import site.danjam.mate.user_service.domain.school.domain.College;
 import site.danjam.mate.user_service.domain.school.domain.Major;
 import site.danjam.mate.user_service.domain.school.domain.School;
@@ -21,7 +25,8 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class SchoolInfoDataInitializer {
+@Order(1) // 먼저 실행되도록 순서 지정
+public class SchoolInfoDataInitializer implements ApplicationRunner {
 
     private final SchoolRepository schoolRepository;
     private final CollegeRepository collegeRepository;
@@ -122,5 +127,10 @@ public class SchoolInfoDataInitializer {
                 throw new RuntimeException("Failed to read hongik_sejong.json", e);
             }
         }
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        init();
     }
 }

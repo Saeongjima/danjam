@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.exception.global.CanNotFindResourceException;
 import site.danjam.mate.common.exception.Code;
 import site.danjam.mate.user_service.domain.school.domain.Major;
@@ -28,5 +29,9 @@ public class MajorRepository {
     public Major findByMajorNameAndSchoolId(String majorName, Long schoolId) {
         return jpaRepository.findByMajorNameAndCollege_School_Id(majorName, schoolId)
                 .orElseThrow(() -> new CanNotFindResourceException(Code.USER_CAN_NOT_FIND_MAJOR));
+    }
+
+    public List<Major> findAll() {
+        return jpaRepository.findAll();
     }
 }
