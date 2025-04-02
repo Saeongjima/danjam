@@ -1,6 +1,5 @@
-package site.danjam.mate.user_service.config;
+package site.danjam.mate.user_service.global.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class DataInitializer {
+public class SchoolInfoDataInitializer {
 
     private final SchoolRepository schoolRepository;
     private final CollegeRepository collegeRepository;

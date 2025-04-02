@@ -26,7 +26,4 @@ public class SchoolRepository {
         return schoolJpaRepository.findAll();
     }
 
-    public School save(School school){
-        return schoolJpaRepository.save(school);
-    }
 }

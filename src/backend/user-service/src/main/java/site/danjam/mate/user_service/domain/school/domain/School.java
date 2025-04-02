@@ -26,9 +26,8 @@ import org.hibernate.annotations.Filter;
 @AllArgsConstructor
 @Table(name = "school")
 @Builder
-@SQLDelete(sql = "UPDATE school SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @FilterDef(name = "deletedSchoolFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
-@Filter(name = "deletedSchoolFilter", condition = "deleted_at is null")
+@Filter(name = "deletedCertificationFilter", condition = "(:isDeleted = true)")
 public class School extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +39,6 @@ public class School extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private List<College> collegeList;
-
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    private List<Dormitory> dormitoryList;
 
     @Column(name = "deleted_at")
     private java.time.LocalDateTime deletedAt;
