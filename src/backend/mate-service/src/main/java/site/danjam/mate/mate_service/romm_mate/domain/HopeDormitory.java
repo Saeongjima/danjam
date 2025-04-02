@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 
 @Entity
-@Getter @Setter
+@Getter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

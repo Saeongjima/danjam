@@ -25,4 +25,8 @@ public class SchoolRepository {
     public List<School> findAll() {
         return schoolJpaRepository.findAll();
     }
+
+    public School save(School school){
+        return schoolJpaRepository.save(school);
+    }
 }

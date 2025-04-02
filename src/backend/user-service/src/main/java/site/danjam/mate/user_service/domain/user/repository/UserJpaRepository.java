@@ -8,3 +8,4 @@ import site.danjam.mate.user_service.domain.user.domain.User;
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     boolean existsByNickname(String nickName);
 }
+

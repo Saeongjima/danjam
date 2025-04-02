@@ -6,30 +6,36 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import site.danjam.mate.mate_service.global.common.annotation.MethodDescription;
-import site.danjam.mate.mate_service.mate.domain.MateProfile;
+import site.danjam.mate.mate_service.global.common.entity.BaseTimeEntity;
 import site.danjam.mate.mate_service.romm_mate.dto.RoomMateProfileInputDTO;
 import site.danjam.mate.mate_service.romm_mate.enums.ActivityTime;
 import site.danjam.mate.mate_service.romm_mate.enums.CleanPeriod;
 import site.danjam.mate.mate_service.romm_mate.enums.Level;
 import site.danjam.mate.mate_service.romm_mate.enums.ShowerTime;
-import site.danjam.mate.mate_service.romm_mate.enums.SleepHabit;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder
-public class RoomMateProfile extends MateProfile {
+public class RoomMateProfile extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Column(nullable = false)
     private String isSmoking; // Y: 흡연, N: 비흡연
@@ -52,7 +58,10 @@ public class RoomMateProfile extends MateProfile {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    ShowerTime showerTime; // _10_20분, _20_30분, _30_40분, _40분이상
+    private ShowerTime showerTime; // _10_20분, _20_30분, _30_40분, _40분이상
+
+    @Column(nullable = false, unique = true)
+    private Long userId;
 
     @OneToMany(mappedBy = "roomMateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HopeDormitory> hopeDormitories;

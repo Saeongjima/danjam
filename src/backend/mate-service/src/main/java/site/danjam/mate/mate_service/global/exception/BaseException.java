@@ -1,5 +1,7 @@
 package site.danjam.mate.mate_service.global.exception;
 
+import static site.danjam.mate.mate_service.global.exception.Code.INTERNAL_SERVER_ERROR;
+
 import lombok.Getter;
 
 @Getter
@@ -9,26 +11,26 @@ public class BaseException extends RuntimeException {
 
     // 기본 생성자에서는 일반적인 에러 코드를 사용
     public BaseException() {
-        super(Code.INTERNAL_SERVER_ERROR.getMessage());
-        this.errorCode = Code.INTERNAL_SERVER_ERROR;
+        super(INTERNAL_SERVER_ERROR.getMessage());
+        this.errorCode = INTERNAL_SERVER_ERROR;
     }
 
     // 에러 메시지를 받는 생성자
     public BaseException(String message) {
         super(message);
-        this.errorCode = Code.INTERNAL_SERVER_ERROR;
+        this.errorCode = INTERNAL_SERVER_ERROR;
     }
 
     // 에러 메시지와 원인을 받는 생성자
     public BaseException(String message, Throwable cause) {
         super(message, cause);
-        this.errorCode = Code.INTERNAL_SERVER_ERROR;
+        this.errorCode = INTERNAL_SERVER_ERROR;
     }
 
     // 원인만을 받는 생성자
     public BaseException(Throwable cause) {
         super(cause);
-        this.errorCode = Code.INTERNAL_SERVER_ERROR;
+        this.errorCode = INTERNAL_SERVER_ERROR;
     }
 
     // 에러 코드를 지정하는 생성자
