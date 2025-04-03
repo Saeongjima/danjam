@@ -1,5 +1,6 @@
 package site.danjam.mate.common.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,10 @@ import site.danjam.mate.common.exception.Code;
 @AllArgsConstructor
 public class ApiResponseError {
 
+    @Schema(description = "응답 코드")
     private Integer code;
+
+    @Schema(description = "응답 메시지")
     private String message;
 
     public static ApiResponseError of(Code code) {

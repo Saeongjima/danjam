@@ -27,13 +27,13 @@ import site.danjam.mate.user_service.domain.certification.service.JoinService;
 public class JoinController {
     private final JoinService joinService;
 
+    @PostMapping(value = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "회원가입", description = "새로운 사용자를 등록합니다. 인증 이미지는 선택적으로 업로드할 수 있습니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
     })
-    @PostMapping(value = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ApiResponseMessage> signup(
             @Parameter(description = "회원가입 정보", required = true) @RequestPart @Valid JoinDTO joinDto,
 
