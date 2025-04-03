@@ -23,7 +23,7 @@ import org.hibernate.annotations.Filter;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "school")
 @Builder
 @FilterDef(name = "deletedSchoolFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
@@ -39,7 +39,4 @@ public class School extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private List<College> collegeList;
-
-    @Column(name = "deleted_at")
-    private java.time.LocalDateTime deletedAt;
 }

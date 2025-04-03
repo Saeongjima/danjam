@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "college")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class College {
 
