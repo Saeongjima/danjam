@@ -11,19 +11,19 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class SchoolRepository {
-    private final SchoolJpaRepository schoolJpaRepository;
+    private final SchoolJpaRepository jpaRepository;
 
     public School findById(Long id) {
-        return schoolJpaRepository.findById(id)
+        return jpaRepository.findById(id)
                 .orElseThrow(() -> new CanNotFindResourceException(Code.USER_CAN_NOT_FIND_SCHOOL));
     }
 
     public School save(School school) {
-        return schoolJpaRepository.save(school);
+        return jpaRepository.save(school);
     }
 
     public List<School> findAll() {
-        return schoolJpaRepository.findAll();
+        return jpaRepository.findAll();
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +22,20 @@ public class GlobalSecurityConfig {
 
     @Bean
     public SecurityFilterChain globalSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        // CORS 설정 todo: 특정 도메인만 허용하도록 수정해야함
+        http
+                .cors((cors) -> cors
+                        .configurationSource(request -> {
+                            CorsConfiguration config = new CorsConfiguration();
+                            config.addAllowedOriginPattern("*");
+                            config.addAllowedMethod("*");
+                            config.addAllowedHeader("*");
+                            config.setAllowCredentials(true);
+                            return config;
+                        }))
+                .csrf(csrf -> csrf.disable());
+
         http
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())  // 로그인 페이지 비활성화

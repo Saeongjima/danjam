@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.response.ApiResponseData;
 import site.danjam.mate.common.response.ApiResponseMessage;
+import site.danjam.mate.common.security.GlobalCustomUserDetails;
+import site.danjam.mate.user_service.auth.dto.CustomUserDetails;
 import site.danjam.mate.user_service.domain.user.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.user.dto.MyProfileDTO;
 import site.danjam.mate.user_service.domain.user.dto.UpdateLoginDTO;
@@ -22,16 +26,16 @@ import site.danjam.mate.user_service.domain.user.dto.UpdateSchoolDTO;
 import site.danjam.mate.user_service.domain.user.service.MyProfileInfoService;
 
 @RestController
-@RequestMapping("/api/myProfile")
+@RequestMapping("user-service/api/my-profile")
 @RequiredArgsConstructor
 public class MyProfileController {
 
     private final MyProfileInfoService myProfileInfoService;
 
     @GetMapping
-    public ResponseEntity<ApiResponseData<MyProfileDTO>> readMyProfile(
-            @RequestHeader("username") String username) {
-        return ResponseEntity.ok(ApiResponseData.of(myProfileInfoService.readMyProfileInfo(username), "마이프로필 조회 성공"));
+    @PreAuthorize("hasAnyRole('STRANGER','AUTH_USER')")
+    public ResponseEntity<ApiResponseData<MyProfileDTO>> readMyProfile(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails) {
+        return ResponseEntity.ok(ApiResponseData.of(myProfileInfoService.readMyProfileInfo(globalCustomUserDetails.getUserId()), "마이프로필 조회 성공"));
     }
 
     @PatchMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE,

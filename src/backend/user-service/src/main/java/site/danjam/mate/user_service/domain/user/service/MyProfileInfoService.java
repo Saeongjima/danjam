@@ -41,12 +41,11 @@ public class MyProfileInfoService {
 
     @MethodDescription(description = "유저 마이 프로필 정보를 조회합니다.")
     @Transactional(readOnly = true)
-    public MyProfileDTO readMyProfileInfo(String username) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
-        MateProfileDTO mate = mateStatusClient.getMateProfile(username);
-        Major major = majorRepository.findById(user.getMajorId()).orElse(null);
-        return MyProfileDTO.from(user, certification, mate, major.getMajorName());
+    public MyProfileDTO readMyProfileInfo(Long userId) {
+
+        User user = userRepository.findById(userId);
+        Major major = majorRepository.findById(user.getMajorId());
+        return MyProfileDTO.from(user,major);
     }
 
     @MethodDescription(description = "마이프로필 로그인정보(username, password, profileImg) 를 수정합니다.")

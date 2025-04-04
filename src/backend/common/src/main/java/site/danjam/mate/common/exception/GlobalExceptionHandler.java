@@ -1,5 +1,6 @@
 package site.danjam.mate.common.exception;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import java.util.List;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.response.ApiResponseError;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -1,5 +1,6 @@
 package site.danjam.mate.common.exception;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
+@Schema(description = "응답 코드")
 public enum Code {
 
     /**

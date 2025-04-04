@@ -1,6 +1,9 @@
 package site.danjam.mate.user_service.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.security.GlobalSecurityContextFilter;
 import site.danjam.mate.user_service.auth.security.CustomLogoutFilter;
@@ -58,6 +63,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterCHain(HttpSecurity http) throws Exception {
+
+        // CORS 설정 todo: 특정 도메인만 허용하도록 수정해야함
+        http
+                .cors((cors) -> cors
+                        .configurationSource(request -> {
+                            CorsConfiguration config = new CorsConfiguration();
+                            config.addAllowedOriginPattern("*");
+                            config.addAllowedMethod("*");
+                            config.addAllowedHeader("*");
+                            config.setAllowCredentials(true);
+                            return config;
+                        }))
+                .csrf(csrf -> csrf.disable());
 
         //csrf disable. 세션방식에서는 항상 고정되기 때문에 방어해야 하지만, jwt방식은 stateless하기 때문에 disable해도 된다.
         http

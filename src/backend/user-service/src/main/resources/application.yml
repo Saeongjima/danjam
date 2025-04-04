@@ -18,7 +18,7 @@ spring:
     password: ${DATABASE_PASSWORD:fake_password}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
@@ -51,3 +51,11 @@ eureka:
       defaultZone: ${EUREKA_SERVER_URL:http://fake-eureka-server:8761/eureka}
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+springdoc:
+  default-produces-media-type: application/json
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
