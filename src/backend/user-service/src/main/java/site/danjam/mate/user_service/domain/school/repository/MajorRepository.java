@@ -15,8 +15,8 @@ import site.danjam.mate.user_service.domain.school.domain.Major;
 public class MajorRepository {
     private final MajorJpaRepository jpaRepository;
 
-    public Optional<Major> findById(Long id) {
-        return jpaRepository.findById(id);
+    public Major findById(Long id) {
+        return jpaRepository.findById(id).orElseThrow(()-> new CanNotFindResourceException(Code.USER_CAN_NOT_FIND_MAJOR));
     }
 
     public Major save(Major major) {

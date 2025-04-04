@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
+import site.danjam.mate.user_service.domain.school.domain.Major;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.certification.domain.Certification;
+import site.danjam.mate.user_service.global.util.DisplayDataConvertor;
 
 @Getter
 @AllArgsConstructor
@@ -19,22 +21,23 @@ public class MyProfileDTO {
     private String birth; //생년월일
     private String major; //전공
     private String greeting; //소개글
+    private String entryYear; //입학년도
 
     //태그 정보
     private String mbti; // mbti
     private Integer gender; //성별
     private MateProfileDTO mateProfileDTO;
 
-    public static MyProfileDTO from(User user, Certification certification, MateProfileDTO mateProfileDTO, String major ) {
+    public static MyProfileDTO from(User user, Major major  ) {
         return MyProfileDTO.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .nickname(user.getNickname())
-                .birth(user.getBirth())
-                .major(major)
+                .birth(DisplayDataConvertor.displayBirthYear(user.getBirth()))
+                .entryYear(DisplayDataConvertor.displayEntryYear(user.getEntryYear()))
+                .major(major.getMajorName())
                 .greeting(user.getGreeting())
                 .mbti(user.getMbti())
                 .gender(user.getGender())
-                .mateProfileDTO(mateProfileDTO)
                 .build();
     }
 }

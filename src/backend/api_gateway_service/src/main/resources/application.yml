@@ -42,20 +42,34 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/user-service/**
+            - Path=/user-service/api/**
           filters:
             - name: AuthPermissionFilter
         - id: mate-service
           uri: lb://mate-service
           predicates:
-            - Path=/mate-service/**
+            - Path=/mate-service/api/**
           filters:
             - name: AuthPermissionFilter
         - id: schedule-service
           uri: lb://schedule-service
           predicates:
-            - Path=/schedule-service/**
+            - Path=/schedule-service/api/**
           filters:
             - name: AuthPermissionFilter
+
+        # swagger-ui 요청 매핑
+        - id: user-service-swagger
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/v3/api-docs
+          filters:
+            - StripPrefix=1
   jwt:
     secret: ${SPRING_JWT_SECRET}
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: user-service
+        url: /user-service/v3/api-docs
