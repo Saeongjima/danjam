@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import site.danjam.mate.common.annotation.MethodDescription;
 import site.danjam.mate.common.exception.global.CanNotFindResourceException;
 import site.danjam.mate.common.exception.Code;
+import site.danjam.mate.user_service.domain.school.domain.College;
 import site.danjam.mate.user_service.domain.school.domain.Major;
 
 @Repository
@@ -22,10 +23,6 @@ public class MajorRepository {
         return jpaRepository.save(major);
     }
 
-    public List<Major> saveAll(List<Major> majors) {
-        return jpaRepository.saveAll(majors);
-    }
-
     public Major findByMajorNameAndSchoolId(String majorName, Long schoolId) {
         return jpaRepository.findByMajorNameAndCollege_School_Id(majorName, schoolId)
                 .orElseThrow(() -> new CanNotFindResourceException(Code.USER_CAN_NOT_FIND_MAJOR));
@@ -33,5 +30,9 @@ public class MajorRepository {
 
     public List<Major> findAll() {
         return jpaRepository.findAll();
+    }
+
+    public List<Major> findAllByCollegeIn(List<College> collegeList) {
+        return jpaRepository.findAllByCollegeIn(collegeList);
     }
 }
