@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.response.ApiResponseData;
 import site.danjam.mate.common.response.ApiResponseMessage;
+import site.danjam.mate.common.security.GlobalCustomUserDetails;
 import site.danjam.mate.user_service.auth.dto.CustomUserDetails;
 import site.danjam.mate.user_service.domain.user.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.user.dto.MyProfileDTO;
@@ -33,8 +34,8 @@ public class MyProfileController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('STRANGER','AUTH_USER')")
-    public ResponseEntity<ApiResponseData<MyProfileDTO>> readMyProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        return ResponseEntity.ok(ApiResponseData.of(myProfileInfoService.readMyProfileInfo(customUserDetails.getId()), "마이프로필 조회 성공"));
+    public ResponseEntity<ApiResponseData<MyProfileDTO>> readMyProfile(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails) {
+        return ResponseEntity.ok(ApiResponseData.of(myProfileInfoService.readMyProfileInfo(globalCustomUserDetails.getUserId()), "마이프로필 조회 성공"));
     }
 
     @PatchMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE,
