@@ -1,5 +1,11 @@
 package site.danjam.mate.user_service.domain.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.response.ApiResponseData;
+import site.danjam.mate.common.response.ApiResponseError;
 import site.danjam.mate.common.response.ApiResponseMessage;
 import site.danjam.mate.common.security.GlobalCustomUserDetails;
-import site.danjam.mate.user_service.auth.dto.CustomUserDetails;
 import site.danjam.mate.user_service.domain.user.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.user.dto.MyProfileDTO;
 import site.danjam.mate.user_service.domain.user.dto.UpdateLoginDTO;
@@ -28,14 +34,34 @@ import site.danjam.mate.user_service.domain.user.service.MyProfileInfoService;
 @RestController
 @RequestMapping("user-service/api/my-profile")
 @RequiredArgsConstructor
+@Tag(name="마이프로필", description = "마이프로필 관련 API")
 public class MyProfileController {
 
     private final MyProfileInfoService myProfileInfoService;
 
+    @Operation(summary = "마이프로필 조회", description = "마이프로필을 조회합니다.\n\n응답 코드 예시:\n- 0: 성공적으로 처리되었습니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "0: 성공적으로 처리되었습니다.", content = @Content(schema = @Schema(implementation = ApiResponseData.class))),
+            @ApiResponse(responseCode = "400", description = "100: 잘못된 입력값이 존재합니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class))),
+            @ApiResponse(responseCode = "500", description = "1: 예기치 못한 서버 오류가 발생했습니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class)))
+    })
     @GetMapping
     @PreAuthorize("hasAnyRole('STRANGER','AUTH_USER')")
     public ResponseEntity<ApiResponseData<MyProfileDTO>> readMyProfile(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails) {
         return ResponseEntity.ok(ApiResponseData.of(myProfileInfoService.readMyProfileInfo(globalCustomUserDetails.getUserId()), "마이프로필 조회 성공"));
+    }
+
+    @Operation(summary = "마이프로필 기본정보 입력(mbti, 인삿말)", description = "마이프로필 기본정보를 입력합니다.\n\n응답 코드 예시:\n- 0: 성공적으로 처리되었습니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "0: 성공적으로 처리되었습니다.", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
+            @ApiResponse(responseCode = "400", description = "100: 잘못된 입력값이 존재합니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class))),
+            @ApiResponse(responseCode = "500", description = "1: 예기치 못한 서버 오류가 발생했습니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class)))
+    })
+    @PatchMapping("/basic-info")
+    public ResponseEntity<ApiResponseMessage> updateBasicInfo(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails,
+                                                                 @RequestBody @Valid GreetingDTO dto) {
+        myProfileInfoService.updateBasicInfo(globalCustomUserDetails.getUserId(), dto);
+        return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
     }
 
     @PatchMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE,
@@ -53,13 +79,6 @@ public class MyProfileController {
                                                                @RequestPart @Valid UpdateSchoolDTO dto,
                                                                @RequestPart(required = false) MultipartFile file) {
         myProfileInfoService.updateSchoolInfo(username, dto, file);
-        return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
-    }
-
-    @PatchMapping("/greeting")
-    public ResponseEntity<ApiResponseMessage> updateGreetingInfo(@RequestHeader("username") String username,
-                                                                 @RequestBody @Valid GreetingDTO dto) {
-        myProfileInfoService.updateGreeting(username, dto);
         return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
     }
 

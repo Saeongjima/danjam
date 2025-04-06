@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.user.dto.MyProfileDTO;
@@ -92,10 +91,10 @@ public class MyProfileInfoService {
     }
 
     @MethodDescription(description = "사용자의 mbti와 소개글을 수정합니다.")
-    public void updateGreeting(String username, GreetingDTO dto) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
+    @Transactional
+    public void updateBasicInfo(Long userId, GreetingDTO dto) {
 
+        User user = userRepository.findById(userId);
         user.updateGreeting(dto.getGreeting());
         user.updateMbti(dto.getMbti());
 
