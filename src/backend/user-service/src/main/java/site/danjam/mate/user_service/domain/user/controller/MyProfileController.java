@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,30 +58,41 @@ public class MyProfileController {
             @ApiResponse(responseCode = "400", description = "100: 잘못된 입력값이 존재합니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class))),
             @ApiResponse(responseCode = "500", description = "1: 예기치 못한 서버 오류가 발생했습니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class)))
     })
-    @PatchMapping("/basic-info")
+    @PutMapping("/basic-info")
     public ResponseEntity<ApiResponseMessage> updateBasicInfo(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails,
                                                                  @RequestBody @Valid GreetingDTO dto) {
         myProfileInfoService.updateBasicInfo(globalCustomUserDetails.getUserId(), dto);
         return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
     }
 
-    @PatchMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE,
+    @Operation(summary = "학교 정보 수정(학교, 학과, 인증 이미지)", description = "학교 정보를 수정합니다. 유저의 학교, 학과, 인증 이미지 수정.\n\n응답 코드 예시:\n- 0: 성공적으로 처리되었습니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "0: 성공적으로 처리되었습니다.", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
+            @ApiResponse(responseCode = "400", description = "100: 잘못된 입력값이 존재합니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class))),
+            @ApiResponse(responseCode = "500", description = "1: 예기치 못한 서버 오류가 발생했습니다.", content = @Content(schema = @Schema(implementation = ApiResponseError.class)))
+    })
+    @PutMapping(value = "/school", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponseMessage> updateLoginInfo(@RequestHeader("username") String username,
-                                                              @RequestPart UpdateLoginDTO dto,
-                                                              @RequestPart(required = false) MultipartFile file) {
-        myProfileInfoService.updateLoginInfo(username, dto, file);
+    public ResponseEntity<ApiResponseMessage> updateSchoolInfo(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails,
+                                                               @RequestPart @Valid UpdateSchoolDTO dto,
+                                                               @RequestPart(required = false) MultipartFile file) {
+        myProfileInfoService.updateSchoolInfo(globalCustomUserDetails.getUserId(), dto, file);
         return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
     }
 
-    @PatchMapping(value = "/school", consumes = {MediaType.APPLICATION_JSON_VALUE,
+
+    @PutMapping(value = "/login-info", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponseMessage> updateSchoolInfo(@RequestHeader("username") String username,
-                                                               @RequestPart @Valid UpdateSchoolDTO dto,
-                                                               @RequestPart(required = false) MultipartFile file) {
-        myProfileInfoService.updateSchoolInfo(username, dto, file);
+    public ResponseEntity<ApiResponseMessage> updateLoginInfo(@AuthenticationPrincipal GlobalCustomUserDetails globalCustomUserDetails,
+                                                              @RequestPart UpdateLoginDTO dto,
+                                                              @RequestPart(required = false) MultipartFile file) {
+        myProfileInfoService.updateLoginInfo(globalCustomUserDetails.getUserId(), dto, file);
         return ResponseEntity.ok(ApiResponseMessage.of("회원정보가 정상적으로 업데이트 되었습니다."));
     }
+
+    //todo - 프로필 이미지 수정 api 추가
+
+
 
     @DeleteMapping
     public ResponseEntity<ApiResponseMessage> deleteUser(@RequestHeader("username") String username,

@@ -47,49 +47,6 @@ public class MyProfileInfoService {
         return MyProfileDTO.from(user,major);
     }
 
-    @MethodDescription(description = "마이프로필 로그인정보(username, password, profileImg) 를 수정합니다.")
-    public void updateLoginInfo(String username, UpdateLoginDTO dto, MultipartFile file) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
-
-        if (file != null && !file.isEmpty()) {
-            user.updateProfileImg(multipartUtil.determineFileName(file, username, SUFFIX, PROFILE_BUCKET_NAME));
-            userRepository.save(user);
-        }
-
-        if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
-            if (certificationRepository.existsByUsername(dto.getUsername())) {
-                throw new DuplicateUsernameException();
-            }
-            certification.updateUsername(username);
-        }
-
-        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            certification.updatePassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-        }
-
-        certificationRepository.save(certification);
-    }
-
-    @MethodDescription(description = "사용자의 학교 정보를 수정합니다.")
-    public void updateSchoolInfo(String username, UpdateSchoolDTO dto, MultipartFile file) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
-        School school = schoolRepository.findById(dto.getSchoolId());
-
-        if (file == null || file.isEmpty()) {
-            throw new InvalidInputException("학교 인증 사진이 존재하지 않습니다.");
-        }
-
-        certification.updateAuthImgUrl(multipartUtil.determineFileName(file, username, SUFFIX, AUTH_BUCKET_NAME));
-        user.updateSchool(school);
-        Major major = majorRepository.findByMajorNameAndSchoolId(dto.getMajor(), school.getId());
-        user.updateSchoolInfo(dto.getEntryYear(), school.getId(), major.getId());
-
-        certificationRepository.save(certification);
-        userRepository.save(user);
-    }
-
     @MethodDescription(description = "사용자의 mbti와 소개글을 수정합니다.")
     @Transactional
     public void updateBasicInfo(Long userId, GreetingDTO dto) {
@@ -100,6 +57,52 @@ public class MyProfileInfoService {
 
         userRepository.save(user);
     }
+
+    @Transactional
+    @MethodDescription(description = "마이프로필 로그인정보(username, password, profileImg) 를 수정합니다.")
+    public void updateLoginInfo(Long userId, UpdateLoginDTO dto, MultipartFile file) {
+        Certification certification = certificationRepository.findByUserId(userId);
+        User user = userRepository.findById(userId);
+
+        if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
+            if (certificationRepository.existsByUsername(dto.getUsername())) {
+                throw new DuplicateUsernameException();
+            }
+            certification.updateUsername(dto.getUsername());
+        }
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            certification.updatePassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        }
+
+        certificationRepository.save(certification);
+
+        if (file != null && !file.isEmpty()) {
+            user.updateProfileImg(multipartUtil.determineFileName(file, certification.getUsername(), SUFFIX, PROFILE_BUCKET_NAME));
+            userRepository.save(user);
+        }
+
+    }
+
+    @MethodDescription(description = "사용자의 학교 정보를 수정합니다.")
+    public void updateSchoolInfo(Long userId, UpdateSchoolDTO dto, MultipartFile file) {
+        Certification certification = certificationRepository.findByUserId(userId);
+        User user = userRepository.findById(userId);
+        School school = schoolRepository.findById(dto.getSchoolId());
+
+        if (file == null || file.isEmpty()) {
+            throw new InvalidInputException("학교 인증 사진이 존재하지 않습니다.");
+        }
+
+        certification.updateAuthImgUrl(multipartUtil.determineFileName(file, certification.getUsername(), SUFFIX, AUTH_BUCKET_NAME));
+        user.updateSchool(school);
+        Major major = majorRepository.findByMajorNameAndSchoolId(dto.getMajor(), school.getId());
+        user.updateSchoolInfo(dto.getEntryYear(), school.getId(), major.getId());
+
+        certificationRepository.save(certification);
+        userRepository.save(user);
+    }
+
 
     @MethodDescription(description = "회원을 탈퇴합니다.")
     public void deleteUser(String username, UpdateLoginDTO dto) {

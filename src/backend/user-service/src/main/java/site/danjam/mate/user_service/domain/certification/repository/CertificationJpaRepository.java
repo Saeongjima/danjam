@@ -10,4 +10,6 @@ public interface CertificationJpaRepository extends JpaRepository<Certification,
     boolean existsByEmail(String email);
 
     Optional<Certification> findByUsername(String username);
+
+    Optional<Certification> findByUserId(Long userId);
 }
