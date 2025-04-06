@@ -104,13 +104,4 @@ public class MyProfileInfoService {
     }
 
 
-    @MethodDescription(description = "회원을 탈퇴합니다.")
-    public void deleteUser(String username, UpdateLoginDTO dto) {
-        Certification certification = certificationRepository.findByUsername(username);
-        if (!bCryptPasswordEncoder.matches(dto.getPassword(), certification.getPassword())) {
-            throw new InvalidInputException("비밀번호가 일치하지 않습니다.");
-        }
-        certification.softDelete(username);
-        certificationRepository.save(certification);
-    }
 }
