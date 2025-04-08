@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.danjam.mate.common.annotation.MethodDescription;
-import site.danjam.mate.user_service.domain.mate.dto.MateProfileDTO;
 import site.danjam.mate.user_service.domain.user.domain.User;
 import site.danjam.mate.user_service.domain.user.dto.GreetingDTO;
 import site.danjam.mate.user_service.domain.user.dto.MyProfileDTO;
@@ -48,21 +47,28 @@ public class MyProfileInfoService {
         return MyProfileDTO.from(user,major);
     }
 
-    @MethodDescription(description = "마이프로필 로그인정보(username, password, profileImg) 를 수정합니다.")
-    public void updateLoginInfo(String username, UpdateLoginDTO dto, MultipartFile file) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
+    @MethodDescription(description = "사용자의 mbti와 소개글을 수정합니다.")
+    @Transactional
+    public void updateBasicInfo(Long userId, GreetingDTO dto) {
 
-        if (file != null && !file.isEmpty()) {
-            user.updateProfileImg(multipartUtil.determineFileName(file, username, SUFFIX, PROFILE_BUCKET_NAME));
-            userRepository.save(user);
-        }
+        User user = userRepository.findById(userId);
+        user.updateGreeting(dto.getGreeting());
+        user.updateMbti(dto.getMbti());
+
+        userRepository.save(user);
+    }
+
+    @Transactional
+    @MethodDescription(description = "마이프로필 로그인정보(username, password, profileImg) 를 수정합니다.")
+    public void updateLoginInfo(Long userId, UpdateLoginDTO dto, MultipartFile file) {
+        Certification certification = certificationRepository.findByUserId(userId);
+        User user = userRepository.findById(userId);
 
         if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
             if (certificationRepository.existsByUsername(dto.getUsername())) {
                 throw new DuplicateUsernameException();
             }
-            certification.updateUsername(username);
+            certification.updateUsername(dto.getUsername());
         }
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
@@ -70,19 +76,25 @@ public class MyProfileInfoService {
         }
 
         certificationRepository.save(certification);
+
+        if (file != null && !file.isEmpty()) {
+            user.updateProfileImg(multipartUtil.determineFileName(file, certification.getUsername(), SUFFIX, PROFILE_BUCKET_NAME));
+            userRepository.save(user);
+        }
+
     }
 
     @MethodDescription(description = "사용자의 학교 정보를 수정합니다.")
-    public void updateSchoolInfo(String username, UpdateSchoolDTO dto, MultipartFile file) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
+    public void updateSchoolInfo(Long userId, UpdateSchoolDTO dto, MultipartFile file) {
+        Certification certification = certificationRepository.findByUserId(userId);
+        User user = userRepository.findById(userId);
         School school = schoolRepository.findById(dto.getSchoolId());
 
         if (file == null || file.isEmpty()) {
             throw new InvalidInputException("학교 인증 사진이 존재하지 않습니다.");
         }
 
-        certification.updateAuthImgUrl(multipartUtil.determineFileName(file, username, SUFFIX, AUTH_BUCKET_NAME));
+        certification.updateAuthImgUrl(multipartUtil.determineFileName(file, certification.getUsername(), SUFFIX, AUTH_BUCKET_NAME));
         user.updateSchool(school);
         Major major = majorRepository.findByMajorNameAndSchoolId(dto.getMajor(), school.getId());
         user.updateSchoolInfo(dto.getEntryYear(), school.getId(), major.getId());
@@ -91,24 +103,5 @@ public class MyProfileInfoService {
         userRepository.save(user);
     }
 
-    @MethodDescription(description = "사용자의 mbti와 소개글을 수정합니다.")
-    public void updateGreeting(String username, GreetingDTO dto) {
-        Certification certification = certificationRepository.findByUsername(username);
-        User user = userRepository.findByMyProfile(certification);
 
-        user.updateGreeting(dto.getGreeting());
-        user.updateMbti(dto.getMbti());
-
-        userRepository.save(user);
-    }
-
-    @MethodDescription(description = "회원을 탈퇴합니다.")
-    public void deleteUser(String username, UpdateLoginDTO dto) {
-        Certification certification = certificationRepository.findByUsername(username);
-        if (!bCryptPasswordEncoder.matches(dto.getPassword(), certification.getPassword())) {
-            throw new InvalidInputException("비밀번호가 일치하지 않습니다.");
-        }
-        certification.softDelete(username);
-        certificationRepository.save(certification);
-    }
 }

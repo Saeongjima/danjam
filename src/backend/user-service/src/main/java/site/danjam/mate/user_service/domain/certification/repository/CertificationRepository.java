@@ -31,4 +31,9 @@ public class CertificationRepository {
     public Optional<Certification> findById(Long userId){
         return certificationJpaRepository.findById(userId);
     }
+
+    public Certification findByUserId(Long userId) {
+        return certificationJpaRepository.findByUserId(userId)
+                .orElseThrow(() -> new CanNotFindUserException());
+    }
 }

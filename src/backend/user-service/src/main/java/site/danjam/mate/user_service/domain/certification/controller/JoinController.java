@@ -31,7 +31,7 @@ public class JoinController {
             MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "회원가입", description = "새로운 사용자를 등록합니다. 인증 이미지는 선택적으로 업로드할 수 있습니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
+            @ApiResponse(responseCode = "200", description = "0: 성공적으로 처리되었습니다.", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ApiResponseMessage.class))),
     })
     public ResponseEntity<ApiResponseMessage> signup(
